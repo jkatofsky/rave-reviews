@@ -4,12 +4,57 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("POSTGRES_URL")
+  url      = env("POSTGRES_URL")
 }
 
-// TODO: remove when working on the legit schema
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+enum OrganizerType {
+  BarOrClub
+  EventCollective
+  MusicFestival
+}
+
+model Organizer {
+  id       Int           @id @default(autoincrement())
+  name     String
+  type     OrganizerType
+  websites String[]
+  reviews  Review[]
+  // TODO:
+  // - location information; want to be able to categorize it to a city for filtering, AND store exact coords to eventually display organizers on a map?
+  // - store average reviews and top genres IN this table, so they don't have to be recomputed every time?
+}
+
+// TODO: much more sub-genres, somehow grouped through their parent genre
+// TODO: make this a model to support user-defined genres?
+enum Genre {
+  House
+  Techno
+  Trance
+  Dubstep
+  DrumAndBass
+  Hardstyle
+  Trap
+  Electro
+}
+
+model Review {
+  id          Int       @id @default(autoincrement())
+  organizer   Organizer @relation(fields: [organizerId], references: [id])
+  organizerId Int
+  description String
+  genres      Genre[]
+  moneySpent  Int?
+
+  // TODO: extract this somewhere?
+  soundSystemRating      Int
+  djAndMusicRating       Int
+  crowdPlurRating        Int
+  safetyAndComfortRating Int
+  venueRating            Int
+  valueForMoneyRating    Int
+  visualsRating          Int?
+  staffRating            Int?
+  foodAndDrinkRating     Int?
+
+  // TODO: images
 }
