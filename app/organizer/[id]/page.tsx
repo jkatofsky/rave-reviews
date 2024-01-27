@@ -1,12 +1,14 @@
 import { Metadata } from 'next';
+import { cache } from 'react';
+
 import {getOrganizer} from '../../../api/organizer';
 import {getReviews} from '../../../api/review';
 
+const cachedGetOrganizer = cache(async (organizerId: number) => await getOrganizer(organizerId));
+
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-    // TODO this is duplicated code from with the component.
-    // Also, it's also just really stupid that I have to fetch this again
     const organizerId  = Number(params.id);
-    const organizer = await getOrganizer(organizerId);
+    const organizer = await cachedGetOrganizer(organizerId);
 
     return {
         title: `${organizer?.name} | Rave Radar`,
@@ -15,7 +17,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
 export default async function Organizer({ params }: { params: { id: string } }) {
     const organizerId  = Number(params.id);
-    const organizer = await getOrganizer(organizerId);
+    const organizer = await cachedGetOrganizer(organizerId);
     const reviews = await getReviews({ organizerId, page: 0, perPage: 10 });
 
     return <>
