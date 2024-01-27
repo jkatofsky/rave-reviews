@@ -1,3 +1,3 @@
 export default function Home() {
-  return <div>rave radar</div>;
+  return <h1>rave radar</h1>;
 }

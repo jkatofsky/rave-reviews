@@ -4,7 +4,7 @@ import { MantineProvider, ColorSchemeScript } from "@mantine/core";
 import { theme } from "../theme";
 
 export const metadata = {
-  title: "rave radar",
+  title: "Rave Radar",
 };
 
 export default function RootLayout({ children }: { children: any }) {
