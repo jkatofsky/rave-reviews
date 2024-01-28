@@ -1,35 +1,50 @@
 import prisma from "../db";
-import type { Review } from "@prisma/client";
+import type { Genre, Review } from "@prisma/client";
 
-const REVIEW_RATING_KEYS = ['soundSystemRating', 'djAndMusicRating', 'crowdPlurRating', 'safetyAndComfortRating', 'venueRating', 'valueForMoneyRating', 'visualsRating', 'staffRating', 'foodAndDrinkRating']
+const RATING_KEYS = ['soundSystemRating', 'djAndMusicRating', 'crowdPlurRating', 'safetyAndComfortRating', 'venueRating', 'valueForMoneyRating', 'visualsRating', 'staffRating', 'foodAndDrinkRating'];
 
-const createReview = async (review: Review): Promise<void> => {
+// TODO: extract stuff from this function
+const createReview = async (formData: FormData): Promise<void> => {
     // TODO: data validation with zod
+
+    const organizerId = Number(formData.get('organizerId'));
+    const description = formData.get('description') as string;
+    const genres = (formData.get('genres') as string).split(',') as Genre[];
+    const moneySpent = Number(formData.get('moneySpent'));
 
     await prisma.review.create({
         data: {
-            ...review
-        }
+            organizerId,
+            description,
+            genres,
+            moneySpent,
+            ...RATING_KEYS.reduce((ratings, ratingKey) => formData.get(ratingKey) ?
+                ({...ratings, [ratingKey]: Number(formData.get(ratingKey))}) : ratings
+            , {})
+        } as Review
     })
 
     const organizerAverageRatingsAggregation = await prisma.review.aggregate({
         where: {
-            organizerId: review.organizerId
+            organizerId: organizerId
         },
-        _avg: REVIEW_RATING_KEYS.reduce((averagingObject, ratingKey) =>
+        _avg: RATING_KEYS.reduce((averagingObject, ratingKey) =>
                   ({ ...averagingObject, [ratingKey]: true }), {})
     });
+    const organizerAverageRatings = Object.fromEntries(Object.entries(organizerAverageRatingsAggregation._avg).filter(([_, v]) => v !== null))
 
-    const oganizerAverageRatings: number[] = Object.values(organizerAverageRatingsAggregation._avg)
-    const organizerOverallAverageRating = oganizerAverageRatings.reduce((a, b) => a + b) / oganizerAverageRatings.length;
+    console.log(organizerAverageRatings);
+
+    const organizerAverageRatingsVector: number[] = Object.values(organizerAverageRatings) as number[];
+    const organizerOverallAverageRating = organizerAverageRatingsVector.reduce((a, b) => a + b) / organizerAverageRatingsVector.length;
 
     await prisma.organizer.update({
         where: {
-            id: review.organizerId
+            id: organizerId
         },
         data: {
-            overallAverageRating: organizerOverallAverageRating,
-            ...organizerAverageRatingsAggregation._avg
+            overallRating: organizerOverallAverageRating,
+            ...organizerAverageRatings
         }
     })
 }

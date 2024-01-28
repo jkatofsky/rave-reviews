@@ -21,18 +21,20 @@ model Organizer {
   websites String[]
   reviews  Review[]
 
-  overallAverageRating          Float
-  soundSystemAverageRating      Float
-  djAndMusicAverageRating       Float
-  crowdPlurAverageRating        Float
-  safetyAndComfortAverageRating Float
-  venueAverageRating            Float
-  valueForMoneyAverageRating    Float
-  visualsAverageRating          Float
-  staffAverageRating            Float
-  foodAndDrinkAverageRating     Float
+  overallRating          Float?
+  soundSystemRating      Float?
+  djAndMusicRating       Float?
+  crowdPlurRating        Float?
+  safetyAndComfortRating Float?
+  venueRating            Float?
+  valueForMoneyRating    Float?
+  visualsRating          Float?
+  staffRating            Float?
+  foodAndDrinkRating     Float?
 
   // TODO: location information; want to be able to categorize it to a city for filtering, AND store exact coords to eventually display organizers on a map?
+
+  // TODO: something with "expensiveness", related to the money spent on the reviews?
 }
 
 // TODO: much more sub-genres, somehow grouped through their parent genre

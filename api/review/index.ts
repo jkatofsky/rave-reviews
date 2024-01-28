@@ -1,2 +1,3 @@
-import {getReviews, ReviewQuery} from './get-reviews';
-export { getReviews, type ReviewQuery };
+import { getReviews, ReviewQuery } from './get-reviews';
+import createReview from './create-review';
+export { getReviews, type ReviewQuery, createReview };
