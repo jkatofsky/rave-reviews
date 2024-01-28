@@ -1,3 +1,5 @@
+'use server';
+
 import prisma from "../db";
 import type { Review } from "@prisma/client";
 
@@ -8,7 +10,7 @@ type ReviewQuery = {
 };
 
 const getReviews = async (reviewQuery: ReviewQuery): Promise<Review[]> => {
-    const { organizerId, page, perPage } = reviewQuery;;
+    const { organizerId, page, perPage } = reviewQuery;
     return await prisma.review.findMany({
         where: { organizerId },
         skip: page * perPage,

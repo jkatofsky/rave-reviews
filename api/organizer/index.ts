@@ -1,2 +1,1 @@
-import getOrganizer from './get-organizer';
-export { getOrganizer };
+export * from './get';

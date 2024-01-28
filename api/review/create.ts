@@ -1,3 +1,5 @@
+'use server';
+
 import prisma from "../db";
 import type { Genre, Review } from "@prisma/client";
 
@@ -46,4 +48,4 @@ const createReview = async (formData: FormData): Promise<void> => {
     })
 }
 
-export default createReview;
+export { createReview };
