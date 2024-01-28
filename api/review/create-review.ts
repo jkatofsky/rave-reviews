@@ -24,27 +24,24 @@ const createReview = async (formData: FormData): Promise<void> => {
         } as Review
     })
 
-    const organizerAverageRatingsAggregation = await prisma.review.aggregate({
+    const organizerRatingsAggregation = await prisma.review.aggregate({
         where: {
             organizerId: organizerId
         },
         _avg: RATING_KEYS.reduce((averagingObject, ratingKey) =>
                   ({ ...averagingObject, [ratingKey]: true }), {})
     });
-    const organizerAverageRatings = Object.fromEntries(Object.entries(organizerAverageRatingsAggregation._avg).filter(([_, v]) => v !== null))
-
-    console.log(organizerAverageRatings);
-
-    const organizerAverageRatingsVector: number[] = Object.values(organizerAverageRatings) as number[];
-    const organizerOverallAverageRating = organizerAverageRatingsVector.reduce((a, b) => a + b) / organizerAverageRatingsVector.length;
+    const organizerRatings = Object.fromEntries(Object.entries(organizerRatingsAggregation._avg).filter(([_, v]) => v !== null))
+    const organizerRatingsVector: number[] = Object.values(organizerRatings) as number[];
+    const organizerOverallRating = organizerRatingsVector.reduce((a, b) => a + b) / organizerRatingsVector.length;
 
     await prisma.organizer.update({
         where: {
             id: organizerId
         },
         data: {
-            overallRating: organizerOverallAverageRating,
-            ...organizerAverageRatings
+            overallRating: organizerOverallRating,
+            ...organizerRatings
         }
     })
 }
