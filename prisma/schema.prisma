@@ -50,6 +50,7 @@ enum Genre {
   Electro
 }
 
+// TODO: make ratings 1-5?
 model Review {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
