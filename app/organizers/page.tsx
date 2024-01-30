@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { getOrganizers } from '../../lib/organizer';
 
 export const metadata = {
-	title: 'Organizers | Rave Radar',
+	title: 'Organizers | Rave Reviews',
 };
 
 // TODO: when it's supported, render the top genres as badges (each with its own assigned color) and the # of reviews

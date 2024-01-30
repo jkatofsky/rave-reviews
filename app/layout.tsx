@@ -5,7 +5,7 @@ import { MantineProvider, ColorSchemeScript, Title, Center } from '@mantine/core
 import { theme } from '../theme';
 
 export const metadata = {
-	title: 'Rave Radar',
+	title: 'Rave Reviews',
 };
 
 // TODO: what to do about the fact that mantine does another render of its Mantine-y theme stuff on the client?
@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: any }) {
 			<body>
 				<MantineProvider theme={theme}>
 					<Center mb="lg" p="md">
-						<Title fw={500}>rave radar</Title>
+						<Title fw={500}>rave reviews</Title>
 					</Center>
 					{children}
 				</MantineProvider>
