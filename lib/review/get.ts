@@ -9,8 +9,7 @@ type ReviewQuery = {
 	perPage: number;
 };
 
-const getReviews = async (reviewQuery: ReviewQuery): Promise<Review[]> => {
-	const { organizerId, page, perPage } = reviewQuery;
+const getReviews = async ({ organizerId, page, perPage }: ReviewQuery): Promise<Review[]> => {
 	return await prisma.review.findMany({
 		where: { organizerId },
 		skip: page * perPage,

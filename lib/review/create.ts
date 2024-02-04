@@ -1,17 +1,14 @@
 'use server';
 
-import prisma from '../db';
-import { RATING_KEYS } from '../constants';
 import type { Genre, Review } from '@prisma/client';
 
-// TODO: extract stuff from this function
-const createReview = async (formData: FormData): Promise<void> => {
-	// TODO: data validation with zod
+import prisma from '../db';
+import { RATINGS_INFO } from '../constants';
+import { recomputeOrganizerReviewData } from '../organizer/update';
 
-	const organizerId = Number(formData.get('organizerId'));
-	const description = formData.get('description') as string;
-	const genres = (formData.get('genres') as string).split(',') as Genre[];
-	const moneySpent = Number(formData.get('moneySpent'));
+const createReview = async (review: Review): Promise<void> => {
+	// TODO: type the params as any and use zod to get the review?
+	const { organizerId, description, genres, moneySpent } = review;
 
 	await prisma.review.create({
 		data: {
@@ -19,44 +16,17 @@ const createReview = async (formData: FormData): Promise<void> => {
 			description,
 			genres,
 			moneySpent,
-			...RATING_KEYS.reduce(
+			...[...RATINGS_INFO.keys()].reduce(
 				(ratings, ratingKey) =>
-					formData.get(ratingKey)
-						? { ...ratings, [ratingKey]: Number(formData.get(ratingKey)) }
+					review[ratingKey as keyof Review]
+						? { ...ratings, [ratingKey]: review[ratingKey as keyof Review] }
 						: ratings,
 				{}
 			),
 		} as Review,
 	});
 
-	const organizerRatingsAggregation = await prisma.review.aggregate({
-		where: {
-			organizerId: organizerId,
-		},
-		_avg: RATING_KEYS.reduce(
-			(averagingObject, ratingKey) => ({
-				...averagingObject,
-				[ratingKey]: true,
-			}),
-			{}
-		),
-	});
-	const organizerRatings = Object.fromEntries(
-		Object.entries(organizerRatingsAggregation._avg).filter(([_, v]) => v !== null)
-	);
-	const organizerRatingsVector: number[] = Object.values(organizerRatings) as number[];
-	const organizerOverallRating =
-		organizerRatingsVector.reduce((a, b) => a + b) / organizerRatingsVector.length;
-
-	await prisma.organizer.update({
-		where: {
-			id: organizerId,
-		},
-		data: {
-			overallRating: organizerOverallRating,
-			...organizerRatings,
-		},
-	});
+	await recomputeOrganizerReviewData(organizerId);
 };
 
 export { createReview };

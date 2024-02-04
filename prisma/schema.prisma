@@ -7,6 +7,8 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
+// TODO: make the default ID type string and use cuid()?
+
 enum OrganizerType {
   BarOrClub
   EventCollective
@@ -14,12 +16,21 @@ enum OrganizerType {
 }
 
 model Organizer {
-  id Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   name     String
   type     OrganizerType
   websites String[]
-  reviews  Review[]
+  // TODO: location information; want to be able to categorize it to a city for filtering, AND store exact coords to eventually display organizers on a map?
+
+  reviews   Review[]
+  // TODO: decide if all of this denormalization is worth it.
+  // Calculating this stuff on-the-fly would be more maintainable, but certainly slower
+  topGenres Genre[]
+
+  reviewCount Int
 
   overallRating          Float?
   soundSystemRating      Float?
@@ -32,9 +43,7 @@ model Organizer {
   staffRating            Float?
   foodAndDrinkRating     Float?
 
-  // TODO: location information; want to be able to categorize it to a city for filtering, AND store exact coords to eventually display organizers on a map?
-
-  // TODO: something with "expensiveness", related to the money spent on the reviews?
+  // TODO: average expensiveness
 }
 
 // TODO: much more sub-genres, somehow grouped through their parent genre
@@ -54,13 +63,16 @@ enum Genre {
 model Review {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   organizer   Organizer @relation(fields: [organizerId], references: [id])
   organizerId Int
 
   description String
   genres      Genre[]
-  moneySpent  Int?
+
+  // TODO: turn this into a dollar sign thing with 4 levels, like google?
+  moneySpent Int?
 
   soundSystemRating      Int
   djAndMusicRating       Int

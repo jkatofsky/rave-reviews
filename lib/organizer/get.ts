@@ -20,8 +20,7 @@ type OrganizerQuery = {
 	perPage: number;
 };
 
-const getOrganizers = async (organizerQuery: OrganizerQuery): Promise<Organizer[]> => {
-	const { page, perPage } = organizerQuery;
+const getOrganizers = async ({ page, perPage }: OrganizerQuery): Promise<Organizer[]> => {
 	return await prisma.organizer.findMany({
 		skip: page * perPage,
 		take: perPage,
