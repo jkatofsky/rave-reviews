@@ -68,6 +68,7 @@ async function getTopGenres(organizerId: number): Promise<Genre[]> {
 	}
 
 	return Object.keys(organizerReviewGenreCounts)
+		.filter((genre) => organizerReviewGenreCounts[genre as Genre] > 0)
 		.sort((a, b) => organizerReviewGenreCounts[b as Genre] - organizerReviewGenreCounts[a as Genre])
 		.slice(0, NUMBER_OF_TOP_REVIEWS_PER_ORGANIZER) as Genre[];
 }

@@ -9,7 +9,7 @@ export function DisplayRating({ rating, ratingsCount }: RatingProps) {
 	return rating !== null ? (
 		<Group gap="xs" wrap="nowrap">
 			<Text c="gray">{rating.toFixed(1)}</Text>
-			<MantineRating value={rating} count={10} readOnly fractions={5} />
+			<MantineRating value={rating} count={5} readOnly fractions={3} />
 			{ratingsCount && <Text c="gray">({ratingsCount})</Text>}
 		</Group>
 	) : (

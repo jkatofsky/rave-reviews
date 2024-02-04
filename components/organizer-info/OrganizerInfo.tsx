@@ -22,6 +22,7 @@ export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 			<DisplayRating rating={organizer.overallRating} ratingsCount={organizer.reviewCount} />
 			<Divider mt="sm" mb="sm" />
 			{/* TODO: make these format not in a column when it's skinnier */}
+			{/* TODO: make the stars bigger */}
 			{[...RATINGS_INFO.entries()].map((rating, index) => (
 				<Box key={index}>
 					<Text fw={600}>{rating[1].title}</Text>

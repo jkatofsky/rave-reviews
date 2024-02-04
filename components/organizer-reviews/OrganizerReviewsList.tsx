@@ -27,6 +27,7 @@ function ReviewCard({ review }: { review: Review }) {
 				<Divider mt="xs" mb="xs" />
 				<Flex justify="flex-start" align="center" direction="row" wrap="wrap">
 					{/* TODO: extract this list to a generic component */}
+					{/* TODO: improve spacing; consider using grid */}
 					{[...RATINGS_INFO.entries()].map((rating, index) => (
 						<Box key={index} mr="xs">
 							<Text>

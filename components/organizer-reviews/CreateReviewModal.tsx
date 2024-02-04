@@ -92,6 +92,7 @@ export default function CreateReviewModal({
 				</Fieldset>
 				<Space h="md" />
 				<Fieldset legend="Rating categories">
+					{/* TODO: make the stars bigger */}
 					{[...RATINGS_INFO.entries()].map((ratingInfo, index) => (
 						<InputWrapper
 							key={index}
@@ -104,7 +105,7 @@ export default function CreateReviewModal({
 							withAsterisk={ratingInfo[1].required}
 							m="xs"
 						>
-							<Rating {...form.getInputProps(ratingInfo[0])} count={10} />
+							<Rating {...form.getInputProps(ratingInfo[0])} count={5} />
 						</InputWrapper>
 					))}
 				</Fieldset>
