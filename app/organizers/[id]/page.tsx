@@ -33,9 +33,10 @@ export default async function Organizer({ params }: { params: { id: string } }) 
 		revalidatePath('/organizers/[id]/page', 'page');
 	}
 
-	// TODO: maybe align the group apart
+	// TODO: rework this layout; make the info sticky (when not wrapped) and stay to the left
+	// then make the reviews expand
 	return (
-		<Group justify="center" align="top" p="lg">
+		<Group justify="center" align="top" p="xl">
 			<OrganizerInfo organizer={organizer!} />
 			<Space w={50} />
 			<OrganizerReviews

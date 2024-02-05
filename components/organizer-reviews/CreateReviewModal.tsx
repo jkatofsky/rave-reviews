@@ -1,6 +1,7 @@
 import {
 	Button,
 	Fieldset,
+	Group,
 	InputWrapper,
 	Modal,
 	MultiSelect,
@@ -15,6 +16,7 @@ import { Genre, Organizer, Review } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 
 import { RATINGS_INFO } from '../../lib/constants';
+import { humanizeGenreName } from '../genre-pill';
 
 export default function CreateReviewModal({
 	opened,
@@ -72,11 +74,15 @@ export default function CreateReviewModal({
 						withAsterisk
 					/>
 					<Space h="sm" />
+					{/* TODO: somehow find a way to style the pills? */}
 					<MultiSelect
 						{...form.getInputProps('genres')}
 						label="Genres"
 						description={`Which genres were played at ${organizer.name}?`}
-						data={Object.keys(Genre)}
+						data={Object.keys(Genre).map((genre) => ({
+							value: genre,
+							label: humanizeGenreName(genre as Genre),
+						}))}
 						searchable
 						withAsterisk
 					/>
@@ -93,21 +99,23 @@ export default function CreateReviewModal({
 				<Space h="md" />
 				<Fieldset legend="Rating categories">
 					{/* TODO: make the stars bigger */}
-					{[...RATINGS_INFO.entries()].map((ratingInfo, index) => (
-						<InputWrapper
-							key={index}
-							label={ratingInfo[1].title}
-							description={
-								typeof ratingInfo[1].creationDescription === 'function'
-									? ratingInfo[1].creationDescription(organizer)
-									: ratingInfo[1].creationDescription
-							}
-							withAsterisk={ratingInfo[1].required}
-							m="xs"
-						>
-							<Rating {...form.getInputProps(ratingInfo[0])} count={5} />
-						</InputWrapper>
-					))}
+					<Group>
+						{[...RATINGS_INFO.entries()].map((ratingInfo, index) => (
+							<InputWrapper
+								w={200}
+								key={index}
+								label={ratingInfo[1].title}
+								description={
+									typeof ratingInfo[1].creationDescription === 'function'
+										? ratingInfo[1].creationDescription(organizer)
+										: ratingInfo[1].creationDescription
+								}
+								withAsterisk={ratingInfo[1].required}
+							>
+								<Rating {...form.getInputProps(ratingInfo[0])} count={5} size="lg" mt="xs" />
+							</InputWrapper>
+						))}
+					</Group>
 				</Fieldset>
 				<Space h="sm" />
 				<Button type="submit" fullWidth>

@@ -22,8 +22,8 @@ export default function RootLayout({ children }: { children: any }) {
 			</head>
 			<body>
 				<MantineProvider theme={theme}>
-					<Center mb="lg" p="md">
-						<Title fw={500}>rave reviews</Title>
+					<Center mb="sm" p="md">
+						<Title fw={300}>rave reviews</Title>
 					</Center>
 					{children}
 				</MantineProvider>

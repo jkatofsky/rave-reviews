@@ -14,7 +14,7 @@ function OrganizerCard({ organizer }: { organizer: Organizer }) {
 	return (
 		<Box component={Link} href={`/organizers/${organizer.id}`} style={{ textDecoration: 'none' }}>
 			<Card>
-				<Title order={3} c="black">
+				<Title order={3} fs="italic" c="black">
 					{organizer.name}
 				</Title>
 				{organizer.overallRating && (
