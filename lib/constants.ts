@@ -7,16 +7,16 @@ type RatingInfo = {
 };
 
 const RATINGS_INFO: Map<string, RatingInfo> = new Map();
-RATINGS_INFO.set('soundSystemRating', {
-	title: 'Sound system',
-	creationDescription:
-		'How did the speakers sound? Were they sufficiently loud, clear, and have enough bass?',
-	required: true,
-});
 RATINGS_INFO.set('djAndMusicRating', {
 	title: 'DJ and music',
 	creationDescription:
 		'Was the DJ good at mixing and song selection? Was the music to your expectations?',
+	required: true,
+});
+RATINGS_INFO.set('soundSystemRating', {
+	title: 'Sound system',
+	creationDescription:
+		'How did the speakers sound? Were they at a good volume, clear, and have quality bass?',
 	required: true,
 });
 RATINGS_INFO.set('crowdPlurRating', {
@@ -34,7 +34,7 @@ RATINGS_INFO.set('safetyAndComfortRating', {
 RATINGS_INFO.set('venueRating', {
 	title: 'Venue',
 	creationDescription:
-		'How was the physical space? Was it aesthetically pleasing and well-organized?',
+		'How did you find the physical space? Was it clean, aesthetically pleasing, and well-thought-out?',
 	required: true,
 });
 RATINGS_INFO.set('valueForMoneyRating', {
@@ -46,7 +46,7 @@ RATINGS_INFO.set('valueForMoneyRating', {
 RATINGS_INFO.set('visualsRating', {
 	title: 'Visuals',
 	creationDescription:
-		'How did you find the visuals - for example, lighting, smoke, and stage design?',
+		'How did you find the visuals - for example, lighting, smoke, or stage design?',
 	required: false,
 });
 RATINGS_INFO.set('staffRating', {
@@ -56,7 +56,7 @@ RATINGS_INFO.set('staffRating', {
 });
 RATINGS_INFO.set('foodAndDrinkRating', {
 	title: 'Food and drink',
-	creationDescription: 'How was the food and drink?',
+	creationDescription: 'How was the food and drinks?',
 	required: false,
 });
 

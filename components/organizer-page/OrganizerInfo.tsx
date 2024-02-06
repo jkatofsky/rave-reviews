@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { DisplayRating } from '../display-rating';
 import { GenrePill } from '../genre-pill';
 import { RATINGS_INFO } from '../../lib/constants';
+import { RatingList } from '../rating-list';
 
 export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 	return (
@@ -33,12 +34,7 @@ export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 			<Divider mt="md" mb="md" />
 
 			<Group gap="lg">
-				{[...RATINGS_INFO.entries()].map((rating, index) => (
-					<Box key={index}>
-						<Text fw={600}>{rating[1].title}</Text>
-						<DisplayRating rating={organizer[rating[0] as keyof Organizer] as number} size="md" />
-					</Box>
-				))}
+				<RatingList<Organizer> objectWithRatings={organizer} />
 			</Group>
 		</Stack>
 	);

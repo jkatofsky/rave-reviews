@@ -9,7 +9,6 @@ import { DisplayRating } from '../display-rating';
 import { OrganizerQuery } from '../../lib/organizer';
 import { Card } from '../card';
 
-// TODO: when it's supported, render the top genres as badges (each with its own assigned color) and the # of reviews
 function OrganizerCard({ organizer }: { organizer: Organizer }) {
 	return (
 		<Box component={Link} href={`/organizers/${organizer.id}`} style={{ textDecoration: 'none' }}>

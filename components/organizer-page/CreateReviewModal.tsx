@@ -61,6 +61,7 @@ export default function CreateReviewModal({
 		>
 			<form
 				onSubmit={form.onSubmit((values) => {
+					// TODO: loading state? Things are fast now but after adding image upload it could take a while
 					onCreateReview(values as Review);
 					router.refresh();
 					onClose();
@@ -74,7 +75,7 @@ export default function CreateReviewModal({
 						withAsterisk
 					/>
 					<Space h="sm" />
-					{/* TODO: somehow find a way to style the pills? */}
+					{/* TODO: somehow find a way to style the options/pills? */}
 					<MultiSelect
 						{...form.getInputProps('genres')}
 						label="Genres"
@@ -98,7 +99,6 @@ export default function CreateReviewModal({
 				</Fieldset>
 				<Space h="md" />
 				<Fieldset legend="Rating categories">
-					{/* TODO: make the stars bigger */}
 					<Group>
 						{[...RATINGS_INFO.entries()].map((ratingInfo, index) => (
 							<InputWrapper
@@ -112,7 +112,7 @@ export default function CreateReviewModal({
 								}
 								withAsterisk={ratingInfo[1].required}
 							>
-								<Rating {...form.getInputProps(ratingInfo[0])} count={5} size="lg" mt="xs" />
+								<Rating {...form.getInputProps(ratingInfo[0])} count={5} size="xl" mt="xs" />
 							</InputWrapper>
 						))}
 					</Group>

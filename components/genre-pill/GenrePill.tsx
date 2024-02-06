@@ -1,7 +1,6 @@
 import { Pill, Text } from '@mantine/core';
 import { Genre } from '@prisma/client';
 
-// TODO: make this a gradient?
 export function deterministicStringToHSLColour(string: string): string {
 	let stringHash = [...string].reduce((acc, char) => {
 		return char.charCodeAt(0) + ((acc << 5) - acc);

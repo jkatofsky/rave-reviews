@@ -1,7 +1,7 @@
 import { Center } from '@mantine/core';
 
 import { getOrganizers } from '../../lib/organizer';
-import { OrganizerList } from '../../components/organizer-list';
+import { OrganizerList } from '../../components/organizers-page';
 
 export const metadata = {
 	title: 'Organizers | Rave Reviews',

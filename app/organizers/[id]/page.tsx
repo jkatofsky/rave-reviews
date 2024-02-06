@@ -6,8 +6,7 @@ import { Review, type Organizer } from '@prisma/client';
 
 import { getOrganizer } from '../../../lib/organizer';
 import { getReviews, createReview } from '../../../lib/review';
-import { OrganizerReviews } from '../../../components/organizer-reviews';
-import { OrganizerInfo } from '../../../components/organizer-info';
+import { OrganizerReviews, OrganizerInfo } from '../../../components/organizer-page';
 
 const cachedGetOrganizer = cache(async (organizerId: number) => await getOrganizer(organizerId));
 

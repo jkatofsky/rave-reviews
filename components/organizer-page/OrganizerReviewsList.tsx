@@ -2,9 +2,8 @@ import { Box, Divider, Flex, Group, Stack, Text } from '@mantine/core';
 import { Review } from '@prisma/client';
 
 import { Card } from '../card';
-import { RATINGS_INFO } from '../../lib/constants';
-import { DisplayRating } from '../display-rating';
 import { GenrePill } from '../genre-pill';
+import { RatingList } from '../rating-list';
 
 // TODO: make the review collapsable/expandable as needed
 function ReviewCard({ review }: { review: Review }) {
@@ -30,13 +29,7 @@ function ReviewCard({ review }: { review: Review }) {
 					</>
 				)}
 				<Flex justify="flex-start" align="center" direction="row" wrap="wrap" gap="sm">
-					{/* TODO: extract this list to a generic component */}
-					{[...RATINGS_INFO.entries()].map((rating, index) => (
-						<Box key={index}>
-							<Text fw={600}>{rating[1].title}</Text>
-							<DisplayRating rating={review[rating[0] as keyof Review] as number} />
-						</Box>
-					))}
+					<RatingList<Review> objectWithRatings={review} />
 				</Flex>
 			</Card>
 		</Box>
