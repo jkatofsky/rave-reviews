@@ -1,6 +1,6 @@
 import { RATINGS_INFO } from '../../lib/constants';
 import { Box, Text } from '@mantine/core';
-import { DisplayRating } from '../display-rating';
+import { DisplayRating } from '.';
 
 export function RatingList<ObjectType>({ objectWithRatings }: { objectWithRatings: ObjectType }) {
 	return (

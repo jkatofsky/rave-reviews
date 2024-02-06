@@ -2,7 +2,7 @@ import { Box, Divider, Flex, Group, Space, Stack, Text, Title } from '@mantine/c
 import { Organizer } from '@prisma/client';
 import Link from 'next/link';
 
-import { DisplayRating } from '../display-rating';
+import { DisplayRating } from '../ratings';
 import { GenrePill } from '../genre-pill';
 import { RATINGS_INFO } from '../../lib/constants';
 import { RatingList } from '../rating-list';

@@ -5,7 +5,7 @@ import { Organizer } from '@prisma/client';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import { DisplayRating } from '../display-rating';
+import { DisplayRating } from '../ratings';
 import { OrganizerQuery } from '../../lib/organizer';
 import { Card } from '../card';
 

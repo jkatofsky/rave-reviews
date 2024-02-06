@@ -1,7 +1,6 @@
 import { Group, Rating as MantineRating, MantineSize, Text } from '@mantine/core';
 
-// TODO: make this component also responsible for rendering the title?
-export interface DisplayRatingProps {
+interface DisplayRatingProps {
 	rating: number | null;
 	ratingsCount?: number | null;
 	size?: MantineSize;
