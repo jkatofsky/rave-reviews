@@ -3,10 +3,6 @@
 import prisma from '../db';
 import type { Organizer } from '@prisma/client';
 
-// TODO: make this return:
-// the number of reviews for the organization
-// the top genres for the organization
-
 const getOrganizer = async (id: number): Promise<Organizer | null> => {
 	return await prisma.organizer.findUnique({
 		where: {

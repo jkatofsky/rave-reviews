@@ -4,8 +4,7 @@ import Link from 'next/link';
 
 import { DisplayRating } from '../ratings';
 import { GenrePill } from '../genre-pill';
-import { RATINGS_INFO } from '../../lib/constants';
-import { RatingList } from '../rating-list';
+import { RatingList } from '../ratings';
 
 export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 	return (

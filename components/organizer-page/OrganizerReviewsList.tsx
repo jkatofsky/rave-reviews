@@ -3,7 +3,7 @@ import { Review } from '@prisma/client';
 
 import { Card } from '../card';
 import { GenrePill } from '../genre-pill';
-import { RatingList } from '../rating-list';
+import { RatingList } from '../ratings';
 
 // TODO: make the review collapsable/expandable as needed
 function ReviewCard({ review }: { review: Review }) {
