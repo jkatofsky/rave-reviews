@@ -3,12 +3,12 @@ import { Review } from '@prisma/client';
 
 import { Card } from '../card';
 import { GenrePill } from '../genre-pill';
-import { RatingList } from '../ratings';
+import { RatingList } from '../rating';
 
 // TODO: make the review collapsable/expandable as needed
 function ReviewCard({ review }: { review: Review }) {
 	return (
-		<Box mih={250} maw={700}>
+		<Box mah={600} maw={800}>
 			<Card>
 				<Text>{review.description}</Text>
 				<Divider mt="xs" mb="xs" />
@@ -36,7 +36,7 @@ function ReviewCard({ review }: { review: Review }) {
 	);
 }
 
-export default function OrganizerReviewsList({ reviews }: { reviews: Review[] }) {
+export function ReviewList({ reviews }: { reviews: Review[] }) {
 	if (!reviews || reviews.length === 0) {
 		return (
 			<Text c="gray" fs="italic">

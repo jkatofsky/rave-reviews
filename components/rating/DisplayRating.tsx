@@ -21,7 +21,7 @@ export function DisplayRating({ rating, ratingsCount, size }: DisplayRatingProps
 		</Group>
 	) : (
 		<Text c="gray" fs="italic">
-			no rating yet
+			no rating
 		</Text>
 	);
 }

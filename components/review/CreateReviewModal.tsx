@@ -15,10 +15,10 @@ import { useForm } from '@mantine/form';
 import { Genre, Organizer, Review } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 
-import { RATINGS_INFO } from '../../lib/constants';
-import { humanizeGenreName } from '../genre-pill';
+import { RATINGS_INFO } from '../../util/constants';
+import { humanizeEnumString } from '../../util';
 
-export default function CreateReviewModal({
+export function CreateReviewModal({
 	opened,
 	organizer,
 	onClose,
@@ -63,7 +63,6 @@ export default function CreateReviewModal({
 				onSubmit={form.onSubmit((values) => {
 					// TODO: loading state? Things are fast now but after adding image upload it could take a while
 					onCreateReview(values as Review);
-					router.refresh();
 					onClose();
 				})}
 			>
@@ -80,10 +79,12 @@ export default function CreateReviewModal({
 						{...form.getInputProps('genres')}
 						label="Genres"
 						description={`Which genres were played at ${organizer.name}?`}
-						data={Object.keys(Genre).map((genre) => ({
-							value: genre,
-							label: humanizeGenreName(genre as Genre),
-						}))}
+						data={Object.keys(Genre)
+							.sort()
+							.map((genre) => ({
+								value: genre,
+								label: humanizeEnumString(genre),
+							}))}
 						searchable
 						withAsterisk
 					/>

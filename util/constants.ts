@@ -60,6 +60,6 @@ RATINGS_INFO.set('foodAndDrinkRating', {
 	required: false,
 });
 
-const NUMBER_OF_TOP_REVIEWS_PER_ORGANIZER = 3;
+const NUMBER_OF_TOP_REVIEWS_PER_ORGANIZER = 5;
 
 export { RATINGS_INFO, NUMBER_OF_TOP_REVIEWS_PER_ORGANIZER };

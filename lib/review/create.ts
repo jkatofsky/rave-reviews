@@ -3,7 +3,7 @@
 import type { Genre, Review } from '@prisma/client';
 
 import prisma from '../db';
-import { RATINGS_INFO } from '../constants';
+import { RATINGS_INFO } from '../../util/constants';
 import { recomputeOrganizerReviewData } from '../organizer/update';
 
 const createReview = async (review: Review): Promise<void> => {

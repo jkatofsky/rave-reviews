@@ -1,7 +1,7 @@
 'use server';
 
 import { Genre } from '@prisma/client';
-import { RATINGS_INFO, NUMBER_OF_TOP_REVIEWS_PER_ORGANIZER } from '../constants';
+import { RATINGS_INFO, NUMBER_OF_TOP_REVIEWS_PER_ORGANIZER } from '../../util/constants';
 import prisma from '../db';
 
 // TODO: why so much "as" needed?

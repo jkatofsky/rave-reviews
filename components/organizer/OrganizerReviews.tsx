@@ -6,8 +6,7 @@ import { useDidUpdate, useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 
 import { ReviewQuery } from '../../lib/review';
-import CreateReviewModal from './CreateReviewModal';
-import OrganizerReviewsList from './OrganizerReviewsList';
+import { CreateReviewModal, ReviewList } from '../review';
 
 export interface OrganizerReviewsProps {
 	organizer: Organizer;
@@ -45,7 +44,7 @@ export function OrganizerReviews({
 			<Button onClick={open}>
 				<Text fw={600}>Add your review!</Text>
 			</Button>
-			<OrganizerReviewsList reviews={reviews} />
+			<ReviewList reviews={reviews} />
 		</Stack>
 	);
 }

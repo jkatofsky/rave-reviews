@@ -47,20 +47,33 @@ model Organizer {
   // TODO: average expensiveness
 }
 
-// TODO: much more sub-genres, somehow grouped through their parent genre
-// TODO: make this a model to support user-defined genres?
 enum Genre {
   House
+  DeepHouse
+  ProgressiveHouse
+  TechHouse
+  AcidHouse
+  TropicalHouse
+  FutureHouse
+  AfroHouse
   Techno
+  Psytrance
+  MelodicTechno
+  HardTechno
+  AcidTechno
   Trance
   Dubstep
   DrumAndBass
   Hardstyle
+  Ambient
+  Disco
+  Funk
   Trap
   Electro
+  Garage
+  Chillout
 }
 
-// TODO: make ratings 1-5?
 model Review {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
