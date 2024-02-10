@@ -1,4 +1,4 @@
-import { Anchor, Box, Divider, Flex, Group, Stack, Text, Title } from '@mantine/core';
+import { Anchor, Box, Divider, Group, Stack, Text, Title } from '@mantine/core';
 import { Organizer } from '@prisma/client';
 
 import { DisplayRating } from '../rating';
@@ -28,7 +28,6 @@ export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 
 			{organizer.topGenres.length > 0 && (
 				<Group gap="xs" mt="lg">
-					<Text fw={600}>Genres</Text>
 					{organizer.topGenres.map((genre, index) => (
 						<GenrePill genre={genre} key={index} />
 					))}

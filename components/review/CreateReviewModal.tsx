@@ -91,7 +91,7 @@ export function CreateReviewModal({
 				</Fieldset>
 				<Space h="md" />
 				<Fieldset legend="Rating categories">
-					<Group>
+					<Group align="top" justify="space-between">
 						{[...RATINGS_INFO.entries()].map((ratingInfo, index) => (
 							<InputWrapper
 								w={200}
@@ -110,7 +110,12 @@ export function CreateReviewModal({
 					</Group>
 				</Fieldset>
 				<Space h="sm" />
-				<Button type="submit" fullWidth>
+				<Button
+					type="submit"
+					fullWidth
+					variant="gradient"
+					gradient={{ from: 'blue', to: 'purple' }}
+				>
 					Submit review
 				</Button>
 			</form>

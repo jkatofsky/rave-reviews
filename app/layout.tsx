@@ -3,13 +3,12 @@ import React from 'react';
 import { MantineProvider, ColorSchemeScript, Title, Center } from '@mantine/core';
 
 import { theme } from '../theme';
+import Link from 'next/link';
 
 export const metadata = {
 	title: 'Rave Reviews',
 };
 
-// TODO: what to do about the fact that mantine does another render of its Mantine-y theme stuff on the client?
-// the server-rendered CSS looks godawful - won't that mess up link previews?
 export default function RootLayout({ children }: { children: any }) {
 	return (
 		<html lang="en">
@@ -21,9 +20,14 @@ export default function RootLayout({ children }: { children: any }) {
 				/>
 			</head>
 			<body>
+				{/* TODO: colour theme */}
 				<MantineProvider theme={theme}>
-					<Center mb="sm" p="md">
-						<Title fw={300}>rave reviews</Title>
+					<Center p="md">
+						<Link href="/" style={{ textDecoration: 'none' }}>
+							<Title fw={300} c="black">
+								rave reviews
+							</Title>
+						</Link>
 					</Center>
 					{children}
 				</MantineProvider>

@@ -18,7 +18,6 @@ function ReviewCard({ review }: { review: Review }) {
 			{review.genres.length > 0 && (
 				<>
 					<Group>
-						<Text fw={600}>Genres</Text>
 						{review.genres.map((genre, index) => (
 							<GenrePill genre={genre} key={index} />
 						))}
@@ -29,7 +28,6 @@ function ReviewCard({ review }: { review: Review }) {
 			{review.moneySpent && (
 				<>
 					<Group>
-						<Text fw={600}>Money spent</Text>
 						<Text>${review.moneySpent}</Text>
 					</Group>
 					<Divider mt="xs" mb="xs" />

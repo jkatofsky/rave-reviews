@@ -43,7 +43,7 @@ export function OrganizerReviews({
 				onClose={close}
 				onCreateReview={createReview}
 			/>
-			<Button onClick={open}>
+			<Button onClick={open} variant="gradient" gradient={{ from: 'blue', to: 'purple' }}>
 				<Text fw={600}>Add your review!</Text>
 			</Button>
 			<ReviewList reviews={reviews} />

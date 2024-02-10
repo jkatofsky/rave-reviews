@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, Group, Stack, Title, Text } from '@mantine/core';
+import { Box, Divider, Group, Stack, Title, Text } from '@mantine/core';
 import { Organizer } from '@prisma/client';
 import Link from 'next/link';
 
@@ -38,11 +38,11 @@ function OrganizerCard({ organizer }: { organizer: Organizer }) {
 				<Divider mb="sm" />
 				{organizer.topGenres.length > 0 && (
 					<>
-						<Flex gap="md">
+						<Group gap="md">
 							{organizer.topGenres.map((genre, index) => (
 								<GenrePill genre={genre} key={index} />
 							))}
-						</Flex>
+						</Group>
 						<Divider mt="sm" />
 					</>
 				)}

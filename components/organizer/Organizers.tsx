@@ -24,7 +24,7 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 	return (
 		<Stack miw={400} p="sm">
 			<CreateOrganizerModal opened={opened} onClose={close} onCreateOrganizer={createOrganizer} />
-			<Button onClick={open}>
+			<Button onClick={open} variant="gradient" gradient={{ from: 'blue', to: 'purple' }}>
 				<Text fw={600}>Add an organizer!</Text>
 			</Button>
 			<OrganizerList organizers={organizers} />

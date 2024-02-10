@@ -46,7 +46,7 @@ RATINGS_INFO.set('valueForMoneyRating', {
 RATINGS_INFO.set('visualsRating', {
 	title: 'Visuals',
 	creationDescription:
-		'How did you find the visuals - for example, lighting, smoke, or stage design?',
+		'How did you find the visuals - for example, lighting, projections, smoke, or stage design?',
 	required: false,
 });
 RATINGS_INFO.set('staffRating', {
@@ -56,7 +56,7 @@ RATINGS_INFO.set('staffRating', {
 });
 RATINGS_INFO.set('foodAndDrinkRating', {
 	title: 'Food and drink',
-	creationDescription: 'How was the food and drinks?',
+	creationDescription: 'How were the food and/or drinks?',
 	required: false,
 });
 

@@ -1,4 +1,4 @@
-import { Button, Group, Modal, Select, Space, TextInput, Title } from '@mantine/core';
+import { Button, Group, Modal, Select, Space, TextInput, Textarea, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { Organizer, OrganizerType } from '@prisma/client';
 
@@ -13,7 +13,7 @@ interface CreateOrganizerModalProps {
 interface CreateOrganizerForm {
 	name: string;
 	type: OrganizerType | null;
-	websites: string; // TODO: make not comma sepereated
+	websites: string; // TODO: make not based on newlines?
 }
 
 export function CreateOrganizerModal({
@@ -36,12 +36,13 @@ export function CreateOrganizerModal({
 			onClose={onClose}
 			title={<Title order={3}>Create an organizer</Title>}
 			centered
-			size="xl"
+			size="lg"
 		>
 			<form
 				onSubmit={form.onSubmit((values) => {
 					// TODO: loading state?
-					const websitesArray = values.websites.replace(/\s/g, '').split(',');
+					const websitesArray =
+						values.websites.length > 0 ? values.websites.split(/\r?\n|\r|\n/g) : [];
 					onCreateOrganizer({
 						name: values.name,
 						type: values.type,
@@ -50,19 +51,25 @@ export function CreateOrganizerModal({
 					onClose();
 				})}
 			>
-				<Group grow>
-					<TextInput label="Name" {...form.getInputProps('name')} withAsterisk />
-					<Select
-						label="Type"
-						data={enumToSelectData(OrganizerType)}
-						{...form.getInputProps('type')}
-						searchable
-						withAsterisk
-					/>
-				</Group>
+				<TextInput label="Name" {...form.getInputProps('name')} withAsterisk />
 				<Space h="sm" />
-				<TextInput label="Websites (comma separated)" {...form.getInputProps('websites')} />
-				<Button type="submit" fullWidth mt="lg">
+
+				<Select
+					label="Type"
+					data={enumToSelectData(OrganizerType)}
+					{...form.getInputProps('type')}
+					searchable
+					withAsterisk
+				/>
+				<Space h="sm" />
+				<Textarea label="Websites (one per line)" {...form.getInputProps('websites')} />
+				<Button
+					type="submit"
+					fullWidth
+					mt="lg"
+					variant="gradient"
+					gradient={{ from: 'blue', to: 'purple' }}
+				>
 					Create organizer
 				</Button>
 			</form>

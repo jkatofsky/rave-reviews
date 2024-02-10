@@ -10,6 +10,7 @@ import { OrganizerInfo, OrganizerReviews } from '../../../components/organizer';
 
 const cachedGetOrganizer = cache(async (organizerId: number) => await getOrganizer(organizerId));
 
+// TODO: metadata https://developers.google.com/search/docs/appearance/structured-data/review-snippet
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
 	const organizerId = Number(params.id);
 	const organizer = await cachedGetOrganizer(organizerId);
@@ -35,7 +36,7 @@ export default async function Organizer({ params }: { params: { id: string } }) 
 	// TODO: rework this layout; make the info sticky (when not wrapped) and stay to the left
 	// https://www.freecodecamp.org/news/fixed-side-and-bottom-navbar-with-css-flexbox
 	return (
-		<Group justify="space-around" align="top" grow p="xl" m="xl">
+		<Group justify="space-around" align="top" grow p="xl">
 			<OrganizerInfo organizer={organizer!} />
 			<OrganizerReviews
 				initialReviews={reviews}
