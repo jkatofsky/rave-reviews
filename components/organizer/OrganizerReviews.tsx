@@ -8,18 +8,18 @@ import { useState } from 'react';
 import { ReviewQuery } from '../../lib/review';
 import { CreateReviewModal, ReviewList } from '../review';
 
-export interface OrganizerReviewsProps {
+interface OrganizerReviewsProps {
 	organizer: Organizer;
 	initialReviews: Review[];
 	getReviews: (reviewQuery: ReviewQuery) => Promise<Review[]>;
-	onCreateReview: (review: Review) => Promise<void>;
+	createReview: (review: Review) => Promise<void>;
 }
 
 export function OrganizerReviews({
 	organizer,
 	initialReviews,
 	getReviews,
-	onCreateReview,
+	createReview,
 }: OrganizerReviewsProps) {
 	const [reviews, setReviews] = useState<Review[]>(initialReviews);
 	const [opened, { open, close }] = useDisclosure(false);
@@ -33,13 +33,15 @@ export function OrganizerReviews({
 		updateReviews();
 	}, [organizer.updatedAt]);
 
+	// TODO: review sorting
+
 	return (
-		<Stack>
+		<Stack miw={400} p="sm">
 			<CreateReviewModal
 				opened={opened}
 				organizer={organizer}
 				onClose={close}
-				onCreateReview={onCreateReview}
+				onCreateReview={createReview}
 			/>
 			<Button onClick={open}>
 				<Text fw={600}>Add your review!</Text>

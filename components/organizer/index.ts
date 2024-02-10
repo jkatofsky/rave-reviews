@@ -1,3 +1,3 @@
-export * from './OrganizerInfo';
-export * from './OrganizerReviews';
-export * from './OrganizerList';
+export { OrganizerInfo } from './OrganizerInfo';
+export { OrganizerReviews } from './OrganizerReviews';
+export { Organizers } from './Organizers';

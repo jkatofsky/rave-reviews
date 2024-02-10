@@ -3,12 +3,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL")
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
-
-// TODO: make the default ID type string and use cuid()?
 
 enum OrganizerType {
   BarOrClub
@@ -63,6 +61,9 @@ enum Genre {
   AcidTechno
   Trance
   Dubstep
+  MelodicDubstep
+  Brostep
+  Chillstep
   DrumAndBass
   Hardstyle
   Ambient
@@ -71,6 +72,7 @@ enum Genre {
   Trap
   Electro
   Garage
+  Breakbeat
   Chillout
 }
 
@@ -82,7 +84,7 @@ model Review {
   organizer   Organizer @relation(fields: [organizerId], references: [id])
   organizerId Int
 
-  description String
+  description String?
   genres      Genre[]
 
   // TODO: turn this into a dollar sign thing with 4 levels, like google?

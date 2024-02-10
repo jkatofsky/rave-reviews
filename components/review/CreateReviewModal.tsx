@@ -13,24 +13,22 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { Genre, Organizer, Review } from '@prisma/client';
-import { useRouter } from 'next/navigation';
 
-import { RATINGS_INFO } from '../../util/constants';
-import { humanizeEnumString } from '../../util';
+import { RATINGS_INFO, enumToSelectData } from '../../util';
+
+interface CreateReviewModalProps {
+	opened: boolean;
+	organizer: Organizer;
+	onClose: () => void;
+	onCreateReview: (review: Review) => Promise<void>;
+}
 
 export function CreateReviewModal({
 	opened,
 	organizer,
 	onClose,
 	onCreateReview,
-}: {
-	opened: boolean;
-	organizer: Organizer;
-	onClose: () => void;
-	onCreateReview: (review: Review) => Promise<void>;
-}) {
-	const router = useRouter();
-
+}: CreateReviewModalProps) {
 	//TODO: ZOD!
 	const form = useForm<Omit<Review, 'id' | 'createdAt' | 'updatedAt'>>({
 		initialValues: {
@@ -71,7 +69,6 @@ export function CreateReviewModal({
 						{...form.getInputProps('description')}
 						label="Description"
 						description={`Describe your experience at ${organizer.name}`}
-						withAsterisk
 					/>
 					<Space h="sm" />
 					{/* TODO: somehow find a way to style the options/pills? */}
@@ -79,14 +76,8 @@ export function CreateReviewModal({
 						{...form.getInputProps('genres')}
 						label="Genres"
 						description={`Which genres were played at ${organizer.name}?`}
-						data={Object.keys(Genre)
-							.sort()
-							.map((genre) => ({
-								value: genre,
-								label: humanizeEnumString(genre),
-							}))}
+						data={enumToSelectData(Genre)}
 						searchable
-						withAsterisk
 					/>
 					<Space h="sm" />
 					<NumberInput

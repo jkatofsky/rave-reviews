@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, Group, Stack, Text } from '@mantine/core';
+import { Divider, Group, Stack, Text } from '@mantine/core';
 import { Review } from '@prisma/client';
 
 import { Card } from '../card';
@@ -8,31 +8,37 @@ import { RatingList } from '../rating';
 // TODO: make the review collapsable/expandable as needed
 function ReviewCard({ review }: { review: Review }) {
 	return (
-		<Box mah={600} maw={800}>
-			<Card>
-				<Text>{review.description}</Text>
-				<Divider mt="xs" mb="xs" />
-				<Group>
-					<Text fw={600}>Genres:</Text>
-					{review.genres.map((genre, index) => (
-						<GenrePill genre={genre} key={index} />
-					))}
-				</Group>
-				<Divider mt="xs" mb="xs" />
-				{review.moneySpent && (
-					<>
-						<Group>
-							<Text fw={600}>Money spent:</Text>
-							<Text>${review.moneySpent}</Text>
-						</Group>
-						<Divider mt="xs" mb="xs" />
-					</>
-				)}
-				<Flex justify="flex-start" align="center" direction="row" wrap="wrap" gap="sm">
-					<RatingList<Review> objectWithRatings={review} />
-				</Flex>
-			</Card>
-		</Box>
+		<Card>
+			{review.description && (
+				<>
+					<Text>{review.description}</Text>
+					<Divider mt="xs" mb="xs" />
+				</>
+			)}
+			{review.genres.length > 0 && (
+				<>
+					<Group>
+						<Text fw={600}>Genres</Text>
+						{review.genres.map((genre, index) => (
+							<GenrePill genre={genre} key={index} />
+						))}
+					</Group>
+					<Divider mt="xs" mb="xs" />
+				</>
+			)}
+			{review.moneySpent && (
+				<>
+					<Group>
+						<Text fw={600}>Money spent</Text>
+						<Text>${review.moneySpent}</Text>
+					</Group>
+					<Divider mt="xs" mb="xs" />
+				</>
+			)}
+			<Group gap="sm">
+				<RatingList<Review> objectWithRatings={review} />
+			</Group>
+		</Card>
 	);
 }
 

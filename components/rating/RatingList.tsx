@@ -1,4 +1,4 @@
-import { RATINGS_INFO } from '../../util/constants';
+import { RATINGS_INFO } from '../../util';
 import { Box, MantineSize, Text } from '@mantine/core';
 import { DisplayRating } from '.';
 
@@ -12,8 +12,8 @@ export function RatingList<ObjectType>({
 	return (
 		<>
 			{[...RATINGS_INFO.entries()].map((rating, index) => (
-				<Box key={index}>
-					<Text fw={600} size={size}>
+				<Box key={index} miw={120} mr="sm">
+					<Text fw={600} size={size} c="black">
 						{rating[1].title}
 					</Text>
 					<DisplayRating

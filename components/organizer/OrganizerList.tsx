@@ -1,12 +1,8 @@
-'use client';
-
 import { Box, Divider, Flex, Group, Stack, Title, Text } from '@mantine/core';
 import { Organizer } from '@prisma/client';
 import Link from 'next/link';
-import { useState } from 'react';
 
 import { DisplayRating, RatingList } from '../rating';
-import { OrganizerQuery } from '../../lib/organizer';
 import { Card } from '../card';
 import { GenrePill } from '../genre-pill';
 import { humanizeEnumString } from '../../util';
@@ -17,10 +13,10 @@ function OrganizerCard({ organizer }: { organizer: Organizer }) {
 			component={Link}
 			href={`/organizers/${organizer.id}`}
 			style={{ textDecoration: 'none' }}
-			maw={700}
+			maw={800}
 		>
 			<Card>
-				<Group justify="space-between">
+				<Group justify="space-between" mb="sm">
 					<Group gap="xs">
 						<Title order={3} fs="italic" c="black">
 							{organizer.name}
@@ -39,28 +35,25 @@ function OrganizerCard({ organizer }: { organizer: Organizer }) {
 						/>
 					</Box>
 				</Group>
-				<Divider mt="sm" mb="sm" />
-				<Flex gap="md">
-					{organizer.topGenres.map((genre, index) => (
-						<GenrePill genre={genre} key={index} />
-					))}
-				</Flex>
-				<Divider mt="sm" mb="sm" />
-				<Group gap="sm">
+				<Divider mb="sm" />
+				{organizer.topGenres.length > 0 && (
+					<>
+						<Flex gap="md">
+							{organizer.topGenres.map((genre, index) => (
+								<GenrePill genre={genre} key={index} />
+							))}
+						</Flex>
+						<Divider mt="sm" />
+					</>
+				)}
+				<Group gap="sm" mt="sm">
 					<RatingList<Organizer> objectWithRatings={organizer} size="sm" />
 				</Group>
 			</Card>
 		</Box>
 	);
 }
-interface OrganizerListProps {
-	initialOrganizers: Organizer[];
-	getOrganizers: (organizerQuery: OrganizerQuery) => Promise<Organizer[]>;
-}
-
-export function OrganizerList({ initialOrganizers, getOrganizers }: OrganizerListProps) {
-	const [organizers, setOrganizers] = useState<Organizer[]>(initialOrganizers);
-
+export function OrganizerList({ organizers }: { organizers: Organizer[] }) {
 	return (
 		<Stack>
 			{organizers.map((organizer) => (

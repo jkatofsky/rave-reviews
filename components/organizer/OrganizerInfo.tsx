@@ -9,31 +9,35 @@ import { humanizeEnumString } from '../../util';
 export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 	return (
 		<Stack gap={0} miw={200} maw={400}>
-			<Flex gap="xs" align="flex-end" mb="sm">
-				<Title fs="italic" order={1} lh={1}>
+			<Group gap="sm" mb="sm" wrap="nowrap">
+				<Title fs="italic" order={1} lh={1} style={{ width: 'min-content' }}>
 					{organizer.name}
 				</Title>
 				<Divider orientation="vertical" />
 				<Text c="gray" fw={400} size="lg">
 					{humanizeEnumString(organizer.type, false)}
 				</Text>
-			</Flex>
-			<Box mb="lg">
+			</Group>
+			<Box>
 				<DisplayRating
 					rating={organizer.overallRating}
 					ratingsCount={organizer.reviewCount}
 					size="xl"
 				/>
 			</Box>
-			<Group gap="xs" mb="xs">
-				{organizer.topGenres.map((genre, index) => (
-					<GenrePill genre={genre} key={index} />
-				))}
-			</Group>
+
+			{organizer.topGenres.length > 0 && (
+				<Group gap="xs" mt="lg">
+					<Text fw={600}>Genres</Text>
+					{organizer.topGenres.map((genre, index) => (
+						<GenrePill genre={genre} key={index} />
+					))}
+				</Group>
+			)}
 
 			<Divider mt="md" mb="md" />
 
-			<Group gap="lg">
+			<Group gap="md">
 				<RatingList<Organizer> objectWithRatings={organizer} />
 			</Group>
 
