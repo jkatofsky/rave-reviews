@@ -17,7 +17,9 @@ enum OrganizerType {
 model Organizer {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // TODO: slight issue: this updates whenever we add a review, since there are the denormalized fields
+  // So, when fleshing out the editing system, I'll need to rely on other information to timestamp the REAL last organizer update
+  updatedAt DateTime @updatedAt 
 
   name     String
   type     OrganizerType

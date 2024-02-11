@@ -1,7 +1,9 @@
 'use server';
 
-import prisma from '../db';
 import type { Organizer } from '@prisma/client';
+
+import { SortingDirection } from '../../util';
+import prisma from '../db';
 
 const getOrganizer = async (id: number): Promise<Organizer | null> => {
 	return await prisma.organizer.findUnique({
@@ -14,12 +16,18 @@ const getOrganizer = async (id: number): Promise<Organizer | null> => {
 type OrganizerQuery = {
 	page: number;
 	perPage: number;
+	sortingFields?: Partial<Record<keyof Organizer, SortingDirection>>[];
 };
 
-const getOrganizers = async ({ page, perPage }: OrganizerQuery): Promise<Organizer[]> => {
+const getOrganizers = async ({
+	page,
+	perPage,
+	sortingFields,
+}: OrganizerQuery): Promise<Organizer[]> => {
 	return await prisma.organizer.findMany({
 		skip: page * perPage,
 		take: perPage,
+		orderBy: sortingFields,
 	});
 };
 

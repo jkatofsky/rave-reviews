@@ -7,6 +7,7 @@ import { useState } from 'react';
 
 import { ReviewQuery } from '../../lib/review';
 import { CreateReviewModal, ReviewList } from '../review';
+import { SortingDirection } from '../../util';
 
 interface OrganizerReviewsProps {
 	organizer: Organizer;
@@ -26,14 +27,16 @@ export function OrganizerReviews({
 
 	useDidUpdate(() => {
 		async function updateReviews() {
-			// TODO: query params!
-			const reviews = await getReviews({ organizerId: organizer.id, page: 0, perPage: 100 });
+			const reviews = await getReviews({
+				organizerId: organizer.id,
+				page: 0,
+				perPage: 100,
+				sortingFields: [{ createdAt: SortingDirection.DESCENDING }],
+			});
 			setReviews(reviews);
 		}
 		updateReviews();
 	}, [organizer.updatedAt]);
-
-	// TODO: review sorting
 
 	return (
 		<Stack miw={400} p="sm">

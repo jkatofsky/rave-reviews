@@ -4,6 +4,7 @@ import { Review } from '@prisma/client';
 import { Card } from '../card';
 import { GenrePill } from '../genre-pill';
 import { RatingList } from '../rating';
+import { Timestamp } from '../timestamp';
 
 // TODO: make the review collapsable/expandable as needed
 function ReviewCard({ review }: { review: Review }) {
@@ -35,6 +36,13 @@ function ReviewCard({ review }: { review: Review }) {
 			)}
 			<Group gap="sm">
 				<RatingList<Review> objectWithRatings={review} />
+			</Group>
+			<Divider mt="xs" mb="xs" />
+			<Group>
+				<Timestamp label="Reviewed" date={review.createdAt} />
+				{review.createdAt.getTime() !== review.updatedAt.getTime() && (
+					<Timestamp label="Edited" date={review.updatedAt} />
+				)}
 			</Group>
 		</Card>
 	);

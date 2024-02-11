@@ -62,4 +62,9 @@ RATINGS_INFO.set('foodAndDrinkRating', {
 
 const NUMBER_OF_TOP_REVIEWS_PER_ORGANIZER = 5;
 
-export { RATINGS_INFO, NUMBER_OF_TOP_REVIEWS_PER_ORGANIZER };
+enum SortingDirection {
+	ASCENDING = 'asc',
+	DESCENDING = 'desc',
+}
+
+export { RATINGS_INFO, NUMBER_OF_TOP_REVIEWS_PER_ORGANIZER, SortingDirection };

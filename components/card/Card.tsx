@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 export function Card({ children }: { children: ReactNode }) {
 	return (
-		<Paper radius="md" bg="gray.1" withBorder p="lg">
+		<Paper radius="md" bg="gray.1" withBorder p="md">
 			{children}
 		</Paper>
 	);
