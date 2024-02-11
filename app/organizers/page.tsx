@@ -6,6 +6,8 @@ import { getOrganizers, createOrganizer } from '../../lib/organizer';
 import { Organizers } from '../../components/organizer';
 import { SortingDirection } from '../../util';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
 	title: 'Organizers | Rave Reviews',
 };

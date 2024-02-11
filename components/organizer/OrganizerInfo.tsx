@@ -45,7 +45,7 @@ export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 				<>
 					<Divider mt="md" mb="md" />
 					<Stack gap="xs">
-						{organizer.websites.map((website: string, index: number) => (
+						{organizer.websites?.map((website: string, index: number) => (
 							<Anchor key={index}>{website}</Anchor>
 						))}
 					</Stack>
