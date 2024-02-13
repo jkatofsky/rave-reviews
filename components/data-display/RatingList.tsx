@@ -1,6 +1,7 @@
-import { RATINGS_INFO } from '../../util';
 import { Box, MantineSize, Text } from '@mantine/core';
-import { DisplayRating } from '.';
+
+import { RATINGS_INFO } from '../../util';
+import { DisplayRating } from './DisplayRating';
 
 export function RatingList<ObjectType>({
 	objectWithRatings,

@@ -1,9 +1,7 @@
 import { Divider, Group, Stack, Text } from '@mantine/core';
 import { Review } from '@prisma/client';
 
-import { Card } from '../data-display';
-import { GenrePill, Timestamp } from '../data-display';
-import { RatingList } from '../rating';
+import { Card, RatingList, GenrePill, Timestamp } from '../data-display';
 
 // TODO: make the review collapsable/expandable as needed: https://mantine.dev/core/spoiler/
 function ReviewCard({ review }: { review: Review }) {

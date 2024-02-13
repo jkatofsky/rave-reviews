@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { cache } from 'react';
 import { Group } from '@mantine/core';
 import { revalidatePath } from 'next/cache';
-import { Review, type Organizer } from '@prisma/client';
+import { Review, type Organizer, Prisma } from '@prisma/client';
 import { notFound } from 'next/navigation';
 
 import { getOrganizer } from '../../../lib/organizer';
@@ -33,6 +33,11 @@ export default async function Organizer({ params }: { params: { id: string } }) 
 		organizerId,
 		page: 0,
 		perPage: DEFAULT_PAGE_SIZE,
+		sortingFields: [
+			{
+				createdAt: Prisma.SortOrder.desc,
+			},
+		],
 	});
 
 	async function createReviewAction(review: Review) {

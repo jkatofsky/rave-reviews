@@ -1,9 +1,7 @@
 import { Anchor, Box, Divider, Group, Stack, Text, Title } from '@mantine/core';
 import { Organizer } from '@prisma/client';
 
-import { DisplayRating } from '../rating';
-import { GenrePill, Timestamp } from '../data-display';
-import { RatingList } from '../rating';
+import { GenrePill, Timestamp, DisplayRating, RatingList } from '../data-display';
 import { humanizeEnumString } from '../../util';
 
 export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
