@@ -2,14 +2,14 @@
 
 import type { Review } from '@prisma/client';
 
-import { SortingDirection } from '../../util';
+import { Prisma } from '@prisma/client';
 import prisma from '../db';
 
 type ReviewQuery = {
 	organizerId: number;
 	page: number;
 	perPage: number;
-	sortingFields?: Partial<Record<keyof Review, SortingDirection>>[];
+	sortingFields?: Partial<Record<keyof Review, Prisma.SortOrder>>[];
 };
 
 const getReviews = async ({

@@ -1,13 +1,14 @@
 'use client';
 
-import { Organizer, Review } from '@prisma/client';
-import { Button, Stack, Text } from '@mantine/core';
+import { Organizer, Review, Prisma } from '@prisma/client';
+import { Button, Group, Stack, Text } from '@mantine/core';
 import { useDidUpdate, useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 
 import { ReviewQuery } from '../../lib/review';
 import { CreateReviewModal, ReviewList } from '../review';
-import { SortingDirection } from '../../util';
+import { DEFAULT_PAGE_SIZE } from '../../util';
+import { SortingButon } from '../sorting';
 
 interface OrganizerReviewsProps {
 	organizer: Organizer;
@@ -24,19 +25,27 @@ export function OrganizerReviews({
 }: OrganizerReviewsProps) {
 	const [reviews, setReviews] = useState<Review[]>(initialReviews);
 	const [opened, { open, close }] = useDisclosure(false);
+	// TODO: put in query params
+	const [sortingField, setSortingField] = useState<{
+		fieldName: keyof Review;
+		sortOrder: Prisma.SortOrder;
+	}>({
+		fieldName: 'createdAt',
+		sortOrder: Prisma.SortOrder.desc,
+	});
 
 	useDidUpdate(() => {
 		async function updateReviews() {
 			const reviews = await getReviews({
 				organizerId: organizer.id,
 				page: 0,
-				perPage: 100,
-				sortingFields: [{ createdAt: SortingDirection.DESCENDING }],
+				perPage: DEFAULT_PAGE_SIZE,
+				sortingFields: [{ [sortingField.fieldName]: sortingField.sortOrder }],
 			});
 			setReviews(reviews);
 		}
 		updateReviews();
-	}, [organizer.updatedAt]);
+	}, [organizer.updatedAt, sortingField]);
 
 	return (
 		<Stack miw={400} p="sm">
@@ -49,6 +58,15 @@ export function OrganizerReviews({
 			<Button onClick={open} variant="gradient" gradient={{ from: 'blue', to: 'purple' }}>
 				<Text fw={600}>Add your review!</Text>
 			</Button>
+			<Group>
+				{/* TODO: more sorting/filtering options */}
+				<SortingButon<Review>
+					sortingFieldName="createdAt"
+					label="Review date"
+					setSortingField={setSortingField}
+					currentSortingField={sortingField}
+				/>
+			</Group>
 			<ReviewList reviews={reviews} />
 		</Stack>
 	);

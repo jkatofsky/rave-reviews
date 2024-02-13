@@ -8,7 +8,7 @@ import { notFound } from 'next/navigation';
 import { getOrganizer } from '../../../lib/organizer';
 import { getReviews, createReview } from '../../../lib/review';
 import { OrganizerInfo, OrganizerReviews } from '../../../components/organizer';
-import { SortingDirection } from '../../../util';
+import { DEFAULT_PAGE_SIZE } from '../../../util';
 
 const cachedGetOrganizer = cache(async (organizerId: number) => await getOrganizer(organizerId));
 
@@ -22,18 +22,17 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 	};
 }
 
-// TODO: review sorting, with query params, etc. Also in the client component
 export default async function Organizer({ params }: { params: { id: string } }) {
 	const organizerId = Number(params.id);
 	const organizer = await cachedGetOrganizer(organizerId);
 
 	if (!organizer) notFound();
 
+	// TODO: figure out how to make this use the same query params as client component
 	const reviews = await getReviews({
 		organizerId,
 		page: 0,
-		perPage: 100,
-		sortingFields: [{ createdAt: SortingDirection.DESCENDING }],
+		perPage: DEFAULT_PAGE_SIZE,
 	});
 
 	async function createReviewAction(review: Review) {

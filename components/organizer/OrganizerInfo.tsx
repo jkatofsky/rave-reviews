@@ -2,10 +2,9 @@ import { Anchor, Box, Divider, Group, Stack, Text, Title } from '@mantine/core';
 import { Organizer } from '@prisma/client';
 
 import { DisplayRating } from '../rating';
-import { GenrePill } from '../genre-pill';
+import { GenrePill, Timestamp } from '../data-display';
 import { RatingList } from '../rating';
 import { humanizeEnumString } from '../../util';
-import { Timestamp } from '../timestamp';
 
 export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 	return (

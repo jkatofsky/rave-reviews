@@ -3,8 +3,7 @@ import { Organizer } from '@prisma/client';
 import Link from 'next/link';
 
 import { DisplayRating, RatingList } from '../rating';
-import { Card } from '../card';
-import { GenrePill } from '../genre-pill';
+import { Card, GenrePill } from '../data-display';
 import { humanizeEnumString } from '../../util';
 
 function OrganizerCard({ organizer }: { organizer: Organizer }) {

@@ -1,4 +1,4 @@
-import { Button, Group, Modal, Select, Space, TextInput, Textarea, Title } from '@mantine/core';
+import { Button, Modal, Select, Space, TextInput, Textarea, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { Organizer, OrganizerType } from '@prisma/client';
 
