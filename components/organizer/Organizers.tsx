@@ -53,26 +53,24 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 			<Button onClick={open} variant="gradient" gradient={{ from: 'blue', to: 'purple' }}>
 				<Text fw={600}>Add an organizer!</Text>
 			</Button>
-			{organizers.length > 0 && (
-				<Group>
-					<SortingButon<Organizer>
-						sortingFieldName="overallRating"
-						label="Rating"
-						setSortingField={setSortingField}
-						currentSortingField={sortingField}
-					/>
-					<Divider orientation="vertical" />
-					<MultiSelect
-						data={enumToSelectData(Genre)}
-						searchable
-						value={topGenresToFilter}
-						onChange={(value) => {
-							setTopGenresToFilter(value as Genre[]);
-						}}
-						placeholder="Filter by genre"
-					/>
-				</Group>
-			)}
+			<Group>
+				<SortingButon<Organizer>
+					sortingFieldName="overallRating"
+					label="Rating"
+					setSortingField={setSortingField}
+					currentSortingField={sortingField}
+				/>
+				<Divider orientation="vertical" />
+				<MultiSelect
+					data={enumToSelectData(Genre)}
+					searchable
+					value={topGenresToFilter}
+					onChange={(value) => {
+						setTopGenresToFilter(value as Genre[]);
+					}}
+					placeholder="Filter by genre"
+				/>
+			</Group>
 			<OrganizerList organizers={organizers} />
 		</Stack>
 	);

@@ -58,17 +58,15 @@ export function OrganizerReviews({
 			<Button onClick={open} variant="gradient" gradient={{ from: 'blue', to: 'purple' }}>
 				<Text fw={600}>Add your review!</Text>
 			</Button>
-			{reviews.length > 0 && (
-				<Group>
-					{/* TODO: more sorting/filtering options */}
-					<SortingButon<Review>
-						sortingFieldName="createdAt"
-						label="Review date"
-						setSortingField={setSortingField}
-						currentSortingField={sortingField}
-					/>
-				</Group>
-			)}
+			<Group>
+				{/* TODO: more sorting/filtering options */}
+				<SortingButon<Review>
+					sortingFieldName="createdAt"
+					label="Review date"
+					setSortingField={setSortingField}
+					currentSortingField={sortingField}
+				/>
+			</Group>
 			<ReviewList reviews={reviews} />
 		</Stack>
 	);
