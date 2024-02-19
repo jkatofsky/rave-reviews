@@ -48,7 +48,7 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 	}, [sortingField, JSON.stringify(topGenresToFilter)]);
 
 	return (
-		<Stack miw={800} p="sm">
+		<Stack p="sm" w={800}>
 			<CreateOrganizerModal opened={opened} onClose={close} onCreateOrganizer={createOrganizer} />
 			<Button onClick={open} variant="gradient" gradient={{ from: 'blue', to: 'purple' }}>
 				<Text fw={600}>Add an organizer!</Text>

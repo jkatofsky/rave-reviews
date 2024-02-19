@@ -7,12 +7,7 @@ import { humanizeEnumString } from '../../util';
 
 function OrganizerCard({ organizer }: { organizer: Organizer }) {
 	return (
-		<Box
-			component={Link}
-			href={`/organizers/${organizer.id}`}
-			style={{ textDecoration: 'none' }}
-			maw={800}
-		>
+		<Box component={Link} href={`/organizers/${organizer.id}`} style={{ textDecoration: 'none' }}>
 			<Card>
 				<Group justify="space-between" mb="sm">
 					<Group gap="xs">
@@ -55,6 +50,13 @@ function OrganizerCard({ organizer }: { organizer: Organizer }) {
 	);
 }
 export function OrganizerList({ organizers }: { organizers: Organizer[] }) {
+	if (!organizers || organizers.length === 0) {
+		return (
+			<Text c="gray" fs="italic">
+				no organizers
+			</Text>
+		);
+	}
 	return (
 		<Stack>
 			{organizers.map((organizer) => (
