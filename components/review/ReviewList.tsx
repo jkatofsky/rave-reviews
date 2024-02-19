@@ -1,21 +1,25 @@
-import { Divider, Group, Stack, Text } from '@mantine/core';
+import { Divider, Group, Spoiler, Stack, Text } from '@mantine/core';
 import { Review } from '@prisma/client';
 
 import { Card, RatingList, GenrePill, Timestamp } from '../data-display';
 
-// TODO: make the review collapsable/expandable as needed: https://mantine.dev/core/spoiler/
 function ReviewCard({ review }: { review: Review }) {
 	return (
 		<Card>
 			{review.description && (
 				<>
-					<Text>{review.description}</Text>
+					<Spoiler maxHeight={120} showLabel="Expand review" hideLabel="Collapse review">
+						<Text>{review.description}</Text>
+					</Spoiler>
 					<Divider mt="xs" mb="xs" />
 				</>
 			)}
 			{review.genres.length > 0 && (
 				<>
 					<Group>
+						<Text c="black" fw={600}>
+							Genres
+						</Text>
 						{review.genres.map((genre, index) => (
 							<GenrePill genre={genre} key={index} />
 						))}
@@ -31,10 +35,9 @@ function ReviewCard({ review }: { review: Review }) {
 					<Divider mt="xs" mb="xs" />
 				</>
 			)}
-			<Group gap="sm">
+			<Group gap="sm" mb="xs">
 				<RatingList<Review> objectWithRatings={review} />
 			</Group>
-			<Divider mt="xs" mb="xs" />
 			<Group>
 				<Timestamp label="Reviewed" date={review.createdAt} />
 				{review.createdAt.getTime() !== review.updatedAt.getTime() && (

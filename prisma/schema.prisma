@@ -101,5 +101,8 @@ model Review {
   visualsRating          Int?
   staffRating            Int?
   foodAndDrinkRating     Int?
+
   // TODO: images
+
+  // TODO: upvotes
 }

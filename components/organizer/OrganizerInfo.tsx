@@ -26,6 +26,9 @@ export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 
 			{organizer.topGenres.length > 0 && (
 				<Group gap="xs" mt="lg">
+					<Text c="black" fw={600}>
+						Top genres
+					</Text>
 					{organizer.topGenres.map((genre, index) => (
 						<GenrePill genre={genre} key={index} />
 					))}

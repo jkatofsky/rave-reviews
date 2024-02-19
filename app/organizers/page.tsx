@@ -12,17 +12,16 @@ export const metadata = {
 	title: 'Organizers | Rave Reviews',
 };
 
-// TODO: organizer text + location search. Also in the client component
+// TODO: organizer name text + location search. Also in the client component
 export default async function OrganizersPage() {
 	// TODO: figure out how to make this use the same query params as client component
 	const organizers = await getOrganizers({
 		page: 0,
 		perPage: DEFAULT_PAGE_SIZE,
-		sortingFields: [
-			{
-				overallRating: Prisma.SortOrder.desc,
-			},
-		],
+		orderBy: {
+			overallRating: { sort: Prisma.SortOrder.desc, nulls: 'last' },
+		},
+		// TODO: genre filtering from query params
 	});
 
 	async function createOrganizerAction(organizer: Organizer) {

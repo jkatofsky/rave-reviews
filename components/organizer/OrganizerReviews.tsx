@@ -40,7 +40,7 @@ export function OrganizerReviews({
 				organizerId: organizer.id,
 				page: 0,
 				perPage: DEFAULT_PAGE_SIZE,
-				sortingFields: [{ [sortingField.fieldName]: sortingField.sortOrder }],
+				orderBy: { [sortingField.fieldName]: sortingField.sortOrder },
 			});
 			setReviews(reviews);
 		}
@@ -58,15 +58,17 @@ export function OrganizerReviews({
 			<Button onClick={open} variant="gradient" gradient={{ from: 'blue', to: 'purple' }}>
 				<Text fw={600}>Add your review!</Text>
 			</Button>
-			<Group>
-				{/* TODO: more sorting/filtering options */}
-				<SortingButon<Review>
-					sortingFieldName="createdAt"
-					label="Review date"
-					setSortingField={setSortingField}
-					currentSortingField={sortingField}
-				/>
-			</Group>
+			{reviews.length > 0 && (
+				<Group>
+					{/* TODO: more sorting/filtering options */}
+					<SortingButon<Review>
+						sortingFieldName="createdAt"
+						label="Review date"
+						setSortingField={setSortingField}
+						currentSortingField={sortingField}
+					/>
+				</Group>
+			)}
 			<ReviewList reviews={reviews} />
 		</Stack>
 	);

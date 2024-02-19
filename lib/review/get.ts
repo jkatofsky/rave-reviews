@@ -9,20 +9,20 @@ type ReviewQuery = {
 	organizerId: number;
 	page: number;
 	perPage: number;
-	sortingFields?: Partial<Record<keyof Review, Prisma.SortOrder>>[];
+	orderBy: Prisma.ReviewOrderByWithRelationInput;
 };
 
 const getReviews = async ({
 	organizerId,
 	page,
 	perPage,
-	sortingFields,
+	orderBy,
 }: ReviewQuery): Promise<Review[]> => {
 	return await prisma.review.findMany({
 		where: { organizerId },
 		skip: page * perPage,
 		take: perPage,
-		orderBy: sortingFields,
+		orderBy,
 	});
 };
 

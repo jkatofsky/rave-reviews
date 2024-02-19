@@ -8,7 +8,7 @@ type RatingInfo = {
 
 const RATINGS_INFO: Map<string, RatingInfo> = new Map();
 RATINGS_INFO.set('djAndMusicRating', {
-	title: 'DJ and music',
+	title: 'DJ & music',
 	creationDescription:
 		'Was the DJ good at mixing and song selection? Was the music to your expectations?',
 	required: true,
@@ -26,7 +26,7 @@ RATINGS_INFO.set('crowdPlurRating', {
 	required: true,
 });
 RATINGS_INFO.set('safetyAndComfortRating', {
-	title: 'Safety and comfort',
+	title: 'Safety & comfort',
 	creationDescription: (organizer) =>
 		`Did you feel safe at ${organizer.name}? Were there ample safe-partying resources and security personnel?`,
 	required: true,
@@ -38,7 +38,7 @@ RATINGS_INFO.set('venueRating', {
 	required: true,
 });
 RATINGS_INFO.set('valueForMoneyRating', {
-	title: 'Value for money',
+	title: 'Value',
 	creationDescription: (organizer) =>
 		`Was your experience at ${organizer.name} worth the money you paid?`,
 	required: true,
@@ -55,7 +55,7 @@ RATINGS_INFO.set('staffRating', {
 	required: false,
 });
 RATINGS_INFO.set('foodAndDrinkRating', {
-	title: 'Food and drink',
+	title: 'Food & drink',
 	creationDescription: 'How were the food and/or drinks?',
 	required: false,
 });

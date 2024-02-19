@@ -37,6 +37,9 @@ function OrganizerCard({ organizer }: { organizer: Organizer }) {
 				{organizer.topGenres.length > 0 && (
 					<>
 						<Group gap="md">
+							<Text c="black" fw={600}>
+								Top genres
+							</Text>
 							{organizer.topGenres.map((genre, index) => (
 								<GenrePill genre={genre} key={index} />
 							))}

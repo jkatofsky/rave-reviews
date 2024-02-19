@@ -1,13 +1,15 @@
 export function humanizeEnumString(enumString: string, capitalize: boolean = true): string {
-	const lowercaseGenreWithSpaces = enumString
+	const humanizedEnumString = enumString
 		.split(/(?=[A-Z])/)
-		.join(' ')
-		.toLowerCase();
-
-	// TODO: "or" -> /
-	// TODO: "and" -> &
+		.map((_word) => {
+			const word = _word.toLowerCase();
+			if (word === 'and') return '&';
+			if (word === 'or') return '/';
+			return word;
+		})
+		.join(' ');
 
 	return capitalize
-		? lowercaseGenreWithSpaces.charAt(0).toUpperCase() + lowercaseGenreWithSpaces.slice(1)
-		: lowercaseGenreWithSpaces;
+		? humanizedEnumString.charAt(0).toUpperCase() + humanizedEnumString.slice(1)
+		: humanizedEnumString;
 }

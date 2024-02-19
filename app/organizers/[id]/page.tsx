@@ -33,11 +33,9 @@ export default async function Organizer({ params }: { params: { id: string } }) 
 		organizerId,
 		page: 0,
 		perPage: DEFAULT_PAGE_SIZE,
-		sortingFields: [
-			{
-				createdAt: Prisma.SortOrder.desc,
-			},
-		],
+		orderBy: {
+			createdAt: Prisma.SortOrder.desc,
+		},
 	});
 
 	async function createReviewAction(review: Review) {

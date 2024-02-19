@@ -1,6 +1,6 @@
 'use server';
 
-import type { Organizer, Prisma } from '@prisma/client';
+import type { Genre, Organizer, Prisma } from '@prisma/client';
 
 import prisma from '../db';
 
@@ -15,18 +15,30 @@ const getOrganizer = async (id: number): Promise<Organizer | null> => {
 type OrganizerQuery = {
 	page: number;
 	perPage: number;
-	sortingFields?: Partial<Record<keyof Organizer, Prisma.SortOrder>>[];
+	orderBy: Prisma.OrganizerOrderByWithRelationInput;
+	topGenresToFilter?: Genre[];
 };
 
 const getOrganizers = async ({
 	page,
 	perPage,
-	sortingFields,
+	orderBy,
+	topGenresToFilter,
 }: OrganizerQuery): Promise<Organizer[]> => {
+	const filters =
+		topGenresToFilter !== undefined && topGenresToFilter.length > 0
+			? {
+					topGenres: {
+						hasSome: topGenresToFilter,
+					},
+			  }
+			: undefined;
+
 	return await prisma.organizer.findMany({
 		skip: page * perPage,
 		take: perPage,
-		orderBy: sortingFields, // TODO: put nulls last: https://www.prisma.io/docs/orm/prisma-client/queries/filtering-and-sorting#sort-with-null-records-first-or-last
+		orderBy,
+		where: filters,
 	});
 };
 
