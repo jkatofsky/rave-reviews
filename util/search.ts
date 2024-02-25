@@ -1,32 +1,45 @@
-import { ReadonlyURLSearchParams } from 'next/navigation';
-import { Prisma } from '@prisma/client';
+import { Genre, Prisma } from '@prisma/client';
+import {
+	parseAsInteger,
+	parseAsString,
+	parseAsStringEnum,
+	createSearchParamsCache,
+	parseAsArrayOf,
+} from 'nuqs/server';
 
-export type NextServerSearchParams = { [key: string]: string | string[] | undefined };
+// TODO: move this code elsewhere?
+// TODO: do all of these need to be objects?
 
-function getGeneralSearchParams(
-	searchParams: ReadonlyURLSearchParams | NextServerSearchParams
-): NextServerSearchParams {
-	return searchParams instanceof ReadonlyURLSearchParams
-		? Object.fromEntries(searchParams)
-		: searchParams;
-}
+export const reviewPageParser = {
+	page: parseAsInteger.withDefault(0),
+};
+export const reviewOrderByParser = {
+	orderByField: parseAsString.withDefault('createdAt'),
+	sortOrder: parseAsStringEnum<Prisma.SortOrder>(Object.values(Prisma.SortOrder)).withDefault(
+		Prisma.SortOrder.desc
+	),
+};
 
-export function getInitialReviewSearchParams(
-	searchParams: ReadonlyURLSearchParams | NextServerSearchParams
-): URLSearchParams {
-	const generalSearchParams = getGeneralSearchParams(searchParams);
+export const reviewSearchParamParser = {
+	page: createSearchParamsCache(reviewPageParser),
+	orderBy: createSearchParamsCache(reviewOrderByParser),
+};
 
-	//TODO: what to do when we need to deal with arrays?
-	const initialSearchParams = new URLSearchParams();
-	initialSearchParams.set('page', (generalSearchParams['page'] as string) || '0');
-	initialSearchParams.set(
-		'orderByField',
-		(generalSearchParams['orderByField'] as string) || 'createdAt'
-	);
-	initialSearchParams.set(
-		'sortOrder',
-		(generalSearchParams['sortOrder'] as string) || Prisma.SortOrder.desc
-	);
+export const organizerPageParser = {
+	page: parseAsInteger.withDefault(0),
+};
+export const organizerOrderByParser = {
+	orderByField: parseAsString.withDefault('overallRating'),
+	sortOrder: parseAsStringEnum<Prisma.SortOrder>(Object.values(Prisma.SortOrder)).withDefault(
+		Prisma.SortOrder.desc
+	),
+};
+export const organizerTopGenresParser = {
+	topGenres: parseAsArrayOf(parseAsStringEnum<Genre>(Object.values(Genre))).withDefault([]),
+};
 
-	return initialSearchParams;
-}
+export const organizerSearchParamParser = {
+	page: createSearchParamsCache(organizerPageParser),
+	orderBy: createSearchParamsCache(organizerOrderByParser),
+	topGenres: createSearchParamsCache(organizerTopGenresParser),
+};

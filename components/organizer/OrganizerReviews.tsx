@@ -1,16 +1,15 @@
 'use client';
 
-import { Organizer, Review, Prisma } from '@prisma/client';
+import { Organizer, Review } from '@prisma/client';
 import { Button, Group, Stack, Text } from '@mantine/core';
 import { useDidUpdate, useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
-import { parseAsInteger, parseAsStringEnum, useQueryState } from 'nuqs';
+import { useQueryStates } from 'nuqs';
 
 import { ReviewQuery } from '../../lib/review';
 import { CreateReviewModal, ReviewList } from '../review';
-import { getInitialReviewSearchParams } from '../../util';
 import { SortingButon } from '../sorting';
-import { useInitialSearchParams } from '../../hooks/search';
+import { reviewOrderByParser, reviewPageParser } from '../../util';
 
 interface OrganizerReviewsProps {
 	organizer: Organizer;
@@ -28,31 +27,20 @@ export function OrganizerReviews({
 	const [reviews, setReviews] = useState<Review[]>(initialReviews);
 	const [opened, { open, close }] = useDisclosure(false);
 
-	useInitialSearchParams(getInitialReviewSearchParams);
+	const [{ page }, setPage] = useQueryStates(reviewPageParser);
+	const [orderBy, setOrderBy] = useQueryStates(reviewOrderByParser);
 
-	const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(0));
-	const [orderByField, setOrderByField] = useQueryState('orderByField', {
-		defaultValue: 'createdAt',
-	});
-	const [sortOrder, setSortOrder] = useQueryState(
-		'sortOrder',
-		parseAsStringEnum<Prisma.SortOrder>(Object.values(Prisma.SortOrder)).withDefault(
-			Prisma.SortOrder.desc
-		)
-	);
-
-	// TODO: after this runs, in DEV mode only, the useQueryState variables reset???!
 	useDidUpdate(() => {
 		async function updateReviews() {
 			const updatedReviews = await getReviews({
 				organizerId: organizer.id,
 				page: page,
-				orderBy: { [orderByField]: sortOrder },
+				orderBy: { [orderBy.orderByField]: orderBy.sortOrder },
 			});
 			setReviews(updatedReviews);
 		}
 		updateReviews();
-	}, [organizer.updatedAt, orderByField, sortOrder, page]);
+	}, [organizer.updatedAt, page, orderBy]);
 
 	return (
 		<Stack miw={400} p="sm">
@@ -71,15 +59,15 @@ export function OrganizerReviews({
 					orderByField="createdAt"
 					label="Review date"
 					onClick={(orderBy) => {
-						setOrderByField(orderBy.orderByField);
-						setSortOrder(orderBy.sortOrder);
+						setOrderBy(orderBy);
 					}}
 					currentOrderBy={{
-						orderByField: orderByField as keyof Review,
-						sortOrder: sortOrder,
+						orderByField: orderBy.orderByField as keyof Review,
+						sortOrder: orderBy.sortOrder,
 					}}
 				/>
 			</Group>
+			{/* TODO: make this a server component and slot it */}
 			<ReviewList reviews={reviews} />
 		</Stack>
 	);

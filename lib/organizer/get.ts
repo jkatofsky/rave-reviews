@@ -17,20 +17,20 @@ type OrganizerQuery = {
 	page: number;
 	perPage?: number;
 	orderBy: Prisma.OrganizerOrderByWithRelationInput;
-	topGenresToFilter?: Genre[];
+	topGenres?: Genre[];
 };
 
 const getOrganizers = async ({
 	page,
 	perPage = DEFAULT_PAGE_SIZE,
 	orderBy,
-	topGenresToFilter,
+	topGenres,
 }: OrganizerQuery): Promise<Organizer[]> => {
 	const filters =
-		topGenresToFilter !== undefined && topGenresToFilter.length > 0
+		topGenres !== undefined && topGenres.length > 0
 			? {
 					topGenres: {
-						hasSome: topGenresToFilter,
+						hasSome: topGenres,
 					},
 			  }
 			: undefined;

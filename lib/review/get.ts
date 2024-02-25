@@ -1,8 +1,7 @@
 'use server';
 
-import type { Review } from '@prisma/client';
+import { type Review, Prisma } from '@prisma/client';
 
-import { Prisma } from '@prisma/client';
 import prisma from '../db';
 import { DEFAULT_PAGE_SIZE } from '../../util';
 

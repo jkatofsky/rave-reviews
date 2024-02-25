@@ -8,7 +8,7 @@ import { notFound } from 'next/navigation';
 import { getOrganizer } from '../../../lib/organizer';
 import { getReviews, createReview } from '../../../lib/review';
 import { OrganizerInfo, OrganizerReviews } from '../../../components/organizer';
-import { getInitialReviewSearchParams, NextServerSearchParams } from '../../../util';
+import { reviewSearchParamParser } from '../../../util';
 
 const cachedGetOrganizer = cache(async (organizerId: number) => await getOrganizer(organizerId));
 
@@ -27,16 +27,15 @@ export default async function Organizer({
 	searchParams,
 }: {
 	params: { id: string };
-	searchParams: NextServerSearchParams;
+	searchParams: Record<string, string | string[] | undefined>;
 }) {
 	const organizerId = Number(params.id);
 	const organizer = await cachedGetOrganizer(organizerId);
 
 	if (!organizer) notFound();
 
-	const { page, orderByField, sortOrder } = Object.fromEntries(
-		getInitialReviewSearchParams(searchParams)
-	);
+	const { page } = reviewSearchParamParser.page.parse(searchParams);
+	const { orderByField, sortOrder } = reviewSearchParamParser.orderBy.parse(searchParams);
 
 	const reviews = await getReviews({
 		organizerId: organizer.id,
