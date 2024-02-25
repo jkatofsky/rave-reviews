@@ -1,7 +1,7 @@
 import { Button } from '@mantine/core';
 import { Prisma } from '@prisma/client';
 
-export function SortingButon<ObjectType>({
+export function SortingButton<ObjectType>({
 	orderByField,
 	label,
 	onClick,
@@ -17,7 +17,7 @@ export function SortingButon<ObjectType>({
 }) {
 	const isActiveSort = currentOrderBy.orderByField === orderByField;
 
-	const variant = isActiveSort ? 'light' : 'outline';
+	const variant = isActiveSort ? 'filled' : 'light';
 	const icon = isActiveSort ? (
 		currentOrderBy.sortOrder === Prisma.SortOrder.asc ? (
 			<>&uarr;</>
@@ -30,6 +30,7 @@ export function SortingButon<ObjectType>({
 
 	return (
 		<Button
+			maw="fit-content"
 			variant={variant}
 			leftSection={icon}
 			onClick={() => {

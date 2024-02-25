@@ -8,13 +8,13 @@ import { useQueryStates } from 'nuqs';
 
 import { ReviewQuery } from '../../lib/review';
 import { CreateReviewModal, ReviewList } from '../review';
-import { SortingButon } from '../sorting';
+import { PaginationButtons, SortingButton } from '../search';
 import { reviewOrderByParser, reviewPageParser } from '../../util';
 
 interface OrganizerReviewsProps {
 	organizer: Organizer;
-	initialReviews: Review[];
-	getReviews: (reviewQuery: ReviewQuery) => Promise<Review[]>;
+	initialReviews: { hasNextPage: boolean; reviews: Review[] };
+	getReviews: (reviewQuery: ReviewQuery) => Promise<{ hasNextPage: boolean; reviews: Review[] }>;
 	createReview: (review: Review) => Promise<void>;
 }
 
@@ -24,20 +24,22 @@ export function OrganizerReviews({
 	getReviews,
 	createReview,
 }: OrganizerReviewsProps) {
-	const [reviews, setReviews] = useState<Review[]>(initialReviews);
+	const [reviews, setReviews] = useState<Review[]>(initialReviews.reviews);
 	const [opened, { open, close }] = useDisclosure(false);
 
 	const [{ page }, setPage] = useQueryStates(reviewPageParser);
+	const [hasNextPage, setHasNextPage] = useState<boolean>(initialReviews.hasNextPage);
 	const [orderBy, setOrderBy] = useQueryStates(reviewOrderByParser);
 
 	useDidUpdate(() => {
 		async function updateReviews() {
-			const updatedReviews = await getReviews({
+			const { reviews: updatedReviews, hasNextPage: updatedHasNextPage } = await getReviews({
 				organizerId: organizer.id,
 				page: page,
 				orderBy: { [orderBy.orderByField]: orderBy.sortOrder },
 			});
 			setReviews(updatedReviews);
+			setHasNextPage(updatedHasNextPage);
 		}
 		updateReviews();
 	}, [organizer.updatedAt, page, orderBy]);
@@ -55,11 +57,12 @@ export function OrganizerReviews({
 			</Button>
 			<Group>
 				{/* TODO: more sorting/filtering options */}
-				<SortingButon<Review>
+				<SortingButton<Review>
 					orderByField="createdAt"
 					label="Review date"
 					onClick={(orderBy) => {
 						setOrderBy(orderBy);
+						setPage({ page: 0 });
 					}}
 					currentOrderBy={{
 						orderByField: orderBy.orderByField as keyof Review,
@@ -69,6 +72,7 @@ export function OrganizerReviews({
 			</Group>
 			{/* TODO: make this a server component and slot it */}
 			<ReviewList reviews={reviews} />
+			<PaginationButtons page={page} setPage={setPage} hasNextPage={hasNextPage} />
 		</Stack>
 	);
 }

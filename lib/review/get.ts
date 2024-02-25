@@ -17,13 +17,18 @@ const getReviews = async ({
 	page,
 	perPage = DEFAULT_PAGE_SIZE,
 	orderBy,
-}: ReviewQuery): Promise<Review[]> => {
-	return await prisma.review.findMany({
+}: ReviewQuery): Promise<{ hasNextPage: boolean; reviews: Review[] }> => {
+	const reviewsWithExtra = await prisma.review.findMany({
 		where: { organizerId },
 		skip: page * perPage,
-		take: perPage,
+		take: perPage + 1,
 		orderBy,
 	});
+	const hasNextPage = reviewsWithExtra.length > perPage;
+	return {
+		hasNextPage,
+		reviews: hasNextPage ? reviewsWithExtra.slice(0, -1) : reviewsWithExtra,
+	};
 };
 
 export { type ReviewQuery, getReviews };

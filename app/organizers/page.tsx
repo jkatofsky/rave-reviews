@@ -12,7 +12,6 @@ export const metadata = {
 	title: 'Organizers | Rave Reviews',
 };
 
-// TODO: organizer name text + location search
 export default async function OrganizersPage({
 	searchParams,
 }: {
