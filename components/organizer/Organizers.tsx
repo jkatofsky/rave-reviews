@@ -69,32 +69,30 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 				<Text fw={600}>Add an organizer!</Text>
 			</Button>
 			<Box>
+				{/* TODO: searching! */}
 				<Group grow>
-					{/* TODO: put a search bar right here! */}
-					<Group grow>
-						<SortingButton<Organizer>
-							orderByField="overallRating"
-							label="Rating"
-							onClick={({ orderByField, sortOrder }) => {
-								setOrderBy({ orderByField, sortOrder });
-								setPage({ page: 0 });
-							}}
-							currentOrderBy={{
-								orderByField: orderBy.orderByField as keyof Organizer,
-								sortOrder: orderBy.sortOrder,
-							}}
-						/>
-						<MultiSelect
-							data={enumToSelectData(Genre)}
-							searchable
-							value={topGenres}
-							onChange={(value) => {
-								setTopGenres({ topGenres: value as Genre[] });
-								setPage({ page: 0 });
-							}}
-							placeholder="Filter by genre"
-						/>
-					</Group>
+					<SortingButton<Organizer>
+						orderByField="overallRating"
+						label="Rating"
+						onClick={({ orderByField, sortOrder }) => {
+							setOrderBy({ orderByField, sortOrder });
+							setPage({ page: 0 });
+						}}
+						currentOrderBy={{
+							orderByField: orderBy.orderByField as keyof Organizer,
+							sortOrder: orderBy.sortOrder,
+						}}
+					/>
+					<MultiSelect
+						data={enumToSelectData(Genre)}
+						searchable
+						value={topGenres}
+						onChange={(value) => {
+							setTopGenres({ topGenres: value as Genre[] });
+							setPage({ page: 0 });
+						}}
+						placeholder="Filter by genre"
+					/>
 				</Group>
 
 				<Anchor

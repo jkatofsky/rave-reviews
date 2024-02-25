@@ -6,6 +6,7 @@ interface PaginationButtonsProps {
 	hasNextPage: boolean;
 }
 
+// TODO: scroll-to?
 export function PaginationButtons({ page, setPage, hasNextPage }: PaginationButtonsProps) {
 	return (
 		<Group>
