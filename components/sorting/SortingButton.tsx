@@ -2,29 +2,24 @@ import { Button } from '@mantine/core';
 import { Prisma } from '@prisma/client';
 
 export function SortingButon<ObjectType>({
-	sortingFieldName,
+	orderByField,
 	label,
-	setSortingField,
-	currentSortingField,
+	onClick,
+	currentOrderBy,
 }: {
-	sortingFieldName: keyof ObjectType;
+	orderByField: keyof ObjectType;
 	label: string;
-	setSortingField: React.Dispatch<
-		React.SetStateAction<{
-			fieldName: keyof ObjectType;
-			sortOrder: Prisma.SortOrder;
-		}>
-	>;
-	currentSortingField: {
-		fieldName: keyof ObjectType;
+	onClick: (orderBy: { orderByField: keyof ObjectType; sortOrder: Prisma.SortOrder }) => void;
+	currentOrderBy: {
+		orderByField: keyof ObjectType;
 		sortOrder: Prisma.SortOrder;
 	};
 }) {
-	const isActiveSort = currentSortingField.fieldName === sortingFieldName;
+	const isActiveSort = currentOrderBy.orderByField === orderByField;
 
 	const variant = isActiveSort ? 'light' : 'outline';
 	const icon = isActiveSort ? (
-		currentSortingField.sortOrder === Prisma.SortOrder.asc ? (
+		currentOrderBy.sortOrder === Prisma.SortOrder.asc ? (
 			<>&uarr;</>
 		) : (
 			<>&darr;</>
@@ -33,25 +28,26 @@ export function SortingButon<ObjectType>({
 		<>&uarr;&darr;</>
 	);
 
-	const onClick = () => {
-		if (isActiveSort) {
-			setSortingField((prevSortingField) => ({
-				...prevSortingField,
-				sortOrder:
-					prevSortingField.sortOrder === Prisma.SortOrder.asc
-						? Prisma.SortOrder.desc
-						: Prisma.SortOrder.asc,
-			}));
-		} else {
-			setSortingField({
-				fieldName: sortingFieldName,
-				sortOrder: Prisma.SortOrder.desc,
-			});
-		}
-	};
-
 	return (
-		<Button variant={variant} leftSection={icon} onClick={onClick}>
+		<Button
+			variant={variant}
+			leftSection={icon}
+			onClick={() => {
+				let sortOrder: Prisma.SortOrder;
+				if (isActiveSort) {
+					sortOrder =
+						currentOrderBy.sortOrder === Prisma.SortOrder.asc
+							? Prisma.SortOrder.desc
+							: Prisma.SortOrder.asc;
+				} else {
+					sortOrder = Prisma.SortOrder.desc;
+				}
+				onClick({
+					orderByField,
+					sortOrder,
+				});
+			}}
+		>
 			{label}
 		</Button>
 	);

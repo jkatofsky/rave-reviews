@@ -9,7 +9,7 @@ import { OrganizerQuery } from '../../lib/organizer';
 import { OrganizerList } from './OrganizerList';
 import { CreateOrganizerModal } from './CreateOrganizerModal';
 import { SortingButon } from '../sorting';
-import { DEFAULT_PAGE_SIZE, enumToSelectData } from '../../util';
+import { enumToSelectData } from '../../util';
 
 interface OrganizersProps {
 	initialOrganizers: Organizer[];
@@ -20,12 +20,12 @@ interface OrganizersProps {
 export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }: OrganizersProps) {
 	const [organizers, setOrganizers] = useState<Organizer[]>(initialOrganizers);
 
-	// TODO: put these two in query params
-	const [sortingField, setSortingField] = useState<{
-		fieldName: keyof Organizer;
+	// TODO: do the query params here too, like in OrganizerReviews
+	const [orderBy, setOrderBy] = useState<{
+		orderByField: keyof Organizer;
 		sortOrder: Prisma.SortOrder;
 	}>({
-		fieldName: 'overallRating',
+		orderByField: 'overallRating',
 		sortOrder: Prisma.SortOrder.desc,
 	});
 	const [topGenresToFilter, setTopGenresToFilter] = useState<Genre[]>([]);
@@ -36,16 +36,15 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 		async function updateOrganizers() {
 			const organizers = await getOrganizers({
 				page: 0,
-				perPage: DEFAULT_PAGE_SIZE,
 				orderBy: {
-					[sortingField.fieldName]: { sort: sortingField.sortOrder, nulls: 'last' },
+					[orderBy.orderByField]: { sort: orderBy.sortOrder, nulls: 'last' },
 				},
 				topGenresToFilter,
 			});
 			setOrganizers(organizers);
 		}
 		updateOrganizers();
-	}, [sortingField, JSON.stringify(topGenresToFilter)]);
+	}, [orderBy, JSON.stringify(topGenresToFilter)]);
 
 	return (
 		<Stack p="sm" w={800}>
@@ -55,10 +54,12 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 			</Button>
 			<Group>
 				<SortingButon<Organizer>
-					sortingFieldName="overallRating"
+					orderByField="overallRating"
 					label="Rating"
-					setSortingField={setSortingField}
-					currentSortingField={sortingField}
+					onClick={({ orderByField, sortOrder }) => {
+						setOrderBy({ orderByField, sortOrder });
+					}}
+					currentOrderBy={orderBy}
 				/>
 				<Divider orientation="vertical" />
 				<MultiSelect
