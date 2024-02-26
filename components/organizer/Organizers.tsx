@@ -6,17 +6,18 @@ import { useDidUpdate, useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { useQueryStates } from 'nuqs';
 
-import { OrganizerQuery } from '../../lib/organizer';
-import { OrganizerList } from './OrganizerList';
-import { CreateOrganizerModal } from './CreateOrganizerModal';
-import { PaginationButtons, SortingButton } from '../search';
+import { OrganizerQuery } from '@/lib/organizer';
+import { PaginationButtons, SortingButton } from '@/components/search';
 import {
 	RATINGS_INFO,
 	enumToSelectData,
 	organizerOrderByParser,
 	organizerPageParser,
 	organizerTopGenresParser,
-} from '../../util';
+} from '@/util';
+
+import { OrganizerList } from './OrganizerList';
+import { CreateOrganizerModal } from './CreateOrganizerModal';
 
 interface OrganizersProps {
 	initialOrganizers: { hasNextPage: boolean; organizers: Organizer[] };

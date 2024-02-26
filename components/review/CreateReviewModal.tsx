@@ -14,7 +14,7 @@ import {
 import { useForm } from '@mantine/form';
 import { Genre, Organizer, Review } from '@prisma/client';
 
-import { RATINGS_INFO, enumToSelectData } from '../../util';
+import { RATINGS_INFO, enumToSelectData } from '@/util';
 
 interface CreateReviewModalProps {
 	opened: boolean;

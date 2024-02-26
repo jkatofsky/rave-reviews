@@ -2,7 +2,7 @@ import { Button, Modal, Select, Space, TextInput, Textarea, Title } from '@manti
 import { useForm } from '@mantine/form';
 import { Organizer, OrganizerType } from '@prisma/client';
 
-import { enumToSelectData } from '../../util';
+import { enumToSelectData } from '@/util';
 
 interface CreateOrganizerModalProps {
 	opened: boolean;

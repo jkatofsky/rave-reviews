@@ -2,9 +2,9 @@
 
 import type { Review } from '@prisma/client';
 
-import prisma from '../db';
-import { RATINGS_INFO } from '../../util';
-import { recomputeOrganizerReviewData } from '../organizer/update';
+import prisma from '@/lib/db';
+import { recomputeOrganizerReviewData } from '@/lib/organizer';
+import { RATINGS_INFO } from '@/util';
 
 const createReview = async (review: Review): Promise<void> => {
 	// TODO: type the params as any and use zod to get the review?

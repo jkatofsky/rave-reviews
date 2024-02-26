@@ -2,8 +2,8 @@
 
 import { type Review, Prisma } from '@prisma/client';
 
-import prisma from '../db';
-import { DEFAULT_PAGE_SIZE } from '../../util';
+import prisma from '@/lib/db';
+import { DEFAULT_PAGE_SIZE } from '@/util';
 
 type ReviewQuery = {
 	organizerId: number;

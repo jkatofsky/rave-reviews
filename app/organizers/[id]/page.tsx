@@ -6,10 +6,10 @@ import { Review, type Organizer } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import { AggregateRating, WithContext } from 'schema-dts';
 
-import { getOrganizer } from '../../../lib/organizer';
-import { getReviews, createReview } from '../../../lib/review';
-import { OrganizerInfo, OrganizerReviews } from '../../../components/organizer';
-import { reviewSearchParamParser } from '../../../util';
+import { getOrganizer } from '@/lib/organizer';
+import { getReviews, createReview } from '@/lib/review';
+import { OrganizerInfo, OrganizerReviews } from '@/components/organizer';
+import { reviewSearchParamParser } from '@/util';
 
 const cachedGetOrganizer = cache(async (organizerId: number) => await getOrganizer(organizerId));
 

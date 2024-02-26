@@ -2,8 +2,8 @@ import { Box, Divider, Group, Stack, Title, Text } from '@mantine/core';
 import { Organizer } from '@prisma/client';
 import Link from 'next/link';
 
-import { Card, GenrePill, DisplayRating, RatingList } from '../data-display';
-import { humanizeEnumString } from '../../util';
+import { Card, GenrePill, DisplayRating, RatingList } from '@/components/data-display';
+import { humanizeEnumString } from '@/util';
 
 function OrganizerCard({ organizer }: { organizer: Organizer }) {
 	return (

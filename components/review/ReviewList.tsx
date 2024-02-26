@@ -1,7 +1,7 @@
 import { Divider, Group, Spoiler, Stack, Text } from '@mantine/core';
 import { Review } from '@prisma/client';
 
-import { Card, RatingList, GenrePill, Timestamp } from '../data-display';
+import { Card, RatingList, GenrePill, Timestamp } from '@/components/data-display';
 
 function ReviewCard({ review }: { review: Review }) {
 	return (

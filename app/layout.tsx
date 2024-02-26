@@ -1,9 +1,9 @@
 import '@mantine/core/styles.css';
 import React from 'react';
+import Link from 'next/link';
 import { MantineProvider, ColorSchemeScript, Title, Center } from '@mantine/core';
 
 import { theme } from '../theme';
-import Link from 'next/link';
 
 export const metadata = {
 	title: 'Rave Reviews',

@@ -1,4 +1,4 @@
-import { Button, Center, Group, Stack, Title } from '@mantine/core';
+import { Button, Center, Group, Title } from '@mantine/core';
 import Link from 'next/link';
 
 export default function NotFound() {

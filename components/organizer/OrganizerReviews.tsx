@@ -6,10 +6,10 @@ import { useDidUpdate, useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { useQueryStates } from 'nuqs';
 
-import { ReviewQuery } from '../../lib/review';
-import { CreateReviewModal, ReviewList } from '../review';
-import { PaginationButtons, SortingButton } from '../search';
-import { reviewOrderByParser, reviewPageParser } from '../../util';
+import { ReviewQuery } from '@/lib/review';
+import { CreateReviewModal, ReviewList } from '@/components/review';
+import { PaginationButtons, SortingButton } from '@/components/search';
+import { reviewOrderByParser, reviewPageParser } from '@/util';
 
 interface OrganizerReviewsProps {
 	organizer: Organizer;

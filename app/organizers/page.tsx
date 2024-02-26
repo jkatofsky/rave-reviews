@@ -2,9 +2,9 @@ import { Center } from '@mantine/core';
 import { Organizer } from '@prisma/client';
 import { redirect } from 'next/navigation';
 
-import { getOrganizers, createOrganizer } from '../../lib/organizer';
-import { Organizers } from '../../components/organizer';
-import { organizerSearchParamParser } from '../../util';
+import { getOrganizers, createOrganizer } from '@/lib/organizer';
+import { Organizers } from '@/components/organizer';
+import { organizerSearchParamParser } from '@/util';
 
 export const dynamic = 'force-dynamic';
 
