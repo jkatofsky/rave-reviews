@@ -1,7 +1,13 @@
 import { Divider, Group, Spoiler, Stack, Text } from '@mantine/core';
 import { Review } from '@prisma/client';
 
-import { Card, RatingList, GenrePill, Timestamp } from '@/components/data-display';
+import {
+	Card,
+	RatingList,
+	GenrePill,
+	Timestamp,
+	DisplayExpensiveness,
+} from '@/components/data-display';
 
 function ReviewCard({ review }: { review: Review }) {
 	return (
@@ -27,11 +33,9 @@ function ReviewCard({ review }: { review: Review }) {
 					<Divider mt="xs" mb="xs" />
 				</>
 			)}
-			{review.moneySpent && (
+			{review.expensiveness && (
 				<>
-					<Group>
-						<Text>${review.moneySpent}</Text>
-					</Group>
+					<DisplayExpensiveness expensiveness={review.expensiveness} />
 					<Divider mt="xs" mb="xs" />
 				</>
 			)}

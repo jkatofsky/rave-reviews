@@ -1,8 +1,14 @@
-import { Box, Divider, Group, Stack, Title, Text } from '@mantine/core';
+import { Box, Divider, Group, Stack, Title, Text, Space } from '@mantine/core';
 import { Organizer } from '@prisma/client';
 import Link from 'next/link';
 
-import { Card, GenrePill, DisplayRating, RatingList } from '@/components/data-display';
+import {
+	Card,
+	GenrePill,
+	DisplayRating,
+	RatingList,
+	DisplayExpensiveness,
+} from '@/components/data-display';
 import { humanizeEnumString } from '@/util';
 
 function OrganizerCard({ organizer }: { organizer: Organizer }) {
@@ -40,6 +46,13 @@ function OrganizerCard({ organizer }: { organizer: Organizer }) {
 							))}
 						</Group>
 						<Divider mt="sm" />
+					</>
+				)}
+				{organizer.overallExpensiveness && (
+					<>
+						<Space h="xs" />
+						<DisplayExpensiveness expensiveness={organizer.overallExpensiveness} />
+						<Divider mb="sm" />
 					</>
 				)}
 				<Group gap="sm" mt="sm">

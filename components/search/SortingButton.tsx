@@ -1,5 +1,6 @@
 import { Button } from '@mantine/core';
 import { Prisma } from '@prisma/client';
+import { IconArrowDown, IconArrowUp, IconArrowsUpDown } from '@tabler/icons-react';
 
 export function SortingButton<ObjectType>({
 	orderByField,
@@ -20,12 +21,12 @@ export function SortingButton<ObjectType>({
 	const variant = isActiveSort ? 'filled' : 'light';
 	const icon = isActiveSort ? (
 		currentOrderBy.sortOrder === Prisma.SortOrder.asc ? (
-			<>&uarr;</>
+			<IconArrowUp />
 		) : (
-			<>&darr;</>
+			<IconArrowDown />
 		)
 	) : (
-		<>&uarr;&darr;</>
+		<IconArrowsUpDown />
 	);
 
 	return (

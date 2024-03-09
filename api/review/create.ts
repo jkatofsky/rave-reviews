@@ -2,20 +2,20 @@
 
 import type { Review } from '@prisma/client';
 
-import prisma from '@/lib/db';
-import { recomputeOrganizerReviewData } from '@/lib/organizer';
+import prisma from '@/api/db';
+import { recomputeOrganizerReviewData } from '@/api/organizer';
 import { RATINGS_INFO } from '@/util';
 
 const createReview = async (review: Review): Promise<void> => {
 	// TODO: type the params as any and use zod to get the review?
-	const { organizerId, description, genres, moneySpent } = review;
+	const { organizerId, description, genres, expensiveness } = review;
 
 	await prisma.review.create({
 		data: {
 			organizerId,
 			description,
 			genres,
-			moneySpent,
+			expensiveness,
 			...[...RATINGS_INFO.keys()].reduce(
 				(ratings, ratingKey) =>
 					review[ratingKey as keyof Review]

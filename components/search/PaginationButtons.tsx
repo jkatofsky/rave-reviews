@@ -1,4 +1,5 @@
 import { Button, Group } from '@mantine/core';
+import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 interface PaginationButtonsProps {
 	page: number;
@@ -19,7 +20,7 @@ export function PaginationButtons({ page, setPage, hasNextPage }: PaginationButt
 					}))
 				}
 			>
-				&larr;&nbsp;Previous page
+				<IconArrowLeft />
 			</Button>
 			<Button
 				variant="outline"
@@ -30,7 +31,7 @@ export function PaginationButtons({ page, setPage, hasNextPage }: PaginationButt
 					}))
 				}
 			>
-				Next page&nbsp;&rarr;
+				<IconArrowRight />
 			</Button>
 		</Group>
 	);

@@ -3,3 +3,4 @@ export * from './GenrePill';
 export * from './Timestamp';
 export * from './DisplayRating';
 export * from './RatingList';
+export * from './DisplayExpensiveness';

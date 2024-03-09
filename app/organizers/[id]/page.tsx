@@ -6,8 +6,8 @@ import { Review, type Organizer } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import { AggregateRating, WithContext } from 'schema-dts';
 
-import { getOrganizer } from '@/lib/organizer';
-import { getReviews, createReview } from '@/lib/review';
+import { getOrganizer } from '@/api/organizer';
+import { getReviews, createReview } from '@/api/review';
 import { OrganizerInfo, OrganizerReviews } from '@/components/organizer';
 import { reviewSearchParamParser } from '@/util';
 

@@ -1,7 +1,13 @@
 import { Anchor, Box, Divider, Group, Stack, Text, Title } from '@mantine/core';
 import { Organizer } from '@prisma/client';
 
-import { GenrePill, Timestamp, DisplayRating, RatingList } from '@/components/data-display';
+import {
+	GenrePill,
+	Timestamp,
+	DisplayRating,
+	RatingList,
+	DisplayExpensiveness,
+} from '@/components/data-display';
 import { humanizeEnumString } from '@/util';
 
 export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
@@ -25,7 +31,7 @@ export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 			</Box>
 
 			{organizer.topGenres.length > 0 && (
-				<Group gap="xs" mt="lg">
+				<Group gap="xs" mt="lg" mb="lg">
 					<Text c="black" fw={600}>
 						Top genres
 					</Text>
@@ -35,7 +41,9 @@ export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 				</Group>
 			)}
 
-			<Divider mt="md" mb="md" />
+			<DisplayExpensiveness expensiveness={organizer.overallExpensiveness} />
+
+			<Divider mt="sm" mb="md" />
 
 			<Group gap="md">
 				<RatingList<Organizer> objectWithRatings={organizer} />

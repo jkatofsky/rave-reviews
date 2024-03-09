@@ -31,6 +31,8 @@ model Organizer {
   // Calculating this stuff on-the-fly would be more maintainable, but certainly slower
   topGenres Genre[]
 
+  overallExpensiveness Int?
+
   reviewCount Int
 
   overallRating          Float?
@@ -43,8 +45,6 @@ model Organizer {
   visualsRating          Float?
   staffRating            Float?
   foodAndDrinkRating     Float?
-
-  // TODO: average expensiveness
 }
 
 enum Genre {
@@ -76,6 +76,7 @@ enum Genre {
   Garage
   Breakbeat
   Chillout
+  BigRoom
 }
 
 model Review {
@@ -89,8 +90,7 @@ model Review {
   description String?
   genres      Genre[]
 
-  // TODO: turn this into a dollar sign thing with 4 levels, like google?
-  moneySpent Int?
+  expensiveness Int?
 
   soundSystemRating      Int
   djAndMusicRating       Int

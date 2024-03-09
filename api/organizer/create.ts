@@ -2,7 +2,7 @@
 
 import type { Organizer } from '@prisma/client';
 
-import prisma from '@/lib/db';
+import prisma from '@/api/db';
 
 const createOrganizer = async (organizer: Organizer): Promise<number> => {
 	// TODO: type the params as any and use zod to get the review?

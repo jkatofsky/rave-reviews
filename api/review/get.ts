@@ -2,7 +2,7 @@
 
 import { type Review, Prisma } from '@prisma/client';
 
-import prisma from '@/lib/db';
+import prisma from '@/api/db';
 import { DEFAULT_PAGE_SIZE } from '@/util';
 
 type ReviewQuery = {

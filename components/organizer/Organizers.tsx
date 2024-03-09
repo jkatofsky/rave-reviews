@@ -6,7 +6,7 @@ import { useDidUpdate, useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { useQueryStates } from 'nuqs';
 
-import { OrganizerQuery } from '@/lib/organizer';
+import { OrganizerQuery } from '@/api/organizer';
 import { PaginationButtons, SortingButton } from '@/components/search';
 import {
 	RATINGS_INFO,
@@ -18,6 +18,11 @@ import {
 
 import { OrganizerList } from './OrganizerList';
 import { CreateOrganizerModal } from './CreateOrganizerModal';
+
+const basicSortingButtons: { label: string; field: keyof Organizer }[] = [
+	{ label: 'Rating', field: 'overallRating' },
+	{ label: 'Expensiveness', field: 'overallExpensiveness' },
+];
 
 interface OrganizersProps {
 	initialOrganizers: { hasNextPage: boolean; organizers: Organizer[] };
@@ -72,18 +77,21 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 			<Box>
 				{/* TODO: searching! */}
 				<Group grow>
-					<SortingButton<Organizer>
-						orderByField="overallRating"
-						label="Rating"
-						onClick={({ orderByField, sortOrder }) => {
-							setOrderBy({ orderByField, sortOrder });
-							setPage({ page: 0 });
-						}}
-						currentOrderBy={{
-							orderByField: orderBy.orderByField as keyof Organizer,
-							sortOrder: orderBy.sortOrder,
-						}}
-					/>
+					{basicSortingButtons.map(({ label, field }, index) => (
+						<SortingButton<Organizer>
+							key={index}
+							orderByField={field}
+							label={label}
+							onClick={({ orderByField, sortOrder }) => {
+								setOrderBy({ orderByField, sortOrder });
+								setPage({ page: 0 });
+							}}
+							currentOrderBy={{
+								orderByField: orderBy.orderByField as keyof Organizer,
+								sortOrder: orderBy.sortOrder,
+							}}
+						/>
+					))}
 					<MultiSelect
 						data={enumToSelectData(Genre)}
 						searchable
@@ -93,6 +101,7 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 							setPage({ page: 0 });
 						}}
 						placeholder="Filter by genre"
+						clearable
 					/>
 				</Group>
 

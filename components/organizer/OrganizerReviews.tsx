@@ -6,7 +6,7 @@ import { useDidUpdate, useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { useQueryStates } from 'nuqs';
 
-import { ReviewQuery } from '@/lib/review';
+import { ReviewQuery } from '@/api/review';
 import { CreateReviewModal, ReviewList } from '@/components/review';
 import { PaginationButtons, SortingButton } from '@/components/search';
 import { reviewOrderByParser, reviewPageParser } from '@/util';
@@ -55,24 +55,28 @@ export function OrganizerReviews({
 			<Button onClick={open} variant="gradient" gradient={{ from: 'blue', to: 'purple' }}>
 				<Text fw={600}>Add your review!</Text>
 			</Button>
-			<Group>
-				{/* TODO: more sorting/filtering options */}
-				<SortingButton<Review>
-					orderByField="createdAt"
-					label="Review date"
-					onClick={(orderBy) => {
-						setOrderBy(orderBy);
-						setPage({ page: 0 });
-					}}
-					currentOrderBy={{
-						orderByField: orderBy.orderByField as keyof Review,
-						sortOrder: orderBy.sortOrder,
-					}}
-				/>
-			</Group>
-			{/* TODO: make this a server component and slot it */}
-			<ReviewList reviews={reviews} />
-			<PaginationButtons page={page} setPage={setPage} hasNextPage={hasNextPage} />
+			{organizer.reviewCount > 0 && (
+				<>
+					<Group>
+						{/* TODO: more sorting/filtering options */}
+						<SortingButton<Review>
+							orderByField="createdAt"
+							label="Review date"
+							onClick={(orderBy) => {
+								setOrderBy(orderBy);
+								setPage({ page: 0 });
+							}}
+							currentOrderBy={{
+								orderByField: orderBy.orderByField as keyof Review,
+								sortOrder: orderBy.sortOrder,
+							}}
+						/>
+					</Group>
+					{/* TODO: make this a server component and slot it */}
+					<ReviewList reviews={reviews} />
+					<PaginationButtons page={page} setPage={setPage} hasNextPage={hasNextPage} />
+				</>
+			)}
 		</Stack>
 	);
 }

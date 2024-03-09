@@ -28,8 +28,8 @@
       "@/components/*": [
         "components/*"
       ],
-      "@/lib/*": [
-        "lib/*"
+      "@/api/*": [
+        "api/*"
       ],
       "@/util/*": [
         "util/*",

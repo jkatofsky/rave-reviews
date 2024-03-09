@@ -5,16 +5,17 @@ import {
 	InputWrapper,
 	Modal,
 	MultiSelect,
-	NumberInput,
 	Rating,
 	Space,
 	Textarea,
 	Title,
+	useMantineTheme,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { Genre, Organizer, Review } from '@prisma/client';
 
-import { RATINGS_INFO, enumToSelectData } from '@/util';
+import { RATINGS_INFO, enumToSelectData, humanizeEnumString } from '@/util';
+import { IconCurrencyDollar } from '@tabler/icons-react';
 
 interface CreateReviewModalProps {
 	opened: boolean;
@@ -23,19 +24,22 @@ interface CreateReviewModalProps {
 	onCreateReview: (review: Review) => Promise<void>;
 }
 
+// TODO: reset the form after submitting
 export function CreateReviewModal({
 	opened,
 	organizer,
 	onClose,
 	onCreateReview,
 }: CreateReviewModalProps) {
+	const theme = useMantineTheme();
+
 	//TODO: ZOD!
 	const form = useForm<Omit<Review, 'id' | 'createdAt' | 'updatedAt'>>({
 		initialValues: {
 			organizerId: organizer.id,
 			description: '',
 			genres: [],
-			moneySpent: null,
+			expensiveness: null,
 			// TODO: avoid hardcoding all these?
 			soundSystemRating: 0,
 			djAndMusicRating: 0,
@@ -69,6 +73,7 @@ export function CreateReviewModal({
 						{...form.getInputProps('description')}
 						label="Description"
 						description={`Describe your experience at ${organizer.name}`}
+						withAsterisk
 					/>
 					<Space h="sm" />
 					{/* TODO: somehow find a way to style the options/pills? */}
@@ -78,16 +83,30 @@ export function CreateReviewModal({
 						description={`Which genres were played at ${organizer.name}?`}
 						data={enumToSelectData(Genre)}
 						searchable
+						clearable
+						withAsterisk
 					/>
 					<Space h="sm" />
-					<NumberInput
-						{...form.getInputProps('moneySpent')}
-						label="Money spent"
-						description={`Roughly how much did you spend in your visit to ${organizer.name}?`}
-						min={0}
-						step={5}
-						prefix="$"
-					/>
+					<InputWrapper
+						label="Expensiveness"
+						description={
+							<>
+								Relative to other organizers of the type{' '}
+								<b>{humanizeEnumString(organizer.type, false)}</b>, how expensive was your
+								experience at {organizer.name}?
+							</>
+						}
+					>
+						<Rating
+							{...form.getInputProps('expensiveness')}
+							count={4}
+							mt="xs"
+							emptySymbol={<IconCurrencyDollar color={theme.colors.gray[3]} size={40} stroke={3} />}
+							fullSymbol={
+								<IconCurrencyDollar color={theme.colors.yellow[6]} size={40} stroke={3} />
+							}
+						/>
+					</InputWrapper>
 				</Fieldset>
 				<Space h="md" />
 				<Fieldset legend="Rating categories">

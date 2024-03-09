@@ -2,7 +2,7 @@
 
 import type { Genre, Organizer, Prisma } from '@prisma/client';
 
-import prisma from '@/lib/db';
+import prisma from '@/api/db';
 import { DEFAULT_PAGE_SIZE } from '@/util';
 
 const getOrganizer = async (id: number): Promise<Organizer | null> => {

@@ -7,7 +7,15 @@ interface DisplayRatingProps {
 }
 
 export function DisplayRating({ rating, ratingsCount, size }: DisplayRatingProps) {
-	return rating !== null ? (
+	if (rating === null) {
+		return (
+			<Text c="gray" fs="italic">
+				no rating
+			</Text>
+		);
+	}
+
+	return (
 		<Group gap="xs" wrap="nowrap">
 			<Text size={size} c="gray" m={0}>
 				{rating.toFixed(1)}
@@ -19,9 +27,5 @@ export function DisplayRating({ rating, ratingsCount, size }: DisplayRatingProps
 				</Text>
 			)}
 		</Group>
-	) : (
-		<Text c="gray" fs="italic">
-			no rating
-		</Text>
 	);
 }
