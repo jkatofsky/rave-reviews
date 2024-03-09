@@ -4,7 +4,7 @@ import { Group } from '@mantine/core';
 import { revalidatePath } from 'next/cache';
 import { Review, type Organizer } from '@prisma/client';
 import { notFound } from 'next/navigation';
-import { AggregateRating, WithContext } from 'schema-dts';
+import { EntertainmentBusiness, WithContext } from 'schema-dts';
 
 import { getOrganizer } from '@/api/organizer';
 import { getReviews, createReview } from '@/api/review';
@@ -32,17 +32,19 @@ export default async function Organizer({
 
 	if (!organizer) notFound();
 
-	const jsonLd: WithContext<AggregateRating> = {
+	// TODO: make the invidual reviews accessble too?
+	const jsonLd: WithContext<EntertainmentBusiness> = {
 		'@context': 'https://schema.org',
-		'@type': 'AggregateRating',
-		itemReviewed: {
-			'@type': 'Organization',
-			name: organizer.name,
+		'@type': 'EntertainmentBusiness',
+		name: organizer.name,
+		priceRange: '$'.repeat(organizer.overallExpensiveness || 0),
+		aggregateRating: {
+			'@type': 'AggregateRating',
+			ratingValue: organizer.overallRating?.toFixed(2).toString(),
+			ratingCount: organizer.reviewCount,
+			worstRating: '1',
+			bestRating: '5',
 		},
-		ratingValue: organizer.overallRating?.toFixed(2).toString(),
-		ratingCount: organizer.reviewCount,
-		worstRating: '1',
-		bestRating: '5',
 	};
 
 	const { page } = reviewSearchParamParser.page.parse(searchParams);
