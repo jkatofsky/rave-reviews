@@ -1,16 +1,27 @@
 'use client';
 
 import { Genre, Organizer } from '@prisma/client';
-import { Anchor, Box, Button, Collapse, Group, MultiSelect, Stack, Text } from '@mantine/core';
+import {
+	Anchor,
+	Box,
+	Button,
+	Collapse,
+	Group,
+	MultiSelect,
+	Stack,
+	Text,
+	RangeSlider,
+} from '@mantine/core';
 import { useDidUpdate, useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
-import { useQueryStates } from 'nuqs';
+import { useQueryState, useQueryStates } from 'nuqs';
 
 import { OrganizerQuery } from '@/api/organizer';
 import { PaginationButtons, SortingButton } from '@/components/search';
 import {
 	RATINGS_INFO,
 	enumToSelectData,
+	organizerExpensivenessRangeParser,
 	organizerOrderByParser,
 	organizerPageParser,
 	organizerTopGenresParser,
@@ -18,11 +29,6 @@ import {
 
 import { OrganizerList } from './OrganizerList';
 import { CreateOrganizerModal } from './CreateOrganizerModal';
-
-const basicSortingButtons: { label: string; field: keyof Organizer }[] = [
-	{ label: 'Rating', field: 'overallRating' },
-	{ label: 'Expensiveness', field: 'overallExpensiveness' },
-];
 
 interface OrganizersProps {
 	initialOrganizers: { hasNextPage: boolean; organizers: Organizer[] };
@@ -40,6 +46,9 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 	const [hasNextPage, setHasNextPage] = useState<boolean>(initialOrganizers.hasNextPage);
 	const [orderBy, setOrderBy] = useQueryStates(organizerOrderByParser);
 	const [{ topGenres }, setTopGenres] = useQueryStates(organizerTopGenresParser);
+	const [{ expensivenessRange }, setExpensivenessRange] = useQueryStates(
+		organizerExpensivenessRangeParser
+	);
 
 	const [isRatingCategorySortingExpanded, isRatingCategorySortingExpandedController] =
 		useDisclosure(RATINGS_INFO.has(orderBy.orderByField));
@@ -52,6 +61,7 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 					orderBy: {
 						[orderBy.orderByField]: { sort: orderBy.sortOrder, nulls: 'last' },
 					},
+					expensivenessRange: expensivenessRange as [number, number],
 					topGenres,
 				});
 			setOrganizers(updatedOrganizers);
@@ -76,22 +86,38 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 			</Button>
 			<Box>
 				{/* TODO: searching! */}
-				<Group grow>
-					{basicSortingButtons.map(({ label, field }, index) => (
-						<SortingButton<Organizer>
-							key={index}
-							orderByField={field}
-							label={label}
-							onClick={({ orderByField, sortOrder }) => {
-								setOrderBy({ orderByField, sortOrder });
-								setPage({ page: 0 });
-							}}
-							currentOrderBy={{
-								orderByField: orderBy.orderByField as keyof Organizer,
-								sortOrder: orderBy.sortOrder,
-							}}
-						/>
-					))}
+				<Group align="top">
+					<SortingButton<Organizer>
+						orderByField="overallRating"
+						label="Rating"
+						onClick={({ orderByField, sortOrder }) => {
+							setOrderBy({ orderByField, sortOrder });
+							setPage({ page: 0 });
+						}}
+						currentOrderBy={{
+							orderByField: orderBy.orderByField as keyof Organizer,
+							sortOrder: orderBy.sortOrder,
+						}}
+					/>
+					<RangeSlider
+						value={expensivenessRange as [number, number]}
+						onChange={(value) => {
+							setExpensivenessRange({ expensivenessRange: value });
+						}}
+						min={1}
+						max={4}
+						step={1}
+						minRange={0}
+						w={150}
+						marks={[
+							{ value: 1, label: '$' },
+							{ value: 2, label: '$$' },
+							{ value: 3, label: '$$$' },
+							{ value: 4, label: '$$$$' },
+						]}
+						label={null}
+						thumbSize={20}
+					/>
 					<MultiSelect
 						data={enumToSelectData(Genre)}
 						searchable
@@ -102,6 +128,7 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 						}}
 						placeholder="Filter by genre"
 						clearable
+						style={{ flexGrow: 1 }}
 					/>
 				</Group>
 

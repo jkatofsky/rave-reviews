@@ -37,9 +37,13 @@ export const organizerOrderByParser = {
 export const organizerTopGenresParser = {
 	topGenres: parseAsArrayOf(parseAsStringEnum<Genre>(Object.values(Genre))).withDefault([]),
 };
+export const organizerExpensivenessRangeParser = {
+	expensivenessRange: parseAsArrayOf(parseAsInteger).withDefault([1, 4]), // TODO: make a custom parser to make this deserialize as a [number, number] and avoid casting everywhere
+};
 
 export const organizerSearchParamParser = {
 	page: createSearchParamsCache(organizerPageParser),
 	orderBy: createSearchParamsCache(organizerOrderByParser),
 	topGenres: createSearchParamsCache(organizerTopGenresParser),
+	expensivenessRange: createSearchParamsCache(organizerExpensivenessRangeParser),
 };

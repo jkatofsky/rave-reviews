@@ -20,12 +20,14 @@ export default async function OrganizersPage({
 	const { page } = organizerSearchParamParser.page.parse(searchParams);
 	const { orderByField, sortOrder } = organizerSearchParamParser.orderBy.parse(searchParams);
 	const { topGenres } = organizerSearchParamParser.topGenres.parse(searchParams);
+	const { expensivenessRange } = organizerSearchParamParser.expensivenessRange.parse(searchParams);
 
 	const organizers = await getOrganizers({
 		page,
 		orderBy: {
 			[orderByField]: { sort: sortOrder, nulls: 'last' },
 		},
+		expensivenessRange: expensivenessRange as [number, number],
 		topGenres,
 	});
 
