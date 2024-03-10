@@ -22,6 +22,8 @@ export default async function OrganizersPage({
 	const { topGenres } = organizerSearchParamParser.topGenres.parse(searchParams);
 	const { expensivenessRange } = organizerSearchParamParser.expensivenessRange.parse(searchParams);
 
+	// TODO: do I need this initial fetching at all? Since client components are also rendered on the server?
+	// same question for Reviews on the single-organizer page
 	const organizers = await getOrganizers({
 		page,
 		orderBy: {

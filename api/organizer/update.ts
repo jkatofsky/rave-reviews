@@ -93,6 +93,7 @@ async function getOverallExpensiveness(organizerId: number): Promise<number | nu
 // TODO: run this on a cron job for all reviews?
 export async function recomputeOrganizerReviewData(organizerId: number) {
 	// TODO: these functions re-query the Review table one-after-the-other. Surely can be optimized
+	// TODO: weight recent reviews higher?
 	const { overallRating, averageRatings } = await getAverageRatings(organizerId);
 	const reviewCount = await getReviewCount(organizerId);
 	const topGenres = await getTopGenres(organizerId);

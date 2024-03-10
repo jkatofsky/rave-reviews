@@ -53,6 +53,8 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 	const [isRatingCategorySortingExpanded, isRatingCategorySortingExpandedController] =
 		useDisclosure(RATINGS_INFO.has(orderBy.orderByField));
 
+	// TODO: react-query for this?
+	// same question for Reviews on the single-organizer page
 	useDidUpdate(() => {
 		async function updateOrganizers() {
 			const { organizers: updatedOrganizers, hasNextPage: updatedHasNextPage } =
