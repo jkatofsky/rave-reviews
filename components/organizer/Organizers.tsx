@@ -55,6 +55,8 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 
 	// TODO: react-query for this?
 	// same question for Reviews on the single-organizer page
+
+	// TODO: debounce!!! Especially with the expensiveness slider, very needed
 	useDidUpdate(() => {
 		async function updateOrganizers() {
 			const { organizers: updatedOrganizers, hasNextPage: updatedHasNextPage } =

@@ -32,7 +32,7 @@ export default async function Organizer({
 
 	if (!organizer) notFound();
 
-	// TODO: make the invidual reviews accessble too?
+	// TODO: make the individual reviews accessble too?
 	const jsonLd: WithContext<EntertainmentBusiness> = {
 		'@context': 'https://schema.org',
 		'@type': 'EntertainmentBusiness',

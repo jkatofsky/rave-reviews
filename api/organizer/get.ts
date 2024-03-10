@@ -35,7 +35,8 @@ function addExpensivenessRangeToFilters(
 	if (
 		(expensivenessRange?.length || 0) !== 2 ||
 		!expensivenessRange?.every((entry) => typeof entry === 'number') ||
-		expensivenessRange[0] > expensivenessRange[1]
+		expensivenessRange[0] > expensivenessRange[1] ||
+		(expensivenessRange[0] === 1 && expensivenessRange[1] === 4)
 	) {
 		return filters;
 	}
