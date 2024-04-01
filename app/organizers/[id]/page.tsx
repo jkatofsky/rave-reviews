@@ -9,7 +9,7 @@ import { EntertainmentBusiness, WithContext } from 'schema-dts';
 import { getOrganizer } from '@/api/organizer';
 import { getReviews, createReview } from '@/api/review';
 import { OrganizerInfo, OrganizerReviews } from '@/components/organizer';
-import { reviewSearchParamParser } from '@/util';
+import { reviewSearchParamParser } from '@/shared/search';
 
 const cachedGetOrganizer = cache(async (organizerId: number) => await getOrganizer(organizerId));
 

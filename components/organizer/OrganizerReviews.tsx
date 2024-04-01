@@ -9,12 +9,13 @@ import { useQueryStates } from 'nuqs';
 import { ReviewQuery } from '@/api/review';
 import { CreateReviewModal, ReviewList } from '@/components/review';
 import { PaginationButtons, SortingButton } from '@/components/search';
-import { reviewOrderByParser, reviewPageParser } from '@/util';
+import { reviewOrderByParser, reviewPageParser } from '@/shared/search';
+import { PaginatedResponse } from '@/shared/types';
 
 interface OrganizerReviewsProps {
 	organizer: Organizer;
-	initialReviews: { hasNextPage: boolean; reviews: Review[] };
-	getReviews: (reviewQuery: ReviewQuery) => Promise<{ hasNextPage: boolean; reviews: Review[] }>;
+	initialReviews: PaginatedResponse<Review>;
+	getReviews: (reviewQuery: ReviewQuery) => Promise<PaginatedResponse<Review>>;
 	createReview: (review: Review) => Promise<void>;
 }
 
@@ -24,7 +25,7 @@ export function OrganizerReviews({
 	getReviews,
 	createReview,
 }: OrganizerReviewsProps) {
-	const [reviews, setReviews] = useState<Review[]>(initialReviews.reviews);
+	const [reviews, setReviews] = useState<Review[]>(initialReviews.value);
 	const [opened, { open, close }] = useDisclosure(false);
 
 	const [{ page }, setPage] = useQueryStates(reviewPageParser);
@@ -33,7 +34,7 @@ export function OrganizerReviews({
 
 	useDidUpdate(() => {
 		async function updateReviews() {
-			const { reviews: updatedReviews, hasNextPage: updatedHasNextPage } = await getReviews({
+			const { value: updatedReviews, hasNextPage: updatedHasNextPage } = await getReviews({
 				organizerId: organizer.id,
 				page: page,
 				orderBy: { [orderBy.orderByField]: orderBy.sortOrder },

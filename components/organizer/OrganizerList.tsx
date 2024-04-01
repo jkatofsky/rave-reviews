@@ -9,7 +9,8 @@ import {
 	RatingList,
 	DisplayExpensiveness,
 } from '@/components/data-display';
-import { humanizeEnumString } from '@/util';
+
+import { humanizeEnumString } from '../util';
 
 function OrganizerCard({ organizer }: { organizer: Organizer }) {
 	return (

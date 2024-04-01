@@ -31,12 +31,9 @@
       "@/api/*": [
         "api/*"
       ],
-      "@/util/*": [
-        "util/*",
+      "@/shared/*": [
+        "shared/*",
       ],
-      "@/util": [
-        "util",
-      ]
     }
   },
   "include": [

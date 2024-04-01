@@ -1,7 +1,7 @@
 import { Pill, Text } from '@mantine/core';
 import { Genre } from '@prisma/client';
 
-import { humanizeEnumString } from '@/util';
+import { humanizeEnumString } from '../util';
 
 function stringToHSLColour(string: string): string {
 	let stringHash = [...string].reduce((acc, char) => {

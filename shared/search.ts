@@ -7,7 +7,6 @@ import {
 	parseAsArrayOf,
 } from 'nuqs/server';
 
-// TODO: move this code elsewhere?
 // TODO: do all of these need to be objects?
 
 export const reviewPageParser = {

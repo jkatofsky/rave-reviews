@@ -3,7 +3,10 @@
 import type { Genre, Organizer, Prisma } from '@prisma/client';
 
 import prisma from '@/api/db';
-import { DEFAULT_PAGE_SIZE } from '@/util';
+import { DEFAULT_PAGE_SIZE } from '@/shared/constants';
+import { PaginatedResponse } from '@/shared/types';
+
+import { getPaginatedResponse } from '../util';
 
 const getOrganizer = async (id: number): Promise<Organizer | null> => {
 	return await prisma.organizer.findUnique({
@@ -63,22 +66,20 @@ const getOrganizers = async ({
 	orderBy,
 	expensivenessRange,
 	topGenres,
-}: OrganizerQuery): Promise<{ hasNextPage: boolean; organizers: Organizer[] }> => {
+}: OrganizerQuery): Promise<PaginatedResponse<Organizer>> => {
 	let filters: Prisma.OrganizerWhereInput = {};
 	filters = addExpensivenessRangeToFilters(expensivenessRange, filters);
 	filters = addTopGenresToFilters(topGenres, filters);
 
-	const organizersWithExtra = await prisma.organizer.findMany({
-		skip: page * perPage,
-		take: perPage + 1,
-		orderBy,
-		where: filters,
-	});
-	const hasNextPage = organizersWithExtra.length > perPage;
-	return {
-		hasNextPage,
-		organizers: hasNextPage ? organizersWithExtra.slice(0, -1) : organizersWithExtra,
-	};
+	const organizersQueryPromise = (_perPage: number) =>
+		prisma.organizer.findMany({
+			skip: page * perPage,
+			take: _perPage,
+			orderBy,
+			where: filters,
+		});
+
+	return await getPaginatedResponse<Organizer>(organizersQueryPromise, perPage);
 };
 
 export { getOrganizer, getOrganizers, type OrganizerQuery };

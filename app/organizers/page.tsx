@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { getOrganizers, createOrganizer } from '@/api/organizer';
 import { Organizers } from '@/components/organizer';
-import { organizerSearchParamParser } from '@/util';
+import { organizerSearchParamParser } from '@/shared/search';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,8 +22,6 @@ export default async function OrganizersPage({
 	const { topGenres } = organizerSearchParamParser.topGenres.parse(searchParams);
 	const { expensivenessRange } = organizerSearchParamParser.expensivenessRange.parse(searchParams);
 
-	// TODO: do I need this initial fetching at all? Since client components are also rendered on the server?
-	// same question for Reviews on the single-organizer page
 	const organizers = await getOrganizers({
 		page,
 		orderBy: {

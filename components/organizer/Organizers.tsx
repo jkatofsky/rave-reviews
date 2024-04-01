@@ -14,32 +14,31 @@ import {
 } from '@mantine/core';
 import { useDidUpdate, useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
-import { useQueryState, useQueryStates } from 'nuqs';
+import { useQueryStates } from 'nuqs';
 
 import { OrganizerQuery } from '@/api/organizer';
 import { PaginationButtons, SortingButton } from '@/components/search';
+import { RATINGS_INFO } from '@/shared/constants';
 import {
-	RATINGS_INFO,
-	enumToSelectData,
 	organizerExpensivenessRangeParser,
 	organizerOrderByParser,
 	organizerPageParser,
 	organizerTopGenresParser,
-} from '@/util';
+} from '@/shared/search';
+import { PaginatedResponse } from '@/shared/types';
 
+import { enumToSelectData } from '../util';
 import { OrganizerList } from './OrganizerList';
 import { CreateOrganizerModal } from './CreateOrganizerModal';
 
 interface OrganizersProps {
-	initialOrganizers: { hasNextPage: boolean; organizers: Organizer[] };
-	getOrganizers: (
-		organizerQuery: OrganizerQuery
-	) => Promise<{ hasNextPage: boolean; organizers: Organizer[] }>;
+	initialOrganizers: PaginatedResponse<Organizer>;
+	getOrganizers: (organizerQuery: OrganizerQuery) => Promise<PaginatedResponse<Organizer>>;
 	createOrganizer: (organizer: Organizer) => Promise<void>;
 }
 
 export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }: OrganizersProps) {
-	const [organizers, setOrganizers] = useState<Organizer[]>(initialOrganizers.organizers);
+	const [organizers, setOrganizers] = useState<Organizer[]>(initialOrganizers.value);
 	const [isCreateOrganizerModalOpen, createOrganizerModalController] = useDisclosure(false);
 
 	const [{ page }, setPage] = useQueryStates(organizerPageParser);
@@ -59,15 +58,14 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 	// TODO: debounce!!! Especially with the expensiveness slider, very needed
 	useDidUpdate(() => {
 		async function updateOrganizers() {
-			const { organizers: updatedOrganizers, hasNextPage: updatedHasNextPage } =
-				await getOrganizers({
-					page,
-					orderBy: {
-						[orderBy.orderByField]: { sort: orderBy.sortOrder, nulls: 'last' },
-					},
-					expensivenessRange: expensivenessRange as [number, number],
-					topGenres,
-				});
+			const { value: updatedOrganizers, hasNextPage: updatedHasNextPage } = await getOrganizers({
+				page,
+				orderBy: {
+					[orderBy.orderByField]: { sort: orderBy.sortOrder, nulls: 'last' },
+				},
+				expensivenessRange: expensivenessRange as [number, number],
+				topGenres,
+			});
 			setOrganizers(updatedOrganizers);
 			setHasNextPage(updatedHasNextPage);
 		}
