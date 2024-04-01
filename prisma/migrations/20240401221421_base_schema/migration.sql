@@ -2,7 +2,7 @@
 CREATE TYPE "OrganizerType" AS ENUM ('BarOrClub', 'EventCollective', 'MusicFestival');
 
 -- CreateEnum
-CREATE TYPE "Genre" AS ENUM ('House', 'Techno', 'Trance', 'Dubstep', 'DrumAndBass', 'Hardstyle', 'Trap', 'Electro');
+CREATE TYPE "Genre" AS ENUM ('House', 'DeepHouse', 'ProgressiveHouse', 'TechHouse', 'AcidHouse', 'TropicalHouse', 'FutureHouse', 'AfroHouse', 'Techno', 'Psytrance', 'MelodicTechno', 'HardTechno', 'AcidTechno', 'Trance', 'Dubstep', 'MelodicDubstep', 'Brostep', 'Chillstep', 'DrumAndBass', 'Hardstyle', 'Ambient', 'Disco', 'Funk', 'Trap', 'Electro', 'Garage', 'Breakbeat', 'Chillout', 'BigRoom', 'BassHouse', 'Hyperpop', 'Jungle', 'Downtempo');
 
 -- CreateTable
 CREATE TABLE "Organizer" (
@@ -13,6 +13,7 @@ CREATE TABLE "Organizer" (
     "type" "OrganizerType" NOT NULL,
     "websites" TEXT[],
     "topGenres" "Genre"[],
+    "overallExpensiveness" INTEGER,
     "reviewCount" INTEGER NOT NULL,
     "overallRating" DOUBLE PRECISION,
     "soundSystemRating" DOUBLE PRECISION,
@@ -34,9 +35,9 @@ CREATE TABLE "Review" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "organizerId" INTEGER NOT NULL,
-    "description" TEXT NOT NULL,
+    "description" TEXT,
     "genres" "Genre"[],
-    "moneySpent" INTEGER,
+    "expensiveness" INTEGER,
     "soundSystemRating" INTEGER NOT NULL,
     "djAndMusicRating" INTEGER NOT NULL,
     "crowdPlurRating" INTEGER NOT NULL,
