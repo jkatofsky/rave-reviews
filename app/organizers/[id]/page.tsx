@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 	const organizer = await cachedGetOrganizer(Number(params.id));
 
 	return {
-		title: `${organizer?.name} | Rave Reviews`,
+		title: organizer ? `${organizer.name} | Rave Reviews` : 'Organizer not found | Rave Reviews',
 	};
 }
 
