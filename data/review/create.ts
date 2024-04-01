@@ -2,7 +2,7 @@
 
 import type { Review } from '@prisma/client';
 
-import prisma from '@/data/db';
+import prisma from '../db';
 import { recomputeOrganizerReviewData } from '@/data/organizer';
 import { RATINGS_INFO } from '@/shared/constants';
 

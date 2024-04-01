@@ -77,6 +77,10 @@ enum Genre {
   Breakbeat
   Chillout
   BigRoom
+  BassHouse
+  Hyperpop
+  Jungle
+  Downtempo
 }
 
 model Review {

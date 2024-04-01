@@ -2,7 +2,7 @@
 
 import { type Review, Prisma } from '@prisma/client';
 
-import prisma from '@/data/db';
+import prisma from '../db';
 import { DEFAULT_PAGE_SIZE } from '@/shared/constants';
 import { PaginatedResponse } from '@/shared/types';
 
