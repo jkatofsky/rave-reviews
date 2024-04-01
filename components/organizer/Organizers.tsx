@@ -16,7 +16,7 @@ import { useDidUpdate, useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { useQueryStates } from 'nuqs';
 
-import { OrganizerQuery } from '@/api/organizer';
+import { OrganizerQuery } from '@/data/organizer';
 import { PaginationButtons, SortingButton } from '@/components/search';
 import { RATINGS_INFO } from '@/shared/constants';
 import {

@@ -2,8 +2,8 @@
 
 import type { Review } from '@prisma/client';
 
-import prisma from '@/api/db';
-import { recomputeOrganizerReviewData } from '@/api/organizer';
+import prisma from '@/data/db';
+import { recomputeOrganizerReviewData } from '@/data/organizer';
 import { RATINGS_INFO } from '@/shared/constants';
 
 const createReview = async (review: Review): Promise<void> => {

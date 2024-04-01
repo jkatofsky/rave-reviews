@@ -2,7 +2,7 @@
 
 import type { Genre, Organizer, Prisma } from '@prisma/client';
 
-import prisma from '@/api/db';
+import prisma from '@/data/db';
 import { DEFAULT_PAGE_SIZE } from '@/shared/constants';
 import { PaginatedResponse } from '@/shared/types';
 

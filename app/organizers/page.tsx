@@ -2,7 +2,7 @@ import { Center } from '@mantine/core';
 import { Organizer } from '@prisma/client';
 import { redirect } from 'next/navigation';
 
-import { getOrganizers, createOrganizer } from '@/api/organizer';
+import { getOrganizers, createOrganizer } from '@/data/organizer';
 import { Organizers } from '@/components/organizer';
 import { organizerSearchParamParser } from '@/shared/search';
 

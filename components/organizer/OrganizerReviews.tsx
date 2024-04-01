@@ -6,7 +6,7 @@ import { useDidUpdate, useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { useQueryStates } from 'nuqs';
 
-import { ReviewQuery } from '@/api/review';
+import { ReviewQuery } from '@/data/review';
 import { CreateReviewModal, ReviewList } from '@/components/review';
 import { PaginationButtons, SortingButton } from '@/components/search';
 import { reviewOrderByParser, reviewPageParser } from '@/shared/search';
