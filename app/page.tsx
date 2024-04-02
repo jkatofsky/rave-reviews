@@ -1,6 +1,8 @@
 import { Button, Center, Stack, Title } from '@mantine/core';
 import Link from 'next/link';
 
+// TODO: fix the spacing...on GitHub it's like 8 spaces
+
 export default function Home() {
 	return (
 		<Center>
