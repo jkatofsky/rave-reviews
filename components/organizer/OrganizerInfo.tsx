@@ -51,6 +51,7 @@ export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 				<RatingList<Organizer> objectWithRatings={organizer} />
 			</Group>
 
+			{/* TODO: auto-detect common websites and give nice formatting; and still have a default nice icon for custom sites */}
 			{organizer.websites.length > 0 && (
 				<>
 					<Divider />

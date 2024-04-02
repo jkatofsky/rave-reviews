@@ -36,7 +36,7 @@ export function CreateReviewModal({
 	const theme = useMantineTheme();
 
 	//TODO: ZOD!
-	const form = useForm<Omit<Review, 'id' | 'createdAt' | 'updatedAt'>>({
+	const form = useForm<Partial<Review>>({
 		initialValues: {
 			organizerId: organizer.id,
 			description: '',
@@ -65,7 +65,8 @@ export function CreateReviewModal({
 		>
 			<form
 				onSubmit={form.onSubmit((values) => {
-					// TODO: loading state? Things are fast now but after adding image upload it could take a while
+					// TODO: loading state?
+					// TODO: reset form on successful create
 					onCreateReview(values as Review);
 					onClose();
 				})}

@@ -79,6 +79,7 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 				onClose={createOrganizerModalController.close}
 				onCreateOrganizer={createOrganizer}
 			/>
+			{/* TODO: make fixed top-right on desktop; and do a different design with useMediaQuery */}
 			<Button
 				onClick={createOrganizerModalController.open}
 				variant="gradient"

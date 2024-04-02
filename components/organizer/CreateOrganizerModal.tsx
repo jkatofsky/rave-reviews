@@ -1,6 +1,18 @@
-import { Button, Modal, Select, Space, TextInput, Textarea, Title } from '@mantine/core';
+import {
+	Button,
+	Fieldset,
+	InputWrapper,
+	Modal,
+	Select,
+	Space,
+	Stack,
+	TextInput,
+	Title,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { Organizer, OrganizerType } from '@prisma/client';
+import { Organizer, OrganizerType, Location } from '@prisma/client';
+
+import { FieldList } from '@/components/form';
 
 import { enumToSelectData } from '../util';
 
@@ -11,9 +23,8 @@ interface CreateOrganizerModalProps {
 }
 
 interface CreateOrganizerForm {
-	name: string;
-	type: OrganizerType | null;
-	websites: string; // TODO: make not based on newlines?
+	organizer: Partial<Organizer>;
+	locations: Location[];
 }
 
 export function CreateOrganizerModal({
@@ -24,9 +35,12 @@ export function CreateOrganizerModal({
 	//TODO: ZOD!
 	const form = useForm<CreateOrganizerForm>({
 		initialValues: {
-			name: '',
-			type: null,
-			websites: '',
+			organizer: {
+				name: '',
+				type: undefined,
+				websites: [],
+			},
+			locations: [],
 		},
 	});
 
@@ -40,29 +54,44 @@ export function CreateOrganizerModal({
 		>
 			<form
 				onSubmit={form.onSubmit((values) => {
+					const { organizer } = values;
 					// TODO: loading state?
-					const websitesArray =
-						values.websites.length > 0 ? values.websites.split(/\r?\n|\r|\n/g) : [];
-					onCreateOrganizer({
-						name: values.name,
-						type: values.type,
-						websites: websitesArray,
-					} as Organizer);
+					// TODO: reset form on successful create
+					onCreateOrganizer(organizer as Organizer);
 					onClose();
 				})}
 			>
-				<TextInput label="Name" {...form.getInputProps('name')} withAsterisk />
-				<Space h="sm" />
+				<Fieldset legend="Basic information">
+					<Stack gap="xs">
+						<TextInput label="Name" {...form.getInputProps('organizer.name')} withAsterisk />
 
-				<Select
-					label="Type"
-					data={enumToSelectData(OrganizerType)}
-					{...form.getInputProps('type')}
-					searchable
-					withAsterisk
-				/>
-				<Space h="sm" />
-				<Textarea label="Websites (one per line)" {...form.getInputProps('websites')} />
+						<Select
+							label="Type"
+							data={enumToSelectData(OrganizerType)}
+							{...form.getInputProps('organizer.type')}
+							searchable
+							withAsterisk
+						/>
+						<InputWrapper label="Websites / social media pages">
+							<FieldList<CreateOrganizerForm, string>
+								form={form}
+								listFieldKey="organizer.websites"
+								renderFunction={(_, index) => (
+									<TextInput {...form.getInputProps(`organizer.websites.${index}`)} />
+								)}
+								newFieldInitialValue=""
+								newFieldButtonLabel="Add URL"
+								disableNewFieldbutton={
+									form.values.organizer.websites?.some(
+										(website) => !website || website.trim() === ''
+									) ?? true
+								}
+							/>
+						</InputWrapper>
+					</Stack>
+				</Fieldset>
+				{/* TODO: implement using FieldList */}
+				<Fieldset legend="Location(s)"></Fieldset>
 				<Button
 					type="submit"
 					fullWidth

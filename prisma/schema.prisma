@@ -19,12 +19,12 @@ model Organizer {
   createdAt DateTime @default(now())
   // TODO: slight issue: this updates whenever we add a review, since there are the denormalized fields
   // So, when fleshing out the editing system, I'll need to rely on other information to timestamp the REAL last organizer update
-  updatedAt DateTime @updatedAt 
+  updatedAt DateTime @updatedAt
 
-  name     String
-  type     OrganizerType
-  websites String[]
-  // TODO: location information; want to be able to categorize it to a city for filtering, AND store exact coords to eventually display organizers on a map?
+  name      String
+  type      OrganizerType
+  websites  String[]
+  locations Location[]
 
   reviews   Review[]
   // TODO: decide if all of this denormalization is worth it.
@@ -45,6 +45,35 @@ model Organizer {
   visualsRating          Float?
   staffRating            Float?
   foodAndDrinkRating     Float?
+}
+
+model City {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  locations Location[]
+
+  city    String
+  country String
+}
+
+model Location {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizer   Organizer @relation(fields: [organizerId], references: [id])
+  organizerId Int
+
+  streetAddress     String?
+  postalCode        String?
+  region            String?
+  city              City    @relation(fields: [cityId], references: [id])
+  cityId            Int
+  googleMapsPlaceId String?
+
+  // TODO: lat/lng? Can be cached from maps API for up to 30 days...
 }
 
 enum Genre {

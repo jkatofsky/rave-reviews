@@ -54,7 +54,7 @@ export function OrganizerReviews({
 				onCreateReview={createReview}
 			/>
 			<Button onClick={open} variant="gradient" gradient={{ from: 'blue', to: 'purple' }}>
-				<Text fw={600}>Add your review!</Text>
+				<Text fw={600}>Add your review of {organizer.name}</Text>
 			</Button>
 			{organizer.reviewCount > 0 && (
 				<>
