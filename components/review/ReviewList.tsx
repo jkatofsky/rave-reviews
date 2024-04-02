@@ -12,42 +12,44 @@ import {
 function ReviewCard({ review }: { review: Review }) {
 	return (
 		<Card>
-			{review.description && (
-				<>
-					<Spoiler maxHeight={120} showLabel="Expand review" hideLabel="Collapse review">
-						<Text>{review.description}</Text>
-					</Spoiler>
-					<Divider mt="xs" mb="xs" />
-				</>
-			)}
-			{review.genres.length > 0 && (
-				<>
-					<Group>
-						<Text c="black" fw={600}>
-							Genres
-						</Text>
-						{review.genres.map((genre, index) => (
-							<GenrePill genre={genre} key={index} />
-						))}
-					</Group>
-					<Divider mt="xs" mb="xs" />
-				</>
-			)}
-			{review.expensiveness && (
-				<>
-					<DisplayExpensiveness expensiveness={review.expensiveness} />
-					<Divider mt="xs" mb="xs" />
-				</>
-			)}
-			<Group gap="sm" mb="xs">
-				<RatingList<Review> objectWithRatings={review} />
-			</Group>
-			<Group>
-				<Timestamp label="Reviewed" date={review.createdAt} />
-				{review.createdAt.getTime() !== review.updatedAt.getTime() && (
-					<Timestamp label="Edited" date={review.updatedAt} />
+			<Stack gap="xs">
+				{review.description && (
+					<>
+						<Spoiler maxHeight={120} showLabel="Expand review" hideLabel="Collapse review">
+							<Text>{review.description}</Text>
+						</Spoiler>
+						<Divider />
+					</>
 				)}
-			</Group>
+				{review.genres.length > 0 && (
+					<>
+						<Group>
+							<Text c="black" fw={600}>
+								Genres
+							</Text>
+							{review.genres.map((genre, index) => (
+								<GenrePill genre={genre} key={index} />
+							))}
+						</Group>
+						<Divider />
+					</>
+				)}
+				{review.expensiveness && (
+					<>
+						<DisplayExpensiveness expensiveness={review.expensiveness} />
+						<Divider />
+					</>
+				)}
+				<Group gap="sm">
+					<RatingList<Review> objectWithRatings={review} />
+				</Group>
+				<Group>
+					<Timestamp label="Reviewed" date={review.createdAt} />
+					{review.createdAt.getTime() !== review.updatedAt.getTime() && (
+						<Timestamp label="Edited" date={review.updatedAt} />
+					)}
+				</Group>
+			</Stack>
 		</Card>
 	);
 }

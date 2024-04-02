@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function Home() {
 	return (
-		<Center h="80%">
+		<Center>
 			<Stack p="lg">
 				<Title order={1} fw={500} mb="xl">
 					crowdsourced rave reviews - by dance music lovers, for dance music lovers

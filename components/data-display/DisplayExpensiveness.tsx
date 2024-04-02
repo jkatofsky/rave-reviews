@@ -8,13 +8,13 @@ interface DisplayExpensivenessProps {
 	sizePx?: number;
 }
 
-export function DisplayExpensiveness({ expensiveness, sizePx = 30 }: DisplayExpensivenessProps) {
+export function DisplayExpensiveness({ expensiveness, sizePx = 24 }: DisplayExpensivenessProps) {
 	const theme = useMantineTheme();
 
 	if (expensiveness === null) {
 		return (
 			<Text c="gray" fs="italic">
-				no expensiveness data
+				no expensiveness
 			</Text>
 		);
 	}
@@ -26,8 +26,11 @@ export function DisplayExpensiveness({ expensiveness, sizePx = 30 }: DisplayExpe
 			value={expensiveness}
 			fractions={1}
 			readOnly
-			emptySymbol={<IconCurrencyDollar color={theme.colors.gray[3]} size={sizePx} stroke={3} />}
-			fullSymbol={<IconCurrencyDollar color={theme.colors.yellow[6]} size={sizePx} stroke={3} />}
+			styles={{
+				symbolBody: { height: sizePx },
+			}}
+			emptySymbol={<IconCurrencyDollar color={theme.colors.gray[3]} size={sizePx} stroke={3.5} />}
+			fullSymbol={<IconCurrencyDollar color={theme.colors.yellow[6]} size={sizePx} stroke={3.5} />}
 		/>
 	);
 }

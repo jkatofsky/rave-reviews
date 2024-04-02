@@ -13,38 +13,39 @@ import { humanizeEnumString } from '../util';
 
 export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 	return (
-		<Stack gap={0} miw={200} maw={400}>
-			<Group gap="sm" mb="sm" wrap="nowrap">
-				<Title fs="italic" order={1} lh={1} style={{ width: 'min-content' }}>
-					{organizer.name}
-				</Title>
-				<Divider orientation="vertical" />
-				<Text c="gray" fw={400} size="lg">
-					{humanizeEnumString(organizer.type, false)}
-				</Text>
-			</Group>
-			<Box>
-				<DisplayRating
-					rating={organizer.overallRating}
-					ratingsCount={organizer.reviewCount}
-					size="xl"
-				/>
-			</Box>
-
-			{organizer.topGenres.length > 0 && (
-				<Group gap="xs" mt="lg" mb="lg">
-					<Text c="black" fw={600}>
-						Top genres
+		<Stack miw={200} maw={400}>
+			<Stack gap="sm">
+				<Group gap="sm" wrap="nowrap">
+					<Title fs="italic" order={1} lh={1} style={{ width: 'min-content' }}>
+						{organizer.name}
+					</Title>
+					<Divider orientation="vertical" />
+					<Text c="gray" fw={400} size="lg">
+						{humanizeEnumString(organizer.type, false)}
 					</Text>
-					{organizer.topGenres.map((genre, index) => (
-						<GenrePill genre={genre} key={index} />
-					))}
+					<Divider orientation="vertical" />
+					<DisplayExpensiveness expensiveness={organizer.overallExpensiveness} />
 				</Group>
-			)}
+				<Box>
+					<DisplayRating
+						rating={organizer.overallRating}
+						ratingsCount={organizer.reviewCount}
+						size="xl"
+					/>
+				</Box>
+				{organizer.topGenres.length > 0 && (
+					<Group gap="xs">
+						<Text c="black" fw={600}>
+							Top genres
+						</Text>
+						{organizer.topGenres.map((genre, index) => (
+							<GenrePill genre={genre} key={index} />
+						))}
+					</Group>
+				)}
+			</Stack>
 
-			<DisplayExpensiveness expensiveness={organizer.overallExpensiveness} />
-
-			<Divider mt="sm" mb="md" />
+			<Divider />
 
 			<Group gap="md">
 				<RatingList<Organizer> objectWithRatings={organizer} />
@@ -52,7 +53,7 @@ export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 
 			{organizer.websites.length > 0 && (
 				<>
-					<Divider mt="md" mb="md" />
+					<Divider />
 					<Stack gap="xs">
 						{organizer.websites?.map((website: string, index: number) => (
 							<Anchor key={index}>{website}</Anchor>
@@ -61,7 +62,7 @@ export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 				</>
 			)}
 
-			<Divider mt="md" mb="md" />
+			<Divider />
 
 			<Group m={0}>
 				<Timestamp label="Created" date={organizer.createdAt} />
