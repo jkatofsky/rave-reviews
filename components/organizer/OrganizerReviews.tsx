@@ -10,13 +10,13 @@ import { ReviewQuery } from '@/data/review';
 import { CreateReviewModal, ReviewList } from '@/components/review';
 import { PaginationButtons, SortingButton } from '@/components/search';
 import { reviewOrderByParser, reviewPageParser } from '@/shared/search';
-import { PaginatedResponse } from '@/shared/types';
+import { CreateReview, PaginatedResponse } from '@/shared/types';
 
 interface OrganizerReviewsProps {
 	organizer: Organizer;
 	initialReviews: PaginatedResponse<Review>;
 	getReviews: (reviewQuery: ReviewQuery) => Promise<PaginatedResponse<Review>>;
-	createReview: (review: Review) => Promise<void>;
+	createReview: (review: CreateReview) => Promise<void>;
 }
 
 export function OrganizerReviews({

@@ -1,16 +1,27 @@
 'use server';
 
-import type { Organizer } from '@prisma/client';
-
 import prisma from '../db';
+import { CreateOrganizer } from '@/shared/types';
 
-const createOrganizer = async (organizer: Organizer): Promise<number> => {
-	// TODO: type the params as any and use zod to get the review?
-	const { name, type, websites } = organizer;
+const createOrganizer = async (organizer: CreateOrganizer): Promise<number> => {
+	const { locations, ...organizerData } = organizer;
 
 	const createdOrganizer = await prisma.organizer.create({
-		data: { name, type, websites, reviewCount: 0 },
+		data: organizerData,
 	});
+
+	for (const location of locations) {
+		await prisma.location.create({
+			data: {
+				...location,
+				organizer: {
+					connect: {
+						id: createdOrganizer.id,
+					},
+				},
+			},
+		});
+	}
 
 	return createdOrganizer.id;
 };

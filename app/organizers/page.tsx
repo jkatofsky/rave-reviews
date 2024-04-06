@@ -1,10 +1,10 @@
 import { Center } from '@mantine/core';
-import { Organizer } from '@prisma/client';
 import { redirect } from 'next/navigation';
 
 import { getOrganizers, createOrganizer } from '@/data/organizer';
 import { Organizers } from '@/components/organizer';
 import { organizerSearchParamParser } from '@/shared/search';
+import { CreateOrganizer } from '@/shared/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,7 +31,7 @@ export default async function OrganizersPage({
 		topGenres,
 	});
 
-	async function createOrganizerAction(organizer: Organizer) {
+	async function createOrganizerAction(organizer: CreateOrganizer) {
 		'use server';
 		const newOrganizerId = await createOrganizer(organizer);
 		redirect(`/organizers/${newOrganizerId}`);

@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { cache } from 'react';
 import { Group } from '@mantine/core';
 import { revalidatePath } from 'next/cache';
-import { Review, type Organizer } from '@prisma/client';
+import { type Organizer } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import { EntertainmentBusiness, WithContext } from 'schema-dts';
 
@@ -10,6 +10,7 @@ import { getOrganizer } from '@/data/organizer';
 import { getReviews, createReview } from '@/data/review';
 import { OrganizerInfo, OrganizerReviews } from '@/components/organizer';
 import { reviewSearchParamParser } from '@/shared/search';
+import { CreateReview } from '@/shared/types';
 
 const cachedGetOrganizer = cache(async (organizerId: number) => await getOrganizer(organizerId));
 
@@ -56,7 +57,7 @@ export default async function Organizer({
 		orderBy: { [orderByField]: sortOrder },
 	});
 
-	async function createReviewAction(review: Review) {
+	async function createReviewAction(review: CreateReview) {
 		'use server';
 		await createReview(review);
 		revalidatePath('/organizers/[id]/page', 'page');

@@ -25,7 +25,7 @@ import {
 	organizerPageParser,
 	organizerTopGenresParser,
 } from '@/shared/search';
-import { PaginatedResponse } from '@/shared/types';
+import { CreateOrganizer, PaginatedResponse } from '@/shared/types';
 
 import { enumToSelectData } from '../util';
 import { OrganizerList } from './OrganizerList';
@@ -34,7 +34,7 @@ import { CreateOrganizerModal } from './CreateOrganizerModal';
 interface OrganizersProps {
 	initialOrganizers: PaginatedResponse<Organizer>;
 	getOrganizers: (organizerQuery: OrganizerQuery) => Promise<PaginatedResponse<Organizer>>;
-	createOrganizer: (organizer: Organizer) => Promise<void>;
+	createOrganizer: (organizer: CreateOrganizer) => Promise<void>;
 }
 
 export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }: OrganizersProps) {
