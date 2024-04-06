@@ -2,9 +2,11 @@ import {
 	Anchor,
 	Button,
 	Collapse,
+	Combobox,
 	Fieldset,
 	Group,
 	InputWrapper,
+	Loader,
 	Modal,
 	Select,
 	Stack,
@@ -16,11 +18,11 @@ import { useDisclosure } from '@mantine/hooks';
 import { City, OrganizerType } from '@prisma/client';
 
 import { CreateOrganizer, CreateLocation } from '@/shared/types';
-import { autocompleteCities } from '@/data/city';
+import { getSuggestedCities } from '@/data/city';
 import { FieldList } from '@/components/form';
 
 import { enumToSelectData } from '../util';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 const NEW_CITY_ID = 'NEW';
 
@@ -37,38 +39,53 @@ function LocationForm({
 	index: number;
 	form: UseFormReturnType<CreateOrganizer>;
 }) {
-	// TODO: fetch this on type in the Select, based on the select filter query
-	const [cities, setCities] = useState<City[]>([]);
-	useEffect(() => {
-		async function setAutocompletedCities() {
-			const autocompletedCities = await autocompleteCities('');
-			setCities(autocompletedCities);
-		}
-		setAutocompletedCities();
-	}, []);
+	const [areSuggestedCitiesLoading, setAreSuggestedCitiesLoading] = useState<boolean>(false);
+	const [suggestedCities, setSuggestedCities] = useState<City[]>([]);
+
+	const currentCityConnectOrCreate = form.values.locations[index].city.connectOrCreate;
+
+	const { name, region, country } = currentCityConnectOrCreate?.create ?? {};
+	const selectedCityLabel = `${name}, ${region}, ${country}`;
+	const selectedCityId = currentCityConnectOrCreate?.where?.id?.toString();
+
+	const suggestCities = async (query: string) => {
+		setAreSuggestedCitiesLoading(true);
+		const cities = await getSuggestedCities(query);
+		setSuggestedCities(cities);
+		setAreSuggestedCitiesLoading(false);
+	};
+
+	const selectData = useMemo(
+		() =>
+			suggestedCities.map(({ id, name, region, country }) => ({
+				value: !id || id === -1 ? NEW_CITY_ID : id.toString(),
+				label: `${name}, ${region}, ${country}`,
+			})),
+		[suggestedCities]
+	);
 
 	const [areAddressDetailsExpanded, areAddressDetailsExpandedController] = useDisclosure(false);
 
-	// TODO: when the id is NEW_CITY_ID, render the row differently
+	// TODO: group into rows based on if it is a new city or not
+	// TODO: fix! after selecting, and having a search again, the value just gets reset to the current
 	return (
 		<>
 			<Select
 				searchable
+				onSearchChange={(query) => {
+					if (query !== selectedCityLabel) suggestCities(query);
+				}}
+				value={selectedCityId}
+				rightSection={areSuggestedCitiesLoading ? <Loader size={18} /> : <Combobox.Chevron />}
 				label="City"
-				data={cities.map(({ id, name, region, country }) => ({
-					value: !id || id === -1 ? NEW_CITY_ID : id.toString(),
-					label: `${name}, ${region}, ${country}`,
-				}))}
+				data={selectData}
 				onChange={(value, options) => {
-					let city;
-					if (!value) {
-						city = { name: '', region: '', country: '' };
-					} else {
-						const [name, region, country] = options.label.split(', ');
-						city = { name, region, country };
-					}
-
-					form.setFieldValue(`locations.${index}.city.connectOrCreate.create`, city);
+					const splitLabel = options?.label?.split(', ');
+					form.setFieldValue(`locations.${index}.city.connectOrCreate.create`, {
+						name: splitLabel?.[0] ?? '',
+						region: splitLabel?.[1] ?? '',
+						country: splitLabel?.[2] ?? '',
+					});
 
 					if (value !== NEW_CITY_ID) {
 						form.setFieldValue(`locations.${index}.city.connectOrCreate.where`, {
@@ -125,8 +142,6 @@ export function CreateOrganizerModal({
 			locations: [],
 		},
 	});
-
-	console.log(form.values);
 
 	return (
 		<Modal
