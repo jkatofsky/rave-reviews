@@ -17,9 +17,9 @@ import { OrganizerType } from '@prisma/client';
 
 import { CreateOrganizer, CreateLocation } from '@/shared/types';
 import { FieldList } from '@/components/form';
+import { CitySuggest } from '@/components/search';
 
 import { enumToSelectData } from '../util';
-import { CitySuggest } from '../search/CitySuggest';
 
 interface CreateOrganizerModalProps {
 	opened: boolean;
