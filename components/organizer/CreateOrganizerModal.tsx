@@ -2,11 +2,9 @@ import {
 	Anchor,
 	Button,
 	Collapse,
-	Combobox,
 	Fieldset,
 	Group,
 	InputWrapper,
-	Loader,
 	Modal,
 	Select,
 	Stack,
@@ -15,16 +13,13 @@ import {
 } from '@mantine/core';
 import { UseFormReturnType, useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import { City, OrganizerType } from '@prisma/client';
+import { OrganizerType } from '@prisma/client';
 
 import { CreateOrganizer, CreateLocation } from '@/shared/types';
-import { getSuggestedCities } from '@/data/city';
 import { FieldList } from '@/components/form';
 
 import { enumToSelectData } from '../util';
-import { useMemo, useState } from 'react';
-
-const NEW_CITY_ID = 'NEW';
+import { CitySuggest } from '../search/CitySuggest';
 
 interface CreateOrganizerModalProps {
 	opened: boolean;
@@ -39,62 +34,20 @@ function LocationForm({
 	index: number;
 	form: UseFormReturnType<CreateOrganizer>;
 }) {
-	const [areSuggestedCitiesLoading, setAreSuggestedCitiesLoading] = useState<boolean>(false);
-	const [suggestedCities, setSuggestedCities] = useState<City[]>([]);
-
-	const currentCityConnectOrCreate = form.values.locations[index].city.connectOrCreate;
-
-	const { name, region, country } = currentCityConnectOrCreate?.create ?? {};
-	const selectedCityLabel = `${name}, ${region}, ${country}`;
-	const selectedCityId = currentCityConnectOrCreate?.where?.id?.toString();
-
-	const suggestCities = async (query: string) => {
-		setAreSuggestedCitiesLoading(true);
-		const cities = await getSuggestedCities(query);
-		setSuggestedCities(cities);
-		setAreSuggestedCitiesLoading(false);
-	};
-
-	const selectData = useMemo(
-		() =>
-			suggestedCities.map(({ id, name, region, country }) => ({
-				value: !id || id === -1 ? NEW_CITY_ID : id.toString(),
-				label: `${name}, ${region}, ${country}`,
-			})),
-		[suggestedCities]
-	);
-
 	const [areAddressDetailsExpanded, areAddressDetailsExpandedController] = useDisclosure(false);
-
-	// TODO: group into rows based on if it is a new city or not
-	// TODO: fix! after selecting, and having a search again, the value just gets reset to the current
-	// TODO: turn this into a component reusable on organizer search, which will not suggest google maps cities
-	// 		- prop that has an on value change callback, which is used in the creation modal to set the form value, and in the search page will be used to set the query state
 
 	return (
 		<>
-			<Select
-				searchable
-				onSearchChange={(query) => {
-					if (query !== selectedCityLabel) suggestCities(query);
-				}}
-				value={selectedCityId}
-				rightSection={areSuggestedCitiesLoading ? <Loader size={18} /> : <Combobox.Chevron />}
-				label="City"
-				data={selectData}
-				onChange={(value, options) => {
-					const splitLabel = options?.label?.split(', ');
-					form.setFieldValue(`locations.${index}.city.connectOrCreate.create`, {
-						name: splitLabel?.[0] ?? '',
-						region: splitLabel?.[1] ?? '',
-						country: splitLabel?.[2] ?? '',
+			<CitySuggest
+				onSelect={({ name, region, country, id }) => {
+					form.setFieldValue(`locations.${index}.city.connectOrCreate`, {
+						create: {
+							name,
+							region,
+							country,
+						},
+						where: { id },
 					});
-
-					if (value !== NEW_CITY_ID) {
-						form.setFieldValue(`locations.${index}.city.connectOrCreate.where`, {
-							id: Number(value),
-						});
-					}
 				}}
 			/>
 			<Anchor
@@ -135,7 +88,6 @@ export function CreateOrganizerModal({
 	onClose,
 	onCreateOrganizer,
 }: CreateOrganizerModalProps) {
-	//TODO: ZOD!
 	const form = useForm<CreateOrganizer>({
 		initialValues: {
 			name: '',
@@ -156,8 +108,6 @@ export function CreateOrganizerModal({
 		>
 			<form
 				onSubmit={form.onSubmit((values) => {
-					// TODO: loading state?
-					// TODO: reset form on successful create
 					onCreateOrganizer(values);
 					onClose();
 				})}
@@ -206,7 +156,7 @@ export function CreateOrganizerModal({
 						}}
 						newFieldButtonLabel="Add location"
 						disableNewFieldButton={(locations) =>
-							locations.some((location) => !location.city.connectOrCreate?.create.name)
+							locations.some((location) => location.city.connectOrCreate?.where.id === -1)
 						}
 					/>
 				</Fieldset>

@@ -20,7 +20,6 @@ export default function RootLayout({ children }: { children: any }) {
 				/>
 			</head>
 			<body>
-				{/* TODO: colour theme */}
 				<MantineProvider theme={theme}>
 					<Center p="md">
 						<Link href="/" style={{ textDecoration: 'none' }}>

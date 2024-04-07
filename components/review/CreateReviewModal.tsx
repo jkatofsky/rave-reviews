@@ -27,7 +27,6 @@ interface CreateReviewModalProps {
 	onCreateReview: (review: CreateReview) => Promise<void>;
 }
 
-// TODO: reset the form after submitting
 export function CreateReviewModal({
 	opened,
 	organizer,
@@ -36,7 +35,6 @@ export function CreateReviewModal({
 }: CreateReviewModalProps) {
 	const theme = useMantineTheme();
 
-	//TODO: ZOD!
 	const form = useForm<CreateReview>({
 		initialValues: {
 			organizer: {
@@ -69,8 +67,6 @@ export function CreateReviewModal({
 		>
 			<form
 				onSubmit={form.onSubmit((values) => {
-					// TODO: loading state?
-					// TODO: reset form on successful create
 					onCreateReview(values);
 					onClose();
 				})}
