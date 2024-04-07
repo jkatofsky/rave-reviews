@@ -68,6 +68,9 @@ function LocationForm({
 
 	// TODO: group into rows based on if it is a new city or not
 	// TODO: fix! after selecting, and having a search again, the value just gets reset to the current
+	// TODO: turn this into a component reusable on organizer search, which will not suggest google maps cities
+	// 		- prop that has an on value change callback, which is used in the creation modal to set the form value, and in the search page will be used to set the query state
+
 	return (
 		<>
 			<Select
