@@ -1,16 +1,35 @@
 import { Center } from '@mantine/core';
 import { redirect } from 'next/navigation';
+import { Metadata } from 'next';
+import { cache } from 'react';
 
 import { getOrganizers, createOrganizer } from '@/data/organizer';
+import { getCity } from '@/data/city';
+
 import { Organizers } from '@/components/organizer';
 import { organizerSearchParamParser } from '@/shared/search';
 import { CreateOrganizer } from '@/shared/types';
+import { organizersDocumentTitle } from '@/shared/metadata';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = {
-	title: 'Organizers | Rave Reviews',
-};
+const cachedCityId = cache(
+	(searchParams: Record<string, string | string[] | undefined>) =>
+		organizerSearchParamParser.cityId.parse(searchParams).cityId
+);
+
+export async function generateMetadata({
+	searchParams,
+}: {
+	searchParams: Record<string, string | string[] | undefined>;
+}): Promise<Metadata> {
+	const cityId = cachedCityId(searchParams);
+	const city = cityId ? await getCity(cityId) : null;
+
+	return {
+		title: organizersDocumentTitle(city),
+	};
+}
 
 export default async function OrganizersPage({
 	searchParams,
@@ -19,7 +38,7 @@ export default async function OrganizersPage({
 }) {
 	const { page } = organizerSearchParamParser.page.parse(searchParams);
 	const { orderByField, sortOrder } = organizerSearchParamParser.orderBy.parse(searchParams);
-	const { cityId } = organizerSearchParamParser.cityId.parse(searchParams);
+	const cityId = cachedCityId(searchParams);
 	const { topGenres } = organizerSearchParamParser.topGenres.parse(searchParams);
 	const { expensivenessRange } = organizerSearchParamParser.expensivenessRange.parse(searchParams);
 

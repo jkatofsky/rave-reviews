@@ -1,6 +1,6 @@
 'use client';
 
-import { Genre, Organizer } from '@prisma/client';
+import { City, Genre, Organizer } from '@prisma/client';
 import {
 	Anchor,
 	Box,
@@ -31,6 +31,7 @@ import { CreateOrganizer, OrganizerWithLocations, PaginatedResponse } from '@/sh
 import { enumToSelectData } from '../util';
 import { OrganizerList } from './OrganizerList';
 import { CreateOrganizerModal } from './CreateOrganizerModal';
+import { organizersDocumentTitle } from '@/shared/metadata';
 
 interface OrganizersProps {
 	initialOrganizers: PaginatedResponse<OrganizerWithLocations>;
@@ -48,6 +49,7 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 	const [hasNextPage, setHasNextPage] = useState<boolean>(initialOrganizers.hasNextPage);
 
 	const [orderBy, setOrderBy] = useQueryStates(organizerOrderByParser);
+	const [selectedCity, setSelectedCity] = useState<City | null>(null);
 	const [{ cityId }, setCityId] = useQueryStates(organizerCityParser);
 	const [{ topGenres }, setTopGenres] = useQueryStates(organizerTopGenresParser);
 	const [{ expensivenessRange }, setExpensivenessRange] = useQueryStates(
@@ -72,7 +74,11 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 			setHasNextPage(updatedHasNextPage);
 		}
 		updateOrganizers();
-	}, [page, orderBy, topGenres]);
+	}, [page, orderBy, topGenres, cityId, expensivenessRange]);
+
+	useDidUpdate(() => {
+		document.title = organizersDocumentTitle(selectedCity);
+	}, [selectedCity?.id]);
 
 	return (
 		<Stack p="sm" w={800}>
@@ -106,7 +112,10 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 					/>
 					<Box miw={250}>
 						<CitySuggest
-							onSelect={(city) => setCityId({ cityId: city ? city.id : 0 })}
+							onSelect={(city) => {
+								setCityId({ cityId: city ? city.id : 0 });
+								setSelectedCity(city);
+							}}
 							initialCityId={cityId}
 							placeholder="Filter by city"
 						/>

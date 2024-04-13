@@ -22,7 +22,7 @@ Global TODOs that are more natural here than the code itself
 - [ ] review editing (maybe also with revisions?)
 - [ ] organizer + review + user reporting
 - [ ] LLM-generated organizer descriptions
-- [ ] endpoint for "X starts on rave reviews" badges on 3rd party sites
+- [ ] endpoint for "X stars on rave reviews" badges on 3rd party sites
 - [ ] god-mode dashboard for me and the homies
 - [ ] nice home page and "about" the project page
   - [ ] a "buy me a coffee" type button

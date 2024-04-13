@@ -1,9 +1,11 @@
 import { City } from '@prisma/client';
-
 import { useEffect, useMemo, useState } from 'react';
 import { CloseButton, Combobox, ComboboxItem, Loader, TextInput, useCombobox } from '@mantine/core';
+
 import { getCity, getSuggestedCities } from '@/data/city';
 import { useDidUpdate } from '@mantine/hooks';
+
+import { stringifyCity } from '../util';
 
 interface CitySuggestProps {
 	initialCityId?: number;
@@ -12,9 +14,6 @@ interface CitySuggestProps {
 	allowMultipleSelection?: boolean;
 	queryMapsAPI?: boolean;
 }
-
-const stringifyCity = ({ name, region, country }: City) =>
-	[name, region, country].filter((partOfAddress) => partOfAddress).join(', ');
 
 // TODO: implement the features associated with the other props
 export function CitySuggest({
