@@ -9,7 +9,7 @@ import { PaginatedResponse } from '@/shared/types';
 import { getPaginatedResponse } from '../util';
 
 type ReviewQuery = {
-	organizerId: number;
+	organizerId: string;
 	page: number;
 	perPage?: number;
 	orderBy: Prisma.ReviewOrderByWithRelationInput;

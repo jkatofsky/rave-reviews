@@ -1,3 +1,7 @@
+import { City } from '@prisma/client';
+
+import { LocationWithCity } from '@/shared/types';
+
 const humanizeEnumString = (enumString: string, capitalize: boolean = true): string => {
 	const humanizedEnumString = enumString
 		.split(/(?=[A-Z])/)
@@ -13,6 +17,7 @@ const humanizeEnumString = (enumString: string, capitalize: boolean = true): str
 		? humanizedEnumString.charAt(0).toUpperCase() + humanizedEnumString.slice(1)
 		: humanizedEnumString;
 };
+
 const enumToSelectData = (enumToSelect: any) =>
 	Object.keys(enumToSelect)
 		.sort()
@@ -21,4 +26,19 @@ const enumToSelectData = (enumToSelect: any) =>
 			label: humanizeEnumString(genre),
 		}));
 
-export { humanizeEnumString, enumToSelectData };
+const stringifyCity = ({ name, region, country }: City) =>
+	[name, region, country].filter((partOfAddress) => partOfAddress).join(', ');
+
+const stringifyLocation = (location: LocationWithCity) => {
+	if (!location.streetAddress || !location.postalCode) return stringifyCity(location.city);
+
+	return (
+		[location.streetAddress, location.postalCode]
+			.filter((partOfAddress) => partOfAddress)
+			.join(', ') +
+		', ' +
+		stringifyCity(location.city)
+	);
+};
+
+export { humanizeEnumString, enumToSelectData, stringifyCity, stringifyLocation };

@@ -1,32 +1,16 @@
 'use server';
 
-import type { Review } from '@prisma/client';
-
 import prisma from '../db';
+
 import { recomputeOrganizerReviewData } from '@/data/organizer';
-import { RATINGS_INFO } from '@/shared/constants';
+import { CreateReview } from '@/shared/types';
 
-const createReview = async (review: Review): Promise<void> => {
-	// TODO: type the params as any and use zod to get the review?
-	const { organizerId, description, genres, expensiveness } = review;
-
+const createReview = async (review: CreateReview): Promise<void> => {
 	await prisma.review.create({
-		data: {
-			organizerId,
-			description,
-			genres,
-			expensiveness,
-			...[...RATINGS_INFO.keys()].reduce(
-				(ratings, ratingKey) =>
-					review[ratingKey as keyof Review]
-						? { ...ratings, [ratingKey]: review[ratingKey as keyof Review] }
-						: ratings,
-				{}
-			),
-		} as Review,
+		data: review,
 	});
 
-	await recomputeOrganizerReviewData(organizerId);
+	await recomputeOrganizerReviewData(review.organizer.connect!.id!);
 };
 
 export { createReview };

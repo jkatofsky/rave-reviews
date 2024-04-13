@@ -12,9 +12,10 @@ import {
 	useMantineTheme,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { Genre, Organizer, Review } from '@prisma/client';
+import { Genre, Organizer, Prisma } from '@prisma/client';
 import { IconCurrencyDollar } from '@tabler/icons-react';
 
+import { CreateReview } from '@/shared/types';
 import { RATINGS_INFO } from '@/shared/constants';
 
 import { enumToSelectData, humanizeEnumString } from '../util';
@@ -23,10 +24,9 @@ interface CreateReviewModalProps {
 	opened: boolean;
 	organizer: Organizer;
 	onClose: () => void;
-	onCreateReview: (review: Review) => Promise<void>;
+	onCreateReview: (review: CreateReview) => Promise<void>;
 }
 
-// TODO: reset the form after submitting
 export function CreateReviewModal({
 	opened,
 	organizer,
@@ -35,14 +35,16 @@ export function CreateReviewModal({
 }: CreateReviewModalProps) {
 	const theme = useMantineTheme();
 
-	//TODO: ZOD!
-	const form = useForm<Omit<Review, 'id' | 'createdAt' | 'updatedAt'>>({
+	const form = useForm<CreateReview>({
 		initialValues: {
-			organizerId: organizer.id,
+			organizer: {
+				connect: {
+					id: organizer.id,
+				},
+			},
 			description: '',
 			genres: [],
 			expensiveness: null,
-			// TODO: avoid hardcoding all these?
 			soundSystemRating: 0,
 			djAndMusicRating: 0,
 			crowdPlurRating: 0,
@@ -65,8 +67,7 @@ export function CreateReviewModal({
 		>
 			<form
 				onSubmit={form.onSubmit((values) => {
-					// TODO: loading state? Things are fast now but after adding image upload it could take a while
-					onCreateReview(values as Review);
+					onCreateReview(values);
 					onClose();
 				})}
 			>

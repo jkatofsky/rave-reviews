@@ -15,25 +15,23 @@ enum OrganizerType {
 }
 
 model Organizer {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   // TODO: slight issue: this updates whenever we add a review, since there are the denormalized fields
   // So, when fleshing out the editing system, I'll need to rely on other information to timestamp the REAL last organizer update
-  updatedAt DateTime @updatedAt 
+  updatedAt DateTime @updatedAt
 
-  name     String
-  type     OrganizerType
-  websites String[]
-  // TODO: location information; want to be able to categorize it to a city for filtering, AND store exact coords to eventually display organizers on a map?
+  name      String
+  type      OrganizerType
+  websites  String[]
+  locations Location[]
 
   reviews   Review[]
-  // TODO: decide if all of this denormalization is worth it.
-  // Calculating this stuff on-the-fly would be more maintainable, but certainly slower
   topGenres Genre[]
 
   overallExpensiveness Int?
 
-  reviewCount Int
+  reviewCount Int // TODO: de-denormalize? https://www.prisma.io/docs/orm/prisma-client/queries/aggregation-grouping-summarizing#count-relations
 
   overallRating          Float?
   soundSystemRating      Float?
@@ -45,6 +43,35 @@ model Organizer {
   visualsRating          Float?
   staffRating            Float?
   foodAndDrinkRating     Float?
+}
+
+model City {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  locations Location[]
+
+  name    String
+  region  String?
+  country String
+}
+
+model Location {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizer   Organizer @relation(fields: [organizerId], references: [id])
+  organizerId String
+
+  city   City   @relation(fields: [cityId], references: [id])
+  cityId String
+
+  streetAddress String?
+  postalCode    String?
+
+  // TODO: lat/lng? Can be cached from maps API for up to 30 days...
 }
 
 enum Genre {
@@ -84,12 +111,12 @@ enum Genre {
 }
 
 model Review {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   organizer   Organizer @relation(fields: [organizerId], references: [id])
-  organizerId Int
+  organizerId String
 
   description String?
   genres      Genre[]
@@ -105,8 +132,4 @@ model Review {
   visualsRating          Int?
   staffRating            Int?
   foodAndDrinkRating     Int?
-
-  // TODO: images
-
-  // TODO: upvotes
 }

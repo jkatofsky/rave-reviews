@@ -1,32 +1,41 @@
 'use server';
 
-import type { Genre, Organizer, Prisma } from '@prisma/client';
+import type { Genre, Prisma } from '@prisma/client';
 
 import prisma from '../db';
 import { DEFAULT_PAGE_SIZE } from '@/shared/constants';
-import { PaginatedResponse } from '@/shared/types';
+import { PaginatedResponse, OrganizerWithLocations } from '@/shared/types';
 
 import { getPaginatedResponse } from '../util';
 
-const getOrganizer = async (id: number): Promise<Organizer | null> => {
+const getOrganizer = async (id: string): Promise<OrganizerWithLocations | null> => {
 	return await prisma.organizer.findUnique({
 		where: {
 			id,
 		},
+		include: {
+			locations: {
+				include: {
+					city: true,
+				},
+			},
+		},
 	});
 };
 
-function addTopGenresToFilters(
-	topGenres: Genre[] | undefined,
+function addCityIdToFilters(
+	cityId: string | undefined,
 	filters: Prisma.OrganizerWhereInput
 ): Prisma.OrganizerWhereInput {
-	if (!topGenres?.length) {
+	if (!cityId) {
 		return filters;
 	}
 	return {
 		...filters,
-		topGenres: {
-			hasSome: topGenres,
+		locations: {
+			some: {
+				cityId,
+			},
 		},
 	};
 }
@@ -52,10 +61,26 @@ function addExpensivenessRangeToFilters(
 	};
 }
 
+function addTopGenresToFilters(
+	topGenres: Genre[] | undefined,
+	filters: Prisma.OrganizerWhereInput
+): Prisma.OrganizerWhereInput {
+	if (!topGenres?.length) {
+		return filters;
+	}
+	return {
+		...filters,
+		topGenres: {
+			hasSome: topGenres,
+		},
+	};
+}
+
 type OrganizerQuery = {
 	page: number;
 	perPage?: number;
 	orderBy: Prisma.OrganizerOrderByWithRelationInput;
+	cityId?: string;
 	expensivenessRange?: [number, number];
 	topGenres?: Genre[];
 };
@@ -64,10 +89,12 @@ const getOrganizers = async ({
 	page,
 	perPage = DEFAULT_PAGE_SIZE,
 	orderBy,
+	cityId,
 	expensivenessRange,
 	topGenres,
-}: OrganizerQuery): Promise<PaginatedResponse<Organizer>> => {
+}: OrganizerQuery): Promise<PaginatedResponse<OrganizerWithLocations>> => {
 	let filters: Prisma.OrganizerWhereInput = {};
+	filters = addCityIdToFilters(cityId, filters);
 	filters = addExpensivenessRangeToFilters(expensivenessRange, filters);
 	filters = addTopGenresToFilters(topGenres, filters);
 
@@ -77,9 +104,16 @@ const getOrganizers = async ({
 			take: _perPage,
 			orderBy,
 			where: filters,
+			include: {
+				locations: {
+					include: {
+						city: true,
+					},
+				},
+			},
 		});
 
-	return await getPaginatedResponse<Organizer>(organizersQueryPromise, perPage);
+	return await getPaginatedResponse<OrganizerWithLocations>(organizersQueryPromise, perPage);
 };
 
 export { getOrganizer, getOrganizers, type OrganizerQuery };
