@@ -15,7 +15,7 @@ import { humanizeEnumString } from '../util';
 
 export function OrganizerInfo({ organizer }: { organizer: OrganizerWithLocations }) {
 	return (
-		<Stack miw={200} maw={500}>
+		<Stack miw={200} maw={500} p="sm">
 			<Stack gap="sm">
 				<Text fs="italic" order={1} component={Title} c="black" textWrap="nowrap" truncate="end">
 					{organizer.name}

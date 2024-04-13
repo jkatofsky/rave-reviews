@@ -5,7 +5,6 @@ import { cache } from 'react';
 
 import { getOrganizers, createOrganizer } from '@/data/organizer';
 import { getCity } from '@/data/city';
-
 import { Organizers } from '@/components/organizer';
 import { organizerSearchParamParser } from '@/shared/search';
 import { CreateOrganizer } from '@/shared/types';
@@ -24,7 +23,7 @@ export async function generateMetadata({
 	searchParams: Record<string, string | string[] | undefined>;
 }): Promise<Metadata> {
 	const cityId = cachedCityId(searchParams);
-	const city = cityId ? await getCity(cityId) : null;
+	const city = await getCity(cityId);
 
 	return {
 		title: organizersDocumentTitle(city),

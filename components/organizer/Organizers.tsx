@@ -97,7 +97,7 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 			</Button>
 			<Box>
 				{/* TODO: searching! */}
-				<Group align="top" wrap="nowrap">
+				<Group align="top" grow>
 					<SortingButton<Organizer>
 						orderByField="overallRating"
 						label="Rating"
@@ -129,7 +129,6 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 						max={4}
 						step={1}
 						minRange={0}
-						w={150}
 						marks={[
 							{ value: 1, label: '$' },
 							{ value: 2, label: '$$' },
@@ -150,10 +149,11 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 						}}
 						placeholder="Filter by genre"
 						clearable
-						style={{ flexGrow: 1 }}
+						miw={200}
 					/>
 				</Group>
 
+				{/* TODO: make it clear which filter is applied when collapsed */}
 				<Anchor
 					mt="xs"
 					mb="xs"

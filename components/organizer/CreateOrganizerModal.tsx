@@ -102,7 +102,7 @@ export function CreateOrganizerModal({
 		<Modal
 			opened={opened}
 			onClose={onClose}
-			title={<Title order={3}>Create an organizer</Title>}
+			title={<Title order={3}>Add an organizer</Title>}
 			centered
 			size="lg"
 		>
