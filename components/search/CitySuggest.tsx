@@ -1,20 +1,29 @@
 import { City } from '@prisma/client';
 
-import { useState } from 'react';
-import { Combobox, ComboboxItem, Loader, TextInput, useCombobox } from '@mantine/core';
-import { getSuggestedCities } from '@/data/city';
+import { useEffect, useMemo, useState } from 'react';
+import { CloseButton, Combobox, ComboboxItem, Loader, TextInput, useCombobox } from '@mantine/core';
+import { getCity, getSuggestedCities } from '@/data/city';
 import { useDidUpdate } from '@mantine/hooks';
 
 interface CitySuggestProps {
-	onSelect: (city: City) => void;
+	initialCityId?: number;
+	onSelect: (city: City | null) => void;
+	placeholder?: string;
 	allowMultipleSelection?: boolean;
 	queryMapsAPI?: boolean;
 }
 
-const stringifyCity = ({ name, region, country }: City) => `${name}, ${region}, ${country}`;
+const stringifyCity = ({ name, region, country }: City) =>
+	[name, region, country].filter((partOfAddress) => partOfAddress).join(', ');
 
 // TODO: implement the features associated with the other props
-export function CitySuggest({ onSelect, allowMultipleSelection, queryMapsAPI }: CitySuggestProps) {
+export function CitySuggest({
+	initialCityId,
+	onSelect,
+	placeholder = 'Search cities',
+	allowMultipleSelection,
+	queryMapsAPI,
+}: CitySuggestProps) {
 	const combobox = useCombobox({
 		onDropdownClose: () => combobox.resetSelectedOption(),
 	});
@@ -26,10 +35,23 @@ export function CitySuggest({ onSelect, allowMultipleSelection, queryMapsAPI }: 
 	const [selectData, setSelectData] = useState<ComboboxItem[]>([]);
 	const [cityQuery, setCityQuery] = useState<string>('');
 
-	useDidUpdate(() => {
-		if (selectedCity) {
-			onSelect(selectedCity);
+	useEffect(() => {
+		async function fetchInitialCity() {
+			if (!initialCityId) {
+				return;
+			}
+			const city = await getCity(initialCityId);
+			if (city) {
+				setSelectedCity(city);
+				setCityQuery(stringifyCity(city));
+			}
 		}
+
+		fetchInitialCity();
+	}, []);
+
+	useDidUpdate(() => {
+		onSelect(selectedCity);
 	}, [selectedCity]);
 
 	useDidUpdate(() => {
@@ -49,18 +71,26 @@ export function CitySuggest({ onSelect, allowMultipleSelection, queryMapsAPI }: 
 			setLoading(false);
 		}
 
-		if (selectedCity && cityQuery === stringifyCity(selectedCity)) {
-			return;
+		if (selectedCity) {
+			if (cityQuery === stringifyCity(selectedCity)) {
+				return;
+			} else {
+				setSelectedCity(null);
+			}
 		}
 
 		suggestCities();
 	}, [cityQuery]);
 
-	const suggstedCityOptions = (selectData || []).map((comboboxItem, index) => (
-		<Combobox.Option value={comboboxItem.value} key={index}>
-			{comboboxItem.label}
-		</Combobox.Option>
-	));
+	const suggstedCityOptions = useMemo(
+		() =>
+			(selectData || []).map((comboboxItem, index) => (
+				<Combobox.Option value={comboboxItem.value} key={index}>
+					{comboboxItem.label}
+				</Combobox.Option>
+			)),
+		[selectData]
+	);
 
 	return (
 		<Combobox
@@ -75,7 +105,7 @@ export function CitySuggest({ onSelect, allowMultipleSelection, queryMapsAPI }: 
 		>
 			<Combobox.Target>
 				<TextInput
-					placeholder="Search cities"
+					placeholder={placeholder}
 					value={cityQuery}
 					onChange={(event) => {
 						setCityQuery(event.currentTarget.value);
@@ -85,7 +115,19 @@ export function CitySuggest({ onSelect, allowMultipleSelection, queryMapsAPI }: 
 					onClick={() => combobox.openDropdown()}
 					onFocus={() => combobox.openDropdown()}
 					onBlur={() => combobox.closeDropdown()}
-					rightSection={loading && <Loader size={18} />}
+					rightSection={
+						loading ? (
+							<Loader size={18} />
+						) : (
+							cityQuery !== '' && (
+								<CloseButton
+									size="sm"
+									onMouseDown={(event) => event.preventDefault()}
+									onClick={() => setCityQuery('')}
+								/>
+							)
+						)
+					}
 				/>
 			</Combobox.Target>
 

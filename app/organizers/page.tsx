@@ -19,6 +19,7 @@ export default async function OrganizersPage({
 }) {
 	const { page } = organizerSearchParamParser.page.parse(searchParams);
 	const { orderByField, sortOrder } = organizerSearchParamParser.orderBy.parse(searchParams);
+	const { cityId } = organizerSearchParamParser.cityId.parse(searchParams);
 	const { topGenres } = organizerSearchParamParser.topGenres.parse(searchParams);
 	const { expensivenessRange } = organizerSearchParamParser.expensivenessRange.parse(searchParams);
 
@@ -27,6 +28,7 @@ export default async function OrganizersPage({
 		orderBy: {
 			[orderByField]: { sort: sortOrder, nulls: 'last' },
 		},
+		cityId,
 		expensivenessRange: expensivenessRange as [number, number],
 		topGenres,
 	});

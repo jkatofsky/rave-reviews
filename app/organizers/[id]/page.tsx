@@ -34,6 +34,7 @@ export default async function Organizer({
 	if (!organizer) notFound();
 
 	// TODO: make the individual reviews accessble too?
+	// TODO: add locations to this
 	const jsonLd: WithContext<EntertainmentBusiness> = {
 		'@context': 'https://schema.org',
 		'@type': 'EntertainmentBusiness',

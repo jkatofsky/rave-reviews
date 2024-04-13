@@ -27,6 +27,9 @@ export const reviewSearchParamParser = {
 export const organizerPageParser = {
 	page: parseAsInteger.withDefault(0),
 };
+export const organizerCityParser = {
+	cityId: parseAsInteger.withDefault(0),
+};
 export const organizerOrderByParser = {
 	orderByField: parseAsString.withDefault('overallRating'),
 	sortOrder: parseAsStringEnum<Prisma.SortOrder>(Object.values(Prisma.SortOrder)).withDefault(
@@ -43,6 +46,7 @@ export const organizerExpensivenessRangeParser = {
 export const organizerSearchParamParser = {
 	page: createSearchParamsCache(organizerPageParser),
 	orderBy: createSearchParamsCache(organizerOrderByParser),
+	cityId: createSearchParamsCache(organizerCityParser),
 	topGenres: createSearchParamsCache(organizerTopGenresParser),
 	expensivenessRange: createSearchParamsCache(organizerExpensivenessRangeParser),
 };

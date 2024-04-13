@@ -4,7 +4,10 @@ Global TODOs that are more natural here than the code itself
 
 ## Features
 
-- [ ] finish the locaitons feature: google maps, filtering organizers, and displayng the data
+- [ ] finish the locations feature
+  - [x] displaying data
+  - [x] filtering
+  - [ ] google maps results
 - [ ] user profiles and auth
   - [ ] anonymous/public profiles
   - [ ] only users can create reviews
@@ -34,6 +37,7 @@ Global TODOs that are more natural here than the code itself
 - [ ] do form validation with Zod (generate schemas from Prisma?)
 - [ ] loading states (both client-side and via next.js loading layouts)
 - [ ] reset forms after closing modals or submitting them
+- [ ] combine `OrganizerInfo` and `OrganizerCard` into one component?
 
 ### Backend
 

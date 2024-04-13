@@ -7,25 +7,19 @@ import {
 	DisplayRating,
 	RatingList,
 	DisplayExpensiveness,
+	Locations,
 } from '@/components/data-display';
+import { OrganizerWithLocations } from '@/shared/types';
 
 import { humanizeEnumString } from '../util';
 
-export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
+export function OrganizerInfo({ organizer }: { organizer: OrganizerWithLocations }) {
 	return (
-		<Stack miw={200} maw={400}>
+		<Stack miw={200} maw={500}>
 			<Stack gap="sm">
-				<Group gap="sm" wrap="nowrap">
-					<Title fs="italic" order={1} lh={1} style={{ width: 'min-content' }}>
-						{organizer.name}
-					</Title>
-					<Divider orientation="vertical" />
-					<Text c="gray" fw={400} size="lg">
-						{humanizeEnumString(organizer.type, false)}
-					</Text>
-					<Divider orientation="vertical" />
-					<DisplayExpensiveness expensiveness={organizer.overallExpensiveness} />
-				</Group>
+				<Text fs="italic" order={1} component={Title} c="black" textWrap="nowrap" truncate="end">
+					{organizer.name}
+				</Text>
 				<Box>
 					<DisplayRating
 						rating={organizer.overallRating}
@@ -33,6 +27,14 @@ export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 						size="xl"
 					/>
 				</Box>
+				<Group gap="sm" wrap="nowrap">
+					<Text c="gray" fw={400} size="lg">
+						{humanizeEnumString(organizer.type, false)}
+					</Text>
+					<Divider orientation="vertical" />
+					<DisplayExpensiveness expensiveness={organizer.overallExpensiveness} />
+				</Group>
+
 				{organizer.topGenres.length > 0 && (
 					<Group gap="xs">
 						<Text c="black" fw={600}>
@@ -50,6 +52,13 @@ export function OrganizerInfo({ organizer }: { organizer: Organizer }) {
 			<Group gap="md">
 				<RatingList<Organizer> objectWithRatings={organizer} />
 			</Group>
+
+			{organizer.locations.length > 0 && (
+				<>
+					<Divider />
+					<Locations locations={organizer.locations} />
+				</>
+			)}
 
 			{/* TODO: auto-detect common websites and give nice formatting; and still have a default nice icon for custom sites */}
 			{organizer.websites.length > 0 && (

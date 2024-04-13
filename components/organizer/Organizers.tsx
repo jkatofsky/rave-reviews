@@ -17,33 +17,38 @@ import { useState } from 'react';
 import { useQueryStates } from 'nuqs';
 
 import { OrganizerQuery } from '@/data/organizer';
-import { PaginationButtons, SortingButton } from '@/components/search';
+import { CitySuggest, PaginationButtons, SortingButton } from '@/components/search';
 import { RATINGS_INFO } from '@/shared/constants';
 import {
+	organizerCityParser,
 	organizerExpensivenessRangeParser,
 	organizerOrderByParser,
 	organizerPageParser,
 	organizerTopGenresParser,
 } from '@/shared/search';
-import { CreateOrganizer, PaginatedResponse } from '@/shared/types';
+import { CreateOrganizer, OrganizerWithLocations, PaginatedResponse } from '@/shared/types';
 
 import { enumToSelectData } from '../util';
 import { OrganizerList } from './OrganizerList';
 import { CreateOrganizerModal } from './CreateOrganizerModal';
 
 interface OrganizersProps {
-	initialOrganizers: PaginatedResponse<Organizer>;
-	getOrganizers: (organizerQuery: OrganizerQuery) => Promise<PaginatedResponse<Organizer>>;
+	initialOrganizers: PaginatedResponse<OrganizerWithLocations>;
+	getOrganizers: (
+		organizerQuery: OrganizerQuery
+	) => Promise<PaginatedResponse<OrganizerWithLocations>>;
 	createOrganizer: (organizer: CreateOrganizer) => Promise<void>;
 }
 
 export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }: OrganizersProps) {
-	const [organizers, setOrganizers] = useState<Organizer[]>(initialOrganizers.value);
+	const [organizers, setOrganizers] = useState<OrganizerWithLocations[]>(initialOrganizers.value);
 	const [isCreateOrganizerModalOpen, createOrganizerModalController] = useDisclosure(false);
 
 	const [{ page }, setPage] = useQueryStates(organizerPageParser);
 	const [hasNextPage, setHasNextPage] = useState<boolean>(initialOrganizers.hasNextPage);
+
 	const [orderBy, setOrderBy] = useQueryStates(organizerOrderByParser);
+	const [{ cityId }, setCityId] = useQueryStates(organizerCityParser);
 	const [{ topGenres }, setTopGenres] = useQueryStates(organizerTopGenresParser);
 	const [{ expensivenessRange }, setExpensivenessRange] = useQueryStates(
 		organizerExpensivenessRangeParser
@@ -59,6 +64,7 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 				orderBy: {
 					[orderBy.orderByField]: { sort: orderBy.sortOrder, nulls: 'last' },
 				},
+				cityId,
 				expensivenessRange: expensivenessRange as [number, number],
 				topGenres,
 			});
@@ -85,7 +91,7 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 			</Button>
 			<Box>
 				{/* TODO: searching! */}
-				<Group align="top">
+				<Group align="top" wrap="nowrap">
 					<SortingButton<Organizer>
 						orderByField="overallRating"
 						label="Rating"
@@ -98,6 +104,13 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 							sortOrder: orderBy.sortOrder,
 						}}
 					/>
+					<Box miw={250}>
+						<CitySuggest
+							onSelect={(city) => setCityId({ cityId: city ? city.id : 0 })}
+							initialCityId={cityId}
+							placeholder="Filter by city"
+						/>
+					</Box>
 					<RangeSlider
 						value={expensivenessRange as [number, number]}
 						onChange={(value) => {
@@ -116,6 +129,7 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 						]}
 						label={null}
 						thumbSize={20}
+						miw={150}
 					/>
 					<MultiSelect
 						data={enumToSelectData(Genre)}
