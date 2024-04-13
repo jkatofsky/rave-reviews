@@ -3,7 +3,7 @@
 import prisma from '../db';
 import { CreateOrganizer } from '@/shared/types';
 
-const createOrganizer = async (organizer: CreateOrganizer): Promise<number> => {
+const createOrganizer = async (organizer: CreateOrganizer): Promise<string> => {
 	const { locations, ...organizerData } = organizer;
 
 	const createdOrganizer = await prisma.organizer.create({

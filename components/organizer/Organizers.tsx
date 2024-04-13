@@ -113,7 +113,7 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 					<Box miw={250}>
 						<CitySuggest
 							onSelect={(city) => {
-								setCityId({ cityId: city ? city.id : 0 });
+								setCityId({ cityId: city?.id || '' });
 								setSelectedCity(city);
 							}}
 							initialCityId={cityId}

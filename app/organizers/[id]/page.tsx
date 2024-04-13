@@ -12,10 +12,10 @@ import { OrganizerInfo, OrganizerReviews } from '@/components/organizer';
 import { reviewSearchParamParser } from '@/shared/search';
 import { CreateReview } from '@/shared/types';
 
-const cachedGetOrganizer = cache(async (organizerId: number) => await getOrganizer(organizerId));
+const cachedGetOrganizer = cache(async (organizerId: string) => await getOrganizer(organizerId));
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-	const organizer = await cachedGetOrganizer(Number(params.id));
+	const organizer = await cachedGetOrganizer(params.id);
 
 	return {
 		title: organizer ? `${organizer.name} | Rave Reviews` : 'Organizer not found | Rave Reviews',
@@ -29,7 +29,7 @@ export default async function Organizer({
 	params: { id: string };
 	searchParams: Record<string, string | string[] | undefined>;
 }) {
-	const organizer = await cachedGetOrganizer(Number(params.id));
+	const organizer = await cachedGetOrganizer(params.id);
 
 	if (!organizer) notFound();
 

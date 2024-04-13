@@ -7,7 +7,7 @@ Global TODOs that are more natural here than the code itself
 - [ ] finish the locations feature
   - [x] displaying data
   - [x] filtering
-  - [ ] google maps results
+  - [ ] using an API to get the data for cities that aren't yet in the table - Google maps?
 - [ ] user profiles and auth
   - [ ] anonymous/public profiles
   - [ ] only users can create reviews
@@ -17,6 +17,7 @@ Global TODOs that are more natural here than the code itself
   - [ ] different roles: (user, mod(?), admin)
 - [ ] images on reviews
 - [ ] review upvotes (also associated with users)
+- [ ] highlighting the matching things in organizers results
 - [ ] organizer editing by users with certain "reputation"
   - [ ] need new table that saves all revisions for rollbacks
 - [ ] review editing (maybe also with revisions?)

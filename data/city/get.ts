@@ -3,7 +3,7 @@
 import { City } from '@prisma/client';
 import prisma from '../db';
 
-export const getCity = async (id: number): Promise<City | null> => {
+export const getCity = async (id: string): Promise<City | null> => {
 	return await prisma.city.findUnique({
 		where: {
 			id,

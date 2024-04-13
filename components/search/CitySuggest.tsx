@@ -8,7 +8,7 @@ import { useDidUpdate } from '@mantine/hooks';
 import { stringifyCity } from '../util';
 
 interface CitySuggestProps {
-	initialCityId?: number;
+	initialCityId?: string;
 	onSelect: (city: City | null) => void;
 	placeholder?: string;
 	allowMultipleSelection?: boolean;
@@ -62,7 +62,7 @@ export function CitySuggest({
 			// TODO: groups based on if it is a new city or not
 			setSelectData(
 				cities.map((city) => ({
-					value: city.id.toString(),
+					value: city.id,
 					label: stringifyCity(city),
 				}))
 			);
@@ -94,7 +94,7 @@ export function CitySuggest({
 	return (
 		<Combobox
 			onOptionSubmit={(cityId) => {
-				const city = suggestedCities.find((city) => city.id === parseInt(cityId))!;
+				const city = suggestedCities.find((city) => city.id === cityId)!;
 				setCityQuery(stringifyCity(city));
 				setSelectedCity(city);
 				combobox.closeDropdown();

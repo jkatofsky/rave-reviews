@@ -7,13 +7,13 @@ import prisma from '../db';
 
 // TODO: why so much "as" needed?
 
-async function getAverageRatings(organizerId: number): Promise<{
+async function getAverageRatings(organizerId: string): Promise<{
 	overallRating: number;
 	averageRatings: Record<string, unknown>; // TODO: be able to type this as number
 }> {
 	const organizerRatingsAggregation = await prisma.review.aggregate({
 		where: {
-			organizerId: organizerId,
+			organizerId,
 		},
 		_avg: [...RATINGS_INFO.keys()].reduce(
 			(averagingObject, ratingKey) => ({
@@ -33,15 +33,15 @@ async function getAverageRatings(organizerId: number): Promise<{
 	return { overallRating, averageRatings };
 }
 
-async function getReviewCount(organizerId: number): Promise<number> {
+async function getReviewCount(organizerId: string): Promise<number> {
 	return await prisma.review.count({
 		where: {
-			organizerId: organizerId,
+			organizerId,
 		},
 	});
 }
 
-async function getTopGenres(organizerId: number): Promise<Genre[]> {
+async function getTopGenres(organizerId: string): Promise<Genre[]> {
 	const organizerReviews = await prisma.review.findMany({
 		where: {
 			organizerId,
@@ -74,10 +74,10 @@ async function getTopGenres(organizerId: number): Promise<Genre[]> {
 		.slice(0, NUMBER_OF_TOP_REVIEWS_PER_ORGANIZER) as Genre[];
 }
 
-async function getOverallExpensiveness(organizerId: number): Promise<number | null> {
+async function getOverallExpensiveness(organizerId: string): Promise<number | null> {
 	const organizerExpensivenessAggregation = await prisma.review.aggregate({
 		where: {
-			organizerId: organizerId,
+			organizerId,
 		},
 		_avg: {
 			expensiveness: true,
@@ -91,7 +91,7 @@ async function getOverallExpensiveness(organizerId: number): Promise<number | nu
 }
 
 // TODO: run this on a cron job for all reviews?
-export async function recomputeOrganizerReviewData(organizerId: number) {
+export async function recomputeOrganizerReviewData(organizerId: string) {
 	// TODO: these functions re-query the Review table one-after-the-other. Surely can be optimized
 	// TODO: weight recent reviews higher?
 	const { overallRating, averageRatings } = await getAverageRatings(organizerId);

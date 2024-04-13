@@ -15,7 +15,7 @@ enum OrganizerType {
 }
 
 model Organizer {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   // TODO: slight issue: this updates whenever we add a review, since there are the denormalized fields
   // So, when fleshing out the editing system, I'll need to rely on other information to timestamp the REAL last organizer update
@@ -46,7 +46,7 @@ model Organizer {
 }
 
 model City {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -55,25 +55,22 @@ model City {
   name    String
   region  String?
   country String
-
-  googleMapsPlaceId String?
 }
 
 model Location {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   organizer   Organizer @relation(fields: [organizerId], references: [id])
-  organizerId Int
+  organizerId String
 
-  city   City @relation(fields: [cityId], references: [id])
-  cityId Int
+  city   City   @relation(fields: [cityId], references: [id])
+  cityId String
 
   streetAddress String?
   postalCode    String?
 
-  // TODO: also a googleMapsPlaceId? 
   // TODO: lat/lng? Can be cached from maps API for up to 30 days...
 }
 
@@ -114,12 +111,12 @@ enum Genre {
 }
 
 model Review {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   organizer   Organizer @relation(fields: [organizerId], references: [id])
-  organizerId Int
+  organizerId String
 
   description String?
   genres      Genre[]
@@ -135,8 +132,4 @@ model Review {
   visualsRating          Int?
   staffRating            Int?
   foodAndDrinkRating     Int?
-
-  // TODO: images
-
-  // TODO: upvotes
 }

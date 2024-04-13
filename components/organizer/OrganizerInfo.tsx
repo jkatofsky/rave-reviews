@@ -56,7 +56,7 @@ export function OrganizerInfo({ organizer }: { organizer: OrganizerWithLocations
 			{organizer.locations.length > 0 && (
 				<>
 					<Divider />
-					<Locations locations={organizer.locations} />
+					<Locations organizer={organizer} clickable size="md" />
 				</>
 			)}
 

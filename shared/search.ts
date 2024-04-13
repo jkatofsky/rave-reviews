@@ -28,7 +28,7 @@ export const organizerPageParser = {
 	page: parseAsInteger.withDefault(0),
 };
 export const organizerCityParser = {
-	cityId: parseAsInteger.withDefault(0),
+	cityId: parseAsString.withDefault(''),
 };
 export const organizerOrderByParser = {
 	orderByField: parseAsString.withDefault('overallRating'),

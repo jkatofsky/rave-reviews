@@ -74,7 +74,7 @@ function OrganizerCard({ organizer }: { organizer: OrganizerWithLocations }) {
 					{organizer.locations.length > 0 && (
 						<>
 							<Divider />
-							<Locations locations={organizer.locations} size="xs" />
+							<Locations organizer={organizer} size="xs" />
 						</>
 					)}
 				</Stack>

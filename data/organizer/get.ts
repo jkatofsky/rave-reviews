@@ -8,7 +8,7 @@ import { PaginatedResponse, OrganizerWithLocations } from '@/shared/types';
 
 import { getPaginatedResponse } from '../util';
 
-const getOrganizer = async (id: number): Promise<OrganizerWithLocations | null> => {
+const getOrganizer = async (id: string): Promise<OrganizerWithLocations | null> => {
 	return await prisma.organizer.findUnique({
 		where: {
 			id,
@@ -24,7 +24,7 @@ const getOrganizer = async (id: number): Promise<OrganizerWithLocations | null> 
 };
 
 function addCityIdToFilters(
-	cityId: number | undefined,
+	cityId: string | undefined,
 	filters: Prisma.OrganizerWhereInput
 ): Prisma.OrganizerWhereInput {
 	if (!cityId) {
@@ -80,7 +80,7 @@ type OrganizerQuery = {
 	page: number;
 	perPage?: number;
 	orderBy: Prisma.OrganizerOrderByWithRelationInput;
-	cityId?: number;
+	cityId?: string;
 	expensivenessRange?: [number, number];
 	topGenres?: Genre[];
 };

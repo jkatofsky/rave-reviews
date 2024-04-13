@@ -39,14 +39,14 @@ function LocationForm({
 	return (
 		<>
 			<CitySuggest
-				onSelect={({ name, region, country, id }) => {
+				onSelect={(city) => {
 					form.setFieldValue(`locations.${index}.city.connectOrCreate`, {
 						create: {
-							name,
-							region,
-							country,
+							name: city?.name || '',
+							region: city?.region || '',
+							country: city?.country || '',
 						},
-						where: { id },
+						where: { id: city?.id || '' },
 					});
 				}}
 			/>
@@ -147,7 +147,7 @@ export function CreateOrganizerModal({
 						newFieldInitialValue={{
 							city: {
 								connectOrCreate: {
-									where: { id: -1 },
+									where: { id: '' },
 									create: { name: '', region: '', country: '' },
 								},
 							},
@@ -156,7 +156,7 @@ export function CreateOrganizerModal({
 						}}
 						newFieldButtonLabel="Add location"
 						disableNewFieldButton={(locations) =>
-							locations.some((location) => location.city.connectOrCreate?.where.id === -1)
+							locations.some((location) => location.city.connectOrCreate?.where.id === '')
 						}
 					/>
 				</Fieldset>
