@@ -17,8 +17,9 @@ export const getCity = async (id: string): Promise<City | null> => {
 
 // TODO: re-enable fulltext search? And make it not throw stupid errors
 
-export const getSuggestedCities = async (query: string): Promise<City[]> =>
-	await prisma.city.findMany({
+export const getSuggestedCities = async (query: string): Promise<City[]> => {
+	if (!query) return Promise.resolve([]);
+	return await prisma.city.findMany({
 		where: {
 			name: {
 				contains: query,
@@ -26,3 +27,4 @@ export const getSuggestedCities = async (query: string): Promise<City[]> =>
 			},
 		},
 	});
+};

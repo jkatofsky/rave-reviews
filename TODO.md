@@ -32,10 +32,11 @@ Global TODOs that are more natural here than the code itself
 
 ### Frontend
 
-- [ ] use `react-query` everywhere for client-side fetching
-- [ ] debounce all client-side fetching
+- [x] use `react-query` everywhere for client-side fetching
+- [x] debounce necessary fetching
 - [ ] create a Mantine theme for the whole app
 - [ ] do form validation with Zod (generate schemas from Prisma?)
+  - [ ] block saving with bad values
 - [ ] loading states (both client-side and via next.js loading layouts)
 - [ ] reset forms after closing modals or submitting them
 - [ ] combine `OrganizerInfo` and `OrganizerCard` into one component?

@@ -3,6 +3,8 @@ import React from 'react';
 import Link from 'next/link';
 import { MantineProvider, ColorSchemeScript, Title, Center } from '@mantine/core';
 
+import { ReactQueryProvider } from '@/components/contexts';
+
 import { theme } from '../theme';
 
 export const metadata = {
@@ -21,14 +23,16 @@ export default function RootLayout({ children }: { children: any }) {
 			</head>
 			<body>
 				<MantineProvider theme={theme}>
-					<Center p="md">
-						<Link href="/" style={{ textDecoration: 'none' }}>
-							<Title fw={300} c="black">
-								rave reviews
-							</Title>
-						</Link>
-					</Center>
-					{children}
+					<ReactQueryProvider>
+						<Center p="md">
+							<Link href="/" style={{ textDecoration: 'none' }}>
+								<Title fw={300} c="black">
+									rave reviews
+								</Title>
+							</Link>
+						</Center>
+						{children}
+					</ReactQueryProvider>
 				</MantineProvider>
 			</body>
 		</html>

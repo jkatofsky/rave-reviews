@@ -1,9 +1,10 @@
 import { City } from '@prisma/client';
-import { useEffect, useMemo, useState } from 'react';
-import { CloseButton, Combobox, ComboboxItem, Loader, TextInput, useCombobox } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useDebouncedValue, useDidUpdate } from '@mantine/hooks';
+import { CloseButton, Combobox, Loader, TextInput, useCombobox } from '@mantine/core';
 
 import { getCity, getSuggestedCities } from '@/data/city';
-import { useDidUpdate } from '@mantine/hooks';
 
 import { stringifyCity } from '../util';
 
@@ -27,12 +28,8 @@ export function CitySuggest({
 		onDropdownClose: () => combobox.resetSelectedOption(),
 	});
 
-	const [suggestedCities, setSuggestedCities] = useState<City[]>([]);
-	const [selectedCity, setSelectedCity] = useState<City | null>(null);
-
-	const [loading, setLoading] = useState<boolean>(false);
-	const [selectData, setSelectData] = useState<ComboboxItem[]>([]);
 	const [cityQuery, setCityQuery] = useState<string>('');
+	const [selectedCity, setSelectedCity] = useState<City | null>(null);
 
 	useEffect(() => {
 		async function fetchInitialCity() {
@@ -54,22 +51,6 @@ export function CitySuggest({
 	}, [selectedCity]);
 
 	useDidUpdate(() => {
-		async function suggestCities() {
-			setLoading(true);
-
-			const cities = await getSuggestedCities(cityQuery);
-			setSuggestedCities(cities);
-			// TODO: groups based on if it is a new city or not
-			setSelectData(
-				cities.map((city) => ({
-					value: city.id,
-					label: stringifyCity(city),
-				}))
-			);
-
-			setLoading(false);
-		}
-
 		if (selectedCity) {
 			if (cityQuery === stringifyCity(selectedCity)) {
 				return;
@@ -77,19 +58,26 @@ export function CitySuggest({
 				setSelectedCity(null);
 			}
 		}
-
-		suggestCities();
 	}, [cityQuery]);
 
-	const suggstedCityOptions = useMemo(
-		() =>
-			(selectData || []).map((comboboxItem, index) => (
-				<Combobox.Option value={comboboxItem.value} key={index}>
-					{comboboxItem.label}
+	const [debouncedCityQuery] = useDebouncedValue(cityQuery, 100, { leading: true });
+	const {
+		data: { suggestedCities, cityOptionElements },
+		isLoading,
+	} = useQuery<{ suggestedCities: City[]; cityOptionElements: JSX.Element[] }>({
+		queryKey: ['cities', debouncedCityQuery],
+		initialData: { suggestedCities: [], cityOptionElements: [] },
+		queryFn: async () => {
+			const suggestedCities = await getSuggestedCities(debouncedCityQuery);
+			// TODO: group based on if it's an existing city or not
+			const cityOptionElements = suggestedCities.map((city) => (
+				<Combobox.Option value={city.id} key={city.id}>
+					{stringifyCity(city)}
 				</Combobox.Option>
-			)),
-		[selectData]
-	);
+			));
+			return { suggestedCities, cityOptionElements };
+		},
+	});
 
 	return (
 		<Combobox
@@ -115,7 +103,7 @@ export function CitySuggest({
 					onFocus={() => combobox.openDropdown()}
 					onBlur={() => combobox.closeDropdown()}
 					rightSection={
-						loading ? (
+						isLoading ? (
 							<Loader size={18} />
 						) : (
 							cityQuery !== '' && (
@@ -130,9 +118,9 @@ export function CitySuggest({
 				/>
 			</Combobox.Target>
 
-			<Combobox.Dropdown hidden={selectData === null}>
+			<Combobox.Dropdown>
 				<Combobox.Options>
-					{suggstedCityOptions}
+					{cityOptionElements}
 					{suggestedCities.length === 0 && <Combobox.Empty>No cities match search</Combobox.Empty>}
 				</Combobox.Options>
 			</Combobox.Dropdown>

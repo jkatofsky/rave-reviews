@@ -12,9 +12,10 @@ import {
 	Text,
 	RangeSlider,
 } from '@mantine/core';
-import { useDidUpdate, useDisclosure } from '@mantine/hooks';
+import { useDebouncedValue, useDidUpdate, useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { useQueryStates } from 'nuqs';
+import { useQuery } from '@tanstack/react-query';
 
 import { OrganizerQuery } from '@/data/organizer';
 import { CitySuggest, PaginationButtons, SortingButton } from '@/components/search';
@@ -27,11 +28,11 @@ import {
 	organizerTopGenresParser,
 } from '@/shared/search';
 import { CreateOrganizer, OrganizerWithLocations, PaginatedResponse } from '@/shared/types';
+import { organizersDocumentTitle } from '@/shared/metadata';
 
 import { enumToSelectData } from '../util';
 import { OrganizerList } from './OrganizerList';
 import { CreateOrganizerModal } from './CreateOrganizerModal';
-import { organizersDocumentTitle } from '@/shared/metadata';
 
 interface OrganizersProps {
 	initialOrganizers: PaginatedResponse<OrganizerWithLocations>;
@@ -42,39 +43,53 @@ interface OrganizersProps {
 }
 
 export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }: OrganizersProps) {
-	const [organizers, setOrganizers] = useState<OrganizerWithLocations[]>(initialOrganizers.value);
-	const [isCreateOrganizerModalOpen, createOrganizerModalController] = useDisclosure(false);
-
 	const [{ page }, setPage] = useQueryStates(organizerPageParser);
-	const [hasNextPage, setHasNextPage] = useState<boolean>(initialOrganizers.hasNextPage);
-
 	const [orderBy, setOrderBy] = useQueryStates(organizerOrderByParser);
-	const [selectedCity, setSelectedCity] = useState<City | null>(null);
 	const [{ cityId }, setCityId] = useQueryStates(organizerCityParser);
 	const [{ topGenres }, setTopGenres] = useQueryStates(organizerTopGenresParser);
 	const [{ expensivenessRange }, setExpensivenessRange] = useQueryStates(
 		organizerExpensivenessRangeParser
 	);
 
-	const [isRatingCategorySortingExpanded, isRatingCategorySortingExpandedController] =
+	const [
+		isCreateOrganizerModalOpen,
+		{ open: openCreateOrganizerModal, close: closeCreateOrganizerModal },
+	] = useDisclosure(false);
+	const [isRatingCategorySortingExpanded, { toggle: toggleRatingCategoryExpansion }] =
 		useDisclosure(RATINGS_INFO.has(orderBy.orderByField));
 
-	useDidUpdate(() => {
-		async function updateOrganizers() {
-			const { value: updatedOrganizers, hasNextPage: updatedHasNextPage } = await getOrganizers({
+	const [selectedCity, setSelectedCity] = useState<City | null>(null);
+
+	const [debouncedOrderBy] = useDebouncedValue(orderBy, 200, { leading: true });
+	const [debouncedTopGenres] = useDebouncedValue(topGenres, 200, { leading: true });
+	const [debouncedExpensivenessRange] = useDebouncedValue(expensivenessRange, 200, {
+		leading: true,
+	});
+	const {
+		data: { value: organizers, hasNextPage },
+	} = useQuery<PaginatedResponse<OrganizerWithLocations>>({
+		queryKey: [
+			'organizers',
+			page,
+			debouncedOrderBy,
+			debouncedTopGenres,
+			cityId,
+			debouncedExpensivenessRange,
+		],
+		initialData: initialOrganizers,
+		queryFn: async () => {
+			const { value, hasNextPage } = await getOrganizers({
 				page,
 				orderBy: {
-					[orderBy.orderByField]: { sort: orderBy.sortOrder, nulls: 'last' },
+					[debouncedOrderBy.orderByField]: { sort: debouncedOrderBy.sortOrder, nulls: 'last' },
 				},
 				cityId,
-				expensivenessRange: expensivenessRange as [number, number],
-				topGenres,
+				expensivenessRange: debouncedExpensivenessRange as [number, number],
+				topGenres: debouncedTopGenres,
 			});
-			setOrganizers(updatedOrganizers);
-			setHasNextPage(updatedHasNextPage);
-		}
-		updateOrganizers();
-	}, [page, orderBy, topGenres, cityId, expensivenessRange]);
+			return { value, hasNextPage };
+		},
+	});
 
 	useDidUpdate(() => {
 		document.title = organizersDocumentTitle(selectedCity);
@@ -84,12 +99,12 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 		<Stack p="sm" w={800}>
 			<CreateOrganizerModal
 				opened={isCreateOrganizerModalOpen}
-				onClose={createOrganizerModalController.close}
+				onClose={closeCreateOrganizerModal}
 				onCreateOrganizer={createOrganizer}
 			/>
 			{/* TODO: make fixed top-right on desktop; and do a different design with useMediaQuery */}
 			<Button
-				onClick={createOrganizerModalController.open}
+				onClick={openCreateOrganizerModal}
 				variant="gradient"
 				gradient={{ from: 'blue', to: 'purple' }}
 			>
@@ -123,7 +138,7 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 					<RangeSlider
 						value={expensivenessRange as [number, number]}
 						onChange={(value) => {
-							setExpensivenessRange({ expensivenessRange: value });
+							setExpensivenessRange({ expensivenessRange: [value[0], value[1]] });
 						}}
 						min={1}
 						max={4}
@@ -154,12 +169,7 @@ export function Organizers({ initialOrganizers, getOrganizers, createOrganizer }
 				</Group>
 
 				{/* TODO: make it clear which filter is applied when collapsed */}
-				<Anchor
-					mt="xs"
-					mb="xs"
-					component="button"
-					onClick={isRatingCategorySortingExpandedController.toggle}
-				>
+				<Anchor mt="xs" mb="xs" component="button" onClick={toggleRatingCategoryExpansion}>
 					Sort by rating category
 				</Anchor>
 				<Collapse in={isRatingCategorySortingExpanded}>

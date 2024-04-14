@@ -2,9 +2,9 @@
 
 import { Organizer, Review } from '@prisma/client';
 import { Button, Group, Stack, Text } from '@mantine/core';
-import { useDidUpdate, useDisclosure } from '@mantine/hooks';
-import { useState } from 'react';
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { useQueryStates } from 'nuqs';
+import { useQuery } from '@tanstack/react-query';
 
 import { ReviewQuery } from '@/data/review';
 import { CreateReviewModal, ReviewList } from '@/components/review';
@@ -25,35 +25,41 @@ export function OrganizerReviews({
 	getReviews,
 	createReview,
 }: OrganizerReviewsProps) {
-	const [reviews, setReviews] = useState<Review[]>(initialReviews.value);
-	const [opened, { open, close }] = useDisclosure(false);
+	const [createReviewModalOpened, { open: openCreateReviewModal, close: closeCreateReviewModal }] =
+		useDisclosure(false);
 
 	const [{ page }, setPage] = useQueryStates(reviewPageParser);
-	const [hasNextPage, setHasNextPage] = useState<boolean>(initialReviews.hasNextPage);
 	const [orderBy, setOrderBy] = useQueryStates(reviewOrderByParser);
 
-	useDidUpdate(() => {
-		async function updateReviews() {
-			const { value: updatedReviews, hasNextPage: updatedHasNextPage } = await getReviews({
+	const [debouncedOrderBy] = useDebouncedValue(orderBy, 200, { leading: true });
+	const {
+		data: { value: reviews, hasNextPage },
+	} = useQuery<PaginatedResponse<Review>>({
+		queryKey: ['reviews', organizer.updatedAt, page, debouncedOrderBy],
+		initialData: initialReviews,
+		queryFn: async () => {
+			const { value, hasNextPage } = await getReviews({
 				organizerId: organizer.id,
 				page: page,
-				orderBy: { [orderBy.orderByField]: orderBy.sortOrder },
+				orderBy: { [debouncedOrderBy.orderByField]: debouncedOrderBy.sortOrder },
 			});
-			setReviews(updatedReviews);
-			setHasNextPage(updatedHasNextPage);
-		}
-		updateReviews();
-	}, [organizer.updatedAt, page, orderBy]);
+			return { value, hasNextPage };
+		},
+	});
 
 	return (
 		<Stack miw={400} p="sm">
 			<CreateReviewModal
-				opened={opened}
+				opened={createReviewModalOpened}
 				organizer={organizer}
-				onClose={close}
+				onClose={closeCreateReviewModal}
 				onCreateReview={createReview}
 			/>
-			<Button onClick={open} variant="gradient" gradient={{ from: 'blue', to: 'purple' }}>
+			<Button
+				onClick={openCreateReviewModal}
+				variant="gradient"
+				gradient={{ from: 'blue', to: 'purple' }}
+			>
 				<Text fw={600}>Add your review of {organizer.name}</Text>
 			</Button>
 			{organizer.reviewCount > 0 && (

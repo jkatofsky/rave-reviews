@@ -38,18 +38,20 @@ function LocationForm({
 
 	return (
 		<>
-			<CitySuggest
-				onSelect={(city) => {
-					form.setFieldValue(`locations.${index}.city.connectOrCreate`, {
-						create: {
-							name: city?.name || '',
-							region: city?.region || '',
-							country: city?.country || '',
-						},
-						where: { id: city?.id || '' },
-					});
-				}}
-			/>
+			<InputWrapper withAsterisk label="City">
+				<CitySuggest
+					onSelect={(city) => {
+						form.setFieldValue(`locations.${index}.city.connectOrCreate`, {
+							create: {
+								name: city?.name || '',
+								region: city?.region || '',
+								country: city?.country || '',
+							},
+							where: { id: city?.id || '' },
+						});
+					}}
+				/>
+			</InputWrapper>
 			<Anchor
 				mt="xs"
 				mb="xs"
