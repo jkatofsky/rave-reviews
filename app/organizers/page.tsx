@@ -20,9 +20,10 @@ const cachedCityId = cache(
 export async function generateMetadata({
 	searchParams,
 }: {
-	searchParams: Record<string, string | string[] | undefined>;
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }): Promise<Metadata> {
-	const cityId = cachedCityId(searchParams);
+	const awaitedSearchParams = await searchParams;
+	const cityId = cachedCityId(awaitedSearchParams);
 	const city = await getCity(cityId);
 
 	return {
@@ -33,13 +34,15 @@ export async function generateMetadata({
 export default async function OrganizersPage({
 	searchParams,
 }: {
-	searchParams: Record<string, string | string[] | undefined>;
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-	const { page } = organizerSearchParamParser.page.parse(searchParams);
-	const { orderByField, sortOrder } = organizerSearchParamParser.orderBy.parse(searchParams);
-	const cityId = cachedCityId(searchParams);
-	const { topGenres } = organizerSearchParamParser.topGenres.parse(searchParams);
-	const { expensivenessRange } = organizerSearchParamParser.expensivenessRange.parse(searchParams);
+	const awaitedSearchParams = await searchParams;
+	const { page } = organizerSearchParamParser.page.parse(awaitedSearchParams);
+	const { orderByField, sortOrder } = organizerSearchParamParser.orderBy.parse(awaitedSearchParams);
+	const cityId = cachedCityId(awaitedSearchParams);
+	const { topGenres } = organizerSearchParamParser.topGenres.parse(awaitedSearchParams);
+	const { expensivenessRange } =
+		organizerSearchParamParser.expensivenessRange.parse(awaitedSearchParams);
 
 	const organizers = await getOrganizers({
 		page,
