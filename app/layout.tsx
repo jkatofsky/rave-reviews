@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { MantineProvider, ColorSchemeScript, mantineHtmlProps, Title, Center } from '@mantine/core';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { SessionProvider } from 'next-auth/react';
 
 import { ReactQueryProvider } from '@/components/contexts';
 
@@ -26,14 +27,16 @@ export default function RootLayout({ children }: { children: any }) {
 				<NuqsAdapter>
 					<MantineProvider theme={theme}>
 						<ReactQueryProvider>
-							<Center p="md">
-								<Link href="/" style={{ textDecoration: 'none' }}>
-									<Title fw={300} c="black">
-										rave reviews
-									</Title>
-								</Link>
-							</Center>
-							{children}
+							<SessionProvider>
+								<Center p="md">
+									<Link href="/" style={{ textDecoration: 'none' }}>
+										<Title fw={300} c="black">
+											rave reviews
+										</Title>
+									</Link>
+								</Center>
+								{children}
+							</SessionProvider>
 						</ReactQueryProvider>
 					</MantineProvider>
 				</NuqsAdapter>

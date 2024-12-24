@@ -9,7 +9,8 @@ Global TODOs that are more natural here than the code itself
   - [x] filtering
   - [ ] using an API to get the data for cities that aren't yet in the table - Google maps?
 - [ ] user profiles and auth
-  - [ ] anonymous/public profiles
+  - [x] setup Auth.js
+  - [ ] fix pooling issue ()
   - [ ] only users can create reviews
   - [ ] only users with certain "reputation" can create organizers
   - [ ] public profiles show reviews and stats, top genres, organizers, etc. Gameified

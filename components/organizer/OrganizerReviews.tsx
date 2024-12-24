@@ -6,7 +6,7 @@ import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { useQueryStates } from 'nuqs';
 import { useQuery } from '@tanstack/react-query';
 
-import { ReviewQuery } from '@/data/review';
+import { ReviewQuery } from '@/actions/review';
 import { CreateReviewModal, ReviewList } from '@/components/review';
 import { PaginationButtons, SortingButton } from '@/components/search';
 import { reviewOrderByParser, reviewPageParser } from '@/shared/search';

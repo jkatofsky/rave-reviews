@@ -3,8 +3,8 @@ import { redirect } from 'next/navigation';
 import { Metadata } from 'next';
 import { cache } from 'react';
 
-import { getOrganizers, createOrganizer } from '@/data/organizer';
-import { getCity } from '@/data/city';
+import { getOrganizers, createOrganizer } from '@/actions/organizer';
+import { getCity } from '@/actions/city';
 import { Organizers } from '@/components/organizer';
 import { organizerSearchParamParser } from '@/shared/search';
 import { CreateOrganizer } from '@/shared/types';

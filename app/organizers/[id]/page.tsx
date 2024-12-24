@@ -6,8 +6,8 @@ import { type Organizer } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import { EntertainmentBusiness, WithContext } from 'schema-dts';
 
-import { getOrganizer } from '@/data/organizer';
-import { getReviews, createReview } from '@/data/review';
+import { getOrganizer } from '@/actions/organizer';
+import { getReviews, createReview } from '@/actions/review';
 import { OrganizerInfo, OrganizerReviews } from '@/components/organizer';
 import { reviewSearchParamParser } from '@/shared/search';
 import { CreateReview } from '@/shared/types';

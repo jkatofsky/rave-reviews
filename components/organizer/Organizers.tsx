@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { useQueryStates } from 'nuqs';
 import { useQuery } from '@tanstack/react-query';
 
-import { OrganizerQuery } from '@/data/organizer';
+import { OrganizerQuery } from '@/actions/organizer';
 import { CitySuggest, PaginationButtons, SortingButton } from '@/components/search';
 import { RATINGS_INFO } from '@/shared/constants';
 import {
@@ -33,6 +33,7 @@ import { organizersDocumentTitle } from '@/shared/metadata';
 import { enumToSelectData } from '../util';
 import { OrganizerList } from './OrganizerList';
 import { CreateOrganizerModal } from './CreateOrganizerModal';
+import { useSession } from 'next-auth/react';
 
 interface OrganizersProps {
 	initialOrganizers: PaginatedResponse<OrganizerWithLocations>;

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useDebouncedValue, useDidUpdate } from '@mantine/hooks';
 import { CloseButton, Combobox, Loader, TextInput, useCombobox } from '@mantine/core';
 
-import { getCity, getSuggestedCities } from '@/data/city';
+import { getCity, getSuggestedCities } from '@/actions/city';
 
 import { stringifyCity } from '../util';
 

@@ -28,8 +28,8 @@
       "@/components/*": [
         "components/*"
       ],
-      "@/data/*": [
-        "data/*"
+      "@/actions/*": [
+        "actions/*"
       ],
       "@/shared/*": [
         "shared/*",

@@ -2,7 +2,7 @@
 
 import prisma from '../db';
 
-import { recomputeOrganizerReviewData } from '@/data/organizer';
+import { recomputeOrganizerReviewData } from '@/actions/organizer';
 import { CreateReview } from '@/shared/types';
 
 const createReview = async (review: CreateReview): Promise<void> => {
