@@ -10,7 +10,6 @@ Global TODOs that are more natural here than the code itself
   - [ ] using an API to get the data for cities that aren't yet in the table - Google maps?
 - [ ] user profiles and auth
   - [x] setup Auth.js
-  - [ ] fix pooling issue (https://authjs.dev/getting-started/adapters/prisma#edge-compatibility)
   - [ ] only users can create reviews
   - [ ] only users with certain "reputation" can create organizers
   - [ ] public profiles show reviews and stats, top genres, organizers, etc. Gameified
@@ -53,6 +52,8 @@ Global TODOs that are more natural here than the code itself
 
 ### Infra
 
+- [ ] fix DB pooling issue (https://authjs.dev/getting-started/adapters/prisma#edge-compatibility)
+- [ ] follow env variable best practices with Vercel
 - [ ] make tests run before prod deployment
 - [ ] re-enable branch previews but make them use a different DB than prod
 - [ ] analytics suite
