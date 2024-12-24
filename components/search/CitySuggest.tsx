@@ -1,5 +1,5 @@
 import { City } from '@prisma/client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, JSX } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useDebouncedValue, useDidUpdate } from '@mantine/hooks';
 import { CloseButton, Combobox, Loader, TextInput, useCombobox } from '@mantine/core';

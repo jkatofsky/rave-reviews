@@ -1,7 +1,8 @@
 import '@mantine/core/styles.css';
 import React from 'react';
 import Link from 'next/link';
-import { MantineProvider, ColorSchemeScript, Title, Center } from '@mantine/core';
+import { MantineProvider, ColorSchemeScript, mantineHtmlProps, Title, Center } from '@mantine/core';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 import { ReactQueryProvider } from '@/components/contexts';
 
@@ -13,7 +14,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: any }) {
 	return (
-		<html lang="en">
+		<html lang="en" {...mantineHtmlProps}>
 			<head>
 				<ColorSchemeScript />
 				<meta
@@ -22,18 +23,20 @@ export default function RootLayout({ children }: { children: any }) {
 				/>
 			</head>
 			<body>
-				<MantineProvider theme={theme}>
-					<ReactQueryProvider>
-						<Center p="md">
-							<Link href="/" style={{ textDecoration: 'none' }}>
-								<Title fw={300} c="black">
-									rave reviews
-								</Title>
-							</Link>
-						</Center>
-						{children}
-					</ReactQueryProvider>
-				</MantineProvider>
+				<NuqsAdapter>
+					<MantineProvider theme={theme}>
+						<ReactQueryProvider>
+							<Center p="md">
+								<Link href="/" style={{ textDecoration: 'none' }}>
+									<Title fw={300} c="black">
+										rave reviews
+									</Title>
+								</Link>
+							</Center>
+							{children}
+						</ReactQueryProvider>
+					</MantineProvider>
+				</NuqsAdapter>
 			</body>
 		</html>
 	);

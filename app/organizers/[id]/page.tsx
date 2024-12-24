@@ -14,8 +14,13 @@ import { CreateReview } from '@/shared/types';
 
 const cachedOrganizer = cache(async (organizerId: string) => await getOrganizer(organizerId));
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-	const organizer = await cachedOrganizer(params.id);
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+	const { id } = await params;
+	const organizer = await cachedOrganizer(id);
 
 	return {
 		title: organizer ? `${organizer.name} | Rave Reviews` : 'Organizer not found | Rave Reviews',
@@ -26,10 +31,12 @@ export default async function Organizer({
 	params,
 	searchParams,
 }: {
-	params: { id: string };
-	searchParams: Record<string, string | string[] | undefined>;
+	params: Promise<{ id: string }>;
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-	const organizer = await cachedOrganizer(params.id);
+	const { id } = await params;
+
+	const organizer = await cachedOrganizer(id);
 
 	if (!organizer) notFound();
 
@@ -49,8 +56,9 @@ export default async function Organizer({
 		},
 	};
 
-	const { page } = reviewSearchParamParser.page.parse(searchParams);
-	const { orderByField, sortOrder } = reviewSearchParamParser.orderBy.parse(searchParams);
+	const awaitedSearchParams = await searchParams;
+	const { page } = reviewSearchParamParser.page.parse(awaitedSearchParams);
+	const { orderByField, sortOrder } = reviewSearchParamParser.orderBy.parse(awaitedSearchParams);
 
 	const reviews = await getReviews({
 		organizerId: organizer.id,

@@ -27,6 +27,7 @@ Global TODOs that are more natural here than the code itself
 - [ ] god-mode dashboard for me and the homies
 - [ ] nice home page and "about" the project page
   - [ ] a "buy me a coffee" type button
+- [ ] percantages for different genres on organizers?
 
 ## In the code
 

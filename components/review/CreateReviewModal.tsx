@@ -61,7 +61,7 @@ export function CreateReviewModal({
 		<Modal
 			opened={opened}
 			onClose={onClose}
-			title={<Title order={3}>Add a review of {organizer.name}</Title>}
+			title={`Add a review of ${organizer.name}`}
 			centered
 			size="xl"
 		>
