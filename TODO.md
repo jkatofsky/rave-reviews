@@ -28,6 +28,8 @@ Global TODOs that are more natural here than the code itself
 - [ ] nice home page and "about" the project page
   - [ ] a "buy me a coffee" type button
 - [ ] percantages for different genres on organizers?
+- [ ] table for genres so they can be crowdsourced too? hierarchy?
+- [ ] BarOrClub -> Venue?
 
 ## In the code
 
